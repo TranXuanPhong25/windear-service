@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-public class HomeController {
+public class BookController {
    @GetMapping("/books")
    public List<Book> getBooks() {
       return Arrays.asList(
