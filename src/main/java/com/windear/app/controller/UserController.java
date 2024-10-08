@@ -1,5 +1,6 @@
 package com.windear.app.controller;
 
+import com.windear.app.entity.User;
 import com.windear.app.model.UserModel;
 import com.windear.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
