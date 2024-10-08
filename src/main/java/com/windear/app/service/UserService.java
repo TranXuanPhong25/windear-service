@@ -13,19 +13,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-//    private final UserRepository userRepository;
     private EntityManager entityManager;
 
-//    @Autowired
-//    public UserService(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
     @Autowired
     public UserService(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    @GetMapping("/users")
     public List<UserModel> getUserList() {
         TypedQuery<User> typedQuery = entityManager.createQuery("FROM User", User.class);
         List<User> users = typedQuery.getResultList();
