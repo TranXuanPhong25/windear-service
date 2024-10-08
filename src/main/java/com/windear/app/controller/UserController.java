@@ -13,6 +13,7 @@ public class UserController {
     // Inject Service vào để gọi được
     private final UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
