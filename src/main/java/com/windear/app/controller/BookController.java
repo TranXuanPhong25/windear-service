@@ -1,6 +1,7 @@
 package com.windear.app.controller;
 
 import com.windear.app.model.Book;
+import com.windear.app.model.UserModel;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,6 +30,12 @@ public class BookController {
             ).toString();
     }
 
-   
-   // Có thể mapping thêm các endpoint khác nữa...
+//   @GetMapping("/api/v1/book/borrowed")
+//   public List<BookModel> getUserList() {
+//        //TODO : implement this
+//   }
+
+//    @GetMapping("/api/v1/book/search")
+    //params :id
+    // Có thể mapping thêm các endpoint khác nữa...
 }
