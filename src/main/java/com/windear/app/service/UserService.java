@@ -2,15 +2,12 @@ package com.windear.app.service;
 
 import com.windear.app.entity.User;
 import com.windear.app.model.UserModel;
-import com.windear.app.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.hibernate.sql.ast.tree.expression.SqlTuple;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +25,7 @@ public class UserService {
         this.entityManager = entityManager;
     }
 
+    @GetMapping("/users")
     public List<UserModel> getUserList() {
         TypedQuery<User> typedQuery = entityManager.createQuery("FROM User", User.class);
         List<User> users = typedQuery.getResultList();
