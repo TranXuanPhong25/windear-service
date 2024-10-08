@@ -1,3 +1,7 @@
+### environment variables
+.env
+.env.production
+
 .idea/
 HELP.md
 target/
