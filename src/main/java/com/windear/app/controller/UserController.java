@@ -19,7 +19,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/users")
     // Trả về Model là một List<UserModel>
     public List<UserModel> getUserList() {
         // Service trả về Model (là List<UserModel>) nên có thể return thẳng luôn
