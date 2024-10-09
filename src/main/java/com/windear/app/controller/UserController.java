@@ -29,19 +29,11 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User findUserById(@PathVariable int id) {
-        User user = userService.findUserById(id);
-        if (user == null) {
-            throw new RuntimeException("User id not found: " + id);
-        }
-        return user;
+        return userService.findUserById(id);
     }
 
     @DeleteMapping("/users/{id}")
     public String deleteUser(@PathVariable int id) {
-        User user = userService.findUserById(id);
-        if (user == null) {
-            throw new RuntimeException("User id not found: " + id);
-        }
         userService.deleteUser(id);
         return "Removed user id: " + id;
     }

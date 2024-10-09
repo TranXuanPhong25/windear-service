@@ -26,7 +26,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(int id) {
-        return entityManager.find(User.class, id);
+        User user = entityManager.find(User.class, id);
+        if (user == null) {
+            throw new RuntimeException("User id not found: " + id);
+        }
+        return user;
     }
 
     @Override
@@ -40,6 +44,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUser(int id) {
         User user = entityManager.find(User.class, id);
+        if (user == null) {
+            throw new RuntimeException("User id not found: " + id);
+        }
         entityManager.remove(user);
     }
 }
