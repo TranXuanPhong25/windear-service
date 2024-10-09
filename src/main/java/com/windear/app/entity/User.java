@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "user", schema = "public")
 public class User {
-    // Để public hết cho đơn giản, bình thường sẽ là private và dùng getter, setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,7 +17,7 @@ public class User {
     public Integer age;
 
     @Column(name = "password")
-    public String password;  // Đã được hash bcrypt
+    public String password;
 
     public Long getId() {
         return id;

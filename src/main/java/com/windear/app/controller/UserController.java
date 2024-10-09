@@ -1,30 +1,48 @@
 package com.windear.app.controller;
 
-import com.windear.app.model.UserModel;
-import com.windear.app.service.UserService;
+import com.windear.app.entity.User;
+import com.windear.app.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
-    // Inject Service vào để gọi được
-    private final UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-
-    @GetMapping("/users")
-    // Trả về Model là một List<UserModel>
-    public List<UserModel> getUserList() {
-        // Service trả về Model (là List<UserModel>) nên có thể return thẳng luôn
-        return userService.getUserList();
+    @PostMapping("/users")
+    public User createUser(@RequestBody User user) {
+        return userService.saveUser(user);
     }
 
-    // Có thể có các endpoint khác
+    @GetMapping("/users")
+    public List<User> getUserList() {
+        return userService.findAllUsers();
+    }
+
+    @GetMapping("/users/{id}")
+    public User findUserById(@PathVariable int id) {
+        User user = userService.findUserById(id);
+        if (user == null) {
+            throw new RuntimeException("User id not found: " + id);
+        }
+        return user;
+    }
+
+    @DeleteMapping("/users/{id}")
+    public String deleteUser(@PathVariable int id) {
+        User user = userService.findUserById(id);
+        if (user == null) {
+            throw new RuntimeException("User id not found: " + id);
+        }
+        userService.deleteUser(id);
+        return "Removed user id: " + id;
+    }
 }
