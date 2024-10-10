@@ -7,8 +7,8 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    public List<User> findAllUsers();
-    public User findUserById(int id);
-    public User saveUser(User user);
-    public void deleteUser(int id);
+    List<User> findAllUsers();
+    User findUserById(int id);
+    User saveUser(User user);
+    void deleteUser(int id);
 }

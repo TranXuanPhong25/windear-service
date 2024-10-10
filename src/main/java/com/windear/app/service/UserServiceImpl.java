@@ -1,52 +1,45 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
+import com.windear.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private EntityManager entityManager;
+    private UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<User> findAllUsers() {
-        TypedQuery<User> typedQuery = entityManager.createQuery("FROM User", User.class);
-        return typedQuery.getResultList();
+        return userRepository.findAll();
     }
 
     @Override
     public User findUserById(int id) {
-        User user = entityManager.find(User.class, id);
-        if (user == null) {
-            throw new RuntimeException("User id not found: " + id);
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
         }
-        return user;
+        else {
+            throw new RuntimeException("User with id not found: " + id);
+        }
     }
 
     @Override
-    @Transactional
     public User saveUser(User user) {
-        User newUser = entityManager.merge(user);
-        return newUser;
+        return userRepository.save(user);
     }
 
     @Override
-    @Transactional
     public void deleteUser(int id) {
-        User user = entityManager.find(User.class, id);
-        if (user == null) {
-            throw new RuntimeException("User id not found: " + id);
-        }
-        entityManager.remove(user);
+        userRepository.deleteById(id);
     }
 }
