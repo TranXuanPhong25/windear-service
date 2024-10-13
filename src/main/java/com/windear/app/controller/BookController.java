@@ -1,24 +1,40 @@
 package com.windear.app.controller;
 
 import com.windear.app.entity.Book;
-import jakarta.persistence.EntityManager;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.windear.app.service.BookService;
+import com.windear.app.service.BookServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class BookController {
-    private EntityManager entityManager;
-    @GetMapping("/books")
-    public String getBooks() {
-        return "";
+    private final BookService bookServiceImpl;
+
+    @Autowired
+    public BookController(BookService bookServiceImpl) {
+        this.bookServiceImpl = bookServiceImpl;
     }
 
-//   @GetMapping("/api/v1/book/borrowed")
-//   public List<BookModel> getUserList() {
-//        //TODO : implement this
-//   }
+    @PostMapping("/books/add")
+    public Book addBook(@RequestBody Book book) {
+        return bookServiceImpl.add(book);
+    }
 
-//    @GetMapping("/api/v1/book/search")
-    //params :id
-    // Có thể mapping thêm các endpoint khác nữa...
+    @GetMapping("/books")
+    public List<Book> getBooks() {
+        return bookServiceImpl.findAll();
+    }
+
+    @GetMapping("/books/search/{id}")
+    public Book findBookById(@PathVariable int id) {
+        return bookServiceImpl.findById(id);
+    }
+
+    @DeleteMapping("/books/delete/{id}")
+    public void deleteBook(@PathVariable int id) {
+        bookServiceImpl.delete(id);
+    }
 }

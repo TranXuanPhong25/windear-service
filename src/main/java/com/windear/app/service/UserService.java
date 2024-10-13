@@ -7,8 +7,9 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    List<User> findAllUsers();
-    User findUserById(int id);
-    User saveUser(User user);
-    void deleteUser(int id);
+    List<User> findAll();
+    User findById(int id);
+    User add(User user);
+    void delete(int id);
+    User handleBookAction(String action, int userId, int bookId);
 }
