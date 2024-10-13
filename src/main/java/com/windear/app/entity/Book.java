@@ -2,6 +2,8 @@ package com.windear.app.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "book", schema = "public")
 public class Book {
@@ -22,9 +24,13 @@ public class Book {
    @Column(name = "borrower_id")
    private Integer borrowerId;
 
+   @Column(name = "borrow_date")
+   private LocalDate borrowDate;
+
    public Book() {
-      this.isAvailable = true;
-      this.borrowerId = null;
+      isAvailable = true;
+      borrowerId = null;
+      borrowDate = null;
    }
 
    public int getId() {
@@ -66,4 +72,12 @@ public class Book {
    public void setBorrowerId(Integer borrowerId) {
       this.borrowerId = borrowerId;
    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(LocalDate borrowDate) {
+        this.borrowDate = borrowDate;
+    }
 }

@@ -2,6 +2,7 @@ package com.windear.app.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class User {
             borrowedBooks.add(book);
             book.setAvailable(false);
             book.setBorrowerId(id);
+            book.setBorrowDate(LocalDate.now());
         }
     }
 
@@ -79,6 +81,7 @@ public class User {
             borrowedBooks.remove(book);
             book.setAvailable(true);
             book.setBorrowerId(null);
+            book.setBorrowDate(null);
         }
     }
 }
