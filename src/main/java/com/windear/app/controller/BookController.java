@@ -18,7 +18,7 @@ public class BookController {
         this.bookServiceImpl = bookServiceImpl;
     }
 
-    @PostMapping("/books/add")
+    @PostMapping("/books")
     public Book addBook(@RequestBody Book book) {
         return bookServiceImpl.add(book);
     }
@@ -28,12 +28,12 @@ public class BookController {
         return bookServiceImpl.findAll();
     }
 
-    @GetMapping("/books/search/{id}")
+    @GetMapping("/books/{id}")
     public Book findBookById(@PathVariable int id) {
         return bookServiceImpl.findById(id);
     }
 
-    @DeleteMapping("/books/delete/{id}")
+    @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable int id) {
         bookServiceImpl.delete(id);
     }
