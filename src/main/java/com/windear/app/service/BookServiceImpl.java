@@ -25,18 +25,6 @@ public class BookServiceImpl implements BookService {
    }
 
    @Override
-   @Transactional
-   public Book add(Book book) {
-      return bookRepository.save(book);
-   }
-
-   @Override
-   @Transactional
-   public void delete(int id) {
-      bookRepository.deleteById(id);
-   }
-
-   @Override
    public Book findById(int id) {
       Optional<Book> book = bookRepository.findById(id);
       if (book.isPresent()) {
@@ -46,4 +34,33 @@ public class BookServiceImpl implements BookService {
          throw new BookNotFoundException("Book with id not found: " + id);
       }
    }
+
+   @Override
+   @Transactional
+   public Book add(Book book) {
+      return bookRepository.save(book);
+   }
+
+   @Override
+   @Transactional
+   public Book update(Book book) {
+      Book bookFromDB = findById(book.getId());
+      if (book.getAuthor() != null) {
+         bookFromDB.setAuthor(book.getAuthor());
+      }
+      if (book.getTitle() != null) {
+         bookFromDB.setTitle(book.getTitle());
+      }
+      bookRepository.save(bookFromDB);
+      return bookFromDB;
+   }
+
+   @Override
+   @Transactional
+   public void delete(int id) {
+      Book book = findById(id);
+      bookRepository.delete(book);
+   }
+
+
 }

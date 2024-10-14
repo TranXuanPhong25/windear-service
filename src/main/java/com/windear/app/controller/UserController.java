@@ -2,7 +2,6 @@ package com.windear.app.controller;
 
 import com.windear.app.entity.User;
 import com.windear.app.service.UserService;
-import com.windear.app.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +35,11 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable int id) {
         userService.delete(id);
+    }
+
+    @PutMapping("/users")
+    public User updateUser(@RequestBody User user) {
+        return userService.update(user);
     }
 
     @PostMapping("/users/{id}/{action}")

@@ -53,6 +53,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public User update(User user) {
+        User userFromDB = findById(user.getId());
+        if (user.getAge() != null) {
+            userFromDB.setAge(user.getAge());
+        }
+        if (user.getName() != null) {
+            userFromDB.setName(user.getName());
+        }
+        if (user.getPassword() != null) {
+            userFromDB.setPassword(user.getPassword());
+        }
+        userRepository.save(userFromDB);
+        return userFromDB;
+    }
+
+    @Override
+    @Transactional
     public User handleBookAction(String action, int userId, int bookId) {
         User user = findById(userId);
         Book book = bookService.findById(bookId);

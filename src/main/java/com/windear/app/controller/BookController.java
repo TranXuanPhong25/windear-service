@@ -2,7 +2,6 @@ package com.windear.app.controller;
 
 import com.windear.app.entity.Book;
 import com.windear.app.service.BookService;
-import com.windear.app.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,30 +10,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class BookController {
-    private final BookService bookServiceImpl;
+    private final BookService bookService;
 
     @Autowired
-    public BookController(BookService bookServiceImpl) {
-        this.bookServiceImpl = bookServiceImpl;
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @PostMapping("/books")
     public Book addBook(@RequestBody Book book) {
-        return bookServiceImpl.add(book);
+        return bookService.add(book);
     }
 
     @GetMapping("/books")
     public List<Book> getBooks() {
-        return bookServiceImpl.findAll();
+        return bookService.findAll();
+    }
+
+    @PutMapping("/books")
+    public Book updateBook(@RequestBody Book book) {
+        return bookService.update(book);
     }
 
     @GetMapping("/books/{id}")
     public Book findBookById(@PathVariable int id) {
-        return bookServiceImpl.findById(id);
+        return bookService.findById(id);
     }
 
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable int id) {
-        bookServiceImpl.delete(id);
+        bookService.delete(id);
     }
 }

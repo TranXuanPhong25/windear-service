@@ -11,5 +11,6 @@ public interface UserService {
     User findById(int id);
     User add(User user);
     void delete(int id);
+    User update(User user);
     User handleBookAction(String action, int userId, int bookId);
 }
