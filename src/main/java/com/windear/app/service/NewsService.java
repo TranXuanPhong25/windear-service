@@ -4,6 +4,6 @@ import com.windear.app.entity.News;
 
 public interface NewsService {
     News saveNews(News news);
-    News findNewsById(String title);
-    void deleteNews(String title);
+    News findNewsById(int newsId);
+    void deleteNews(int newsId);
 }

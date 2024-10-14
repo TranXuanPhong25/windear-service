@@ -1,22 +1,23 @@
 package com.windear.app.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "news")
 public class News {
     
     @Id
+    @Column(name = "news_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int newsId;
+
     @Column(name = "title")
     private String title;
 
-    @Column(name = "descripstion")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "imageUrl")
+    @Column(name = "image_url")
     private String imageUrl;
 
     public String getTitle() {
@@ -41,5 +42,13 @@ public class News {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
     }
 }

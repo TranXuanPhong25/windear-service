@@ -2,14 +2,13 @@ package com.windear.app.controller;
 
 import com.windear.app.entity.News;
 import com.windear.app.service.NewsService;
-import com.windear.app.service.NewsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class NewsController {
-    private NewsService newsService;
+    private final NewsService newsService;
 
     @Autowired
     public NewsController(NewsService newsService) {
@@ -21,14 +20,14 @@ public class NewsController {
         return newsService.saveNews(news);
     }
 
-    @GetMapping("/news/{id}")
-    public News getNews(@PathVariable String title) {
-        return newsService.findNewsById(title);
+    @GetMapping("/news/{newsId}")
+    public News getNews(@PathVariable int newsId) {
+        return newsService.findNewsById(newsId);
     }
 
-    @DeleteMapping("news/{id}")
-    public void deleteNews(@PathVariable String title) {
-        newsService.deleteNews(title);
+    @DeleteMapping("news/{newsId}")
+    public void deleteNews(@PathVariable int newsId) {
+        newsService.deleteNews(newsId);
     }
 
 
