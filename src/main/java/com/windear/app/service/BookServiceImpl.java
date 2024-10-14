@@ -1,6 +1,7 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.Book;
+import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class BookServiceImpl implements BookService {
          return book.get();
       }
       else {
-         throw new RuntimeException("User with id not found: " + id);
+         throw new BookNotFoundException("Book with id not found: " + id);
       }
    }
 }

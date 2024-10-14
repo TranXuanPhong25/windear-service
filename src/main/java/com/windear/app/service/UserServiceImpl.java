@@ -2,6 +2,7 @@ package com.windear.app.service;
 
 import com.windear.app.entity.Book;
 import com.windear.app.entity.User;
+import com.windear.app.exception.UserNotFoundException;
 import com.windear.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
             return user.get();
         }
         else {
-            throw new RuntimeException("User with id not found: " + id);
+            throw new UserNotFoundException("User with id not found: " + id);
         }
     }
 
@@ -46,7 +47,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete(int id) {
-        userRepository.deleteById(id);
+        User user = findById(id);
+        userRepository.delete(user);
     }
 
     @Override
