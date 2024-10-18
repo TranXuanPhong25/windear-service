@@ -1,4 +1,4 @@
-package com.windear.app;
+package com.windear.app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
