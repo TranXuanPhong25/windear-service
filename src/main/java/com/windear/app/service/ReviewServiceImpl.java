@@ -33,6 +33,7 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewRepository.findAllByBookId(bookId);
     }
 
+    //TODO:
     @Override
     public Review findReviewById(int reviewId) {
         Optional<Review> review = reviewRepository.findById(reviewId);
@@ -64,10 +65,12 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void delete(int reviewId) {
+    public boolean delete(int reviewId) {
         if (findReviewById(reviewId) != null) {
             reviewRepository.deleteById(reviewId);
+            return true;
         }
+        return false;
     }
 
 

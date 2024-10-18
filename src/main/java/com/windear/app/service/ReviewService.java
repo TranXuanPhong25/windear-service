@@ -11,5 +11,5 @@ public interface ReviewService {
     List<Review> findReviewByBookId(int bookId);
     Review findReviewById(int reviewId);
     Review update(Review review);
-    void delete(int reviewId);
+    boolean delete(int reviewId);
 }
