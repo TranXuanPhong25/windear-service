@@ -1,5 +1,7 @@
 package com.windear.app.entity;
 
+import java.time.LocalDate;
+
 public class ExternalBook{
     private int id;
     private String title;

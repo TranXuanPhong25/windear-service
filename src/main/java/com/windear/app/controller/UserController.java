@@ -47,4 +47,9 @@ public class UserController {
     public ExternalBook borrowBook(@PathVariable int userId, @PathVariable int bookId) {
         return userService.borrowBook(userId, bookId);
     }
+
+    @GetMapping("users/{userId}/return/{bookId}")
+    public ExternalBook returnBook(@PathVariable int userId, @PathVariable int bookId) {
+        return userService.returnBook(userId, bookId);
+    }
 }

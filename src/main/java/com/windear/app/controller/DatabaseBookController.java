@@ -5,6 +5,8 @@ import com.windear.app.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/db")
 public class DatabaseBookController {
@@ -13,6 +15,11 @@ public class DatabaseBookController {
     @Autowired
     public DatabaseBookController(BookService bookService) {
         this.bookService = bookService;
+    }
+
+    @GetMapping("/books")
+    public List<Book> findAll() {
+        return bookService.findAll();
     }
 
     @PostMapping("/books")

@@ -14,4 +14,5 @@ public interface UserService {
     void delete(int id);
     User update(User user);
     ExternalBook borrowBook(int userId, int bookId);
+    ExternalBook returnBook(int userId, int bookId);
 }

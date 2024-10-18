@@ -3,12 +3,14 @@ package com.windear.app.service;
 import com.windear.app.entity.Book;
 import com.windear.app.entity.ExternalBook;
 import com.windear.app.entity.User;
+import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.exception.UserNotFoundException;
 import com.windear.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +85,22 @@ public class UserServiceImpl implements UserService {
         Book book = externalBook.convertToBook();
         book.setId(bookId);
         book.setBorrowerId(userId);
+        book.setBorrowDate(LocalDate.now());
         bookService.add(book);
         return externalBook;
+    }
+
+    @Override
+    @Transactional
+    public ExternalBook returnBook(int userId, int bookId) {
+        User user = findById(userId);
+        ExternalBook externalBook = externalBookService.findById(bookId).get(0);
+        for (Book book : user.getBorrowedBooks()) {
+            if (book.getId() == bookId) {
+                bookService.delete(bookId);
+                return externalBook;
+            }
+        }
+        throw new BookNotFoundException("Book with id not found: " + bookId);
     }
 }

@@ -66,20 +66,4 @@ public class User {
     public void setBorrowedBooks(List<Book> borrowedBooks) {
         this.borrowedBooks = borrowedBooks;
     }
-
-    public void borrowBook(Book book) {
-        if (book.getBorrowerId() == null) {
-            borrowedBooks.add(book);
-            book.setBorrowerId(id);
-            book.setBorrowDate(LocalDate.now());
-        }
-    }
-
-    public void returnBook(Book book) {
-        if (borrowedBooks.contains(book)) {
-            borrowedBooks.remove(book);
-            book.setBorrowerId(null);
-            book.setBorrowDate(null);
-        }
-    }
 }
