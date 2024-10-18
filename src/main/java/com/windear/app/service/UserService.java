@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.windear.app.entity.ExternalBook;
 import com.windear.app.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -12,5 +13,5 @@ public interface UserService {
     User add(User user);
     void delete(int id);
     User update(User user);
-    User handleBookAction(String action, int userId, int bookId);
+    ExternalBook borrowBook(int userId, int bookId);
 }

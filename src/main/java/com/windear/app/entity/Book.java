@@ -9,7 +9,6 @@ import java.time.LocalDate;
 public class Book {
    @Id
    @Column(name = "id")
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private int id;
 
    @Column(name = "title")
@@ -18,9 +17,6 @@ public class Book {
    @Column(name = "author")
    private String author;
 
-   @Column(name = "is_available")
-   private boolean isAvailable;
-
    @Column(name = "borrower_id")
    private Integer borrowerId;
 
@@ -28,7 +24,6 @@ public class Book {
    private LocalDate borrowDate;
 
    public Book() {
-      isAvailable = true;
       borrowerId = null;
       borrowDate = null;
    }
@@ -55,14 +50,6 @@ public class Book {
    
    public void setAuthor(String author) {
       this.author = author;
-   }
-
-   public boolean isAvailable() {
-      return isAvailable;
-   }
-
-   public void setAvailable(boolean available) {
-      isAvailable = available;
    }
 
    public Integer getBorrowerId() {

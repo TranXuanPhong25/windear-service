@@ -1,6 +1,7 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.Book;
+import com.windear.app.entity.ExternalBook;
 import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,8 @@ public class BookServiceImpl implements BookService {
       bookRepository.delete(book);
    }
 
-
+//   public Book convertToBook(ExternalBook externalBook) {
+//      Book book = new Book();
+//
+//   }
 }

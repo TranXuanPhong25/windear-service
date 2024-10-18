@@ -1,6 +1,7 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.Book;
+import com.windear.app.entity.ExternalBook;
 import com.windear.app.entity.User;
 import com.windear.app.exception.UserNotFoundException;
 import com.windear.app.repository.UserRepository;
@@ -15,11 +16,13 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BookService bookService;
+    private final ExternalBookService externalBookService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BookServiceImpl bookService) {
+    public UserServiceImpl(UserRepository userRepository, BookServiceImpl bookService, ExternalBookService externalBookService) {
         this.userRepository = userRepository;
         this.bookService = bookService;
+        this.externalBookService = externalBookService;
     }
 
     @Override
@@ -48,6 +51,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void delete(int id) {
         User user = findById(id);
+        List<Book> books = user.getBorrowedBooks();
+        for (Book book : books) {
+            bookService.delete(book.getId());
+        }
         userRepository.delete(user);
     }
 
@@ -70,14 +77,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User handleBookAction(String action, int userId, int bookId) {
+    public ExternalBook borrowBook(int userId, int bookId) {
         User user = findById(userId);
-        Book book = bookService.findById(bookId);
-        if (action.equals("borrow")) {
-            user.borrowBook(book);
-        } else if (action.equals("return")){
-            user.returnBook(book);
-        }
-        return user;
+        ExternalBook externalBook = externalBookService.findById(bookId).get(0);
+        Book book = externalBook.convertToBook();
+        book.setId(bookId);
+        book.setBorrowerId(userId);
+        bookService.add(book);
+        return externalBook;
     }
 }

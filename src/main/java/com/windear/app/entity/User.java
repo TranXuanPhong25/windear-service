@@ -68,9 +68,8 @@ public class User {
     }
 
     public void borrowBook(Book book) {
-        if (book.isAvailable()) {
+        if (book.getBorrowerId() == null) {
             borrowedBooks.add(book);
-            book.setAvailable(false);
             book.setBorrowerId(id);
             book.setBorrowDate(LocalDate.now());
         }
@@ -79,7 +78,6 @@ public class User {
     public void returnBook(Book book) {
         if (borrowedBooks.contains(book)) {
             borrowedBooks.remove(book);
-            book.setAvailable(true);
             book.setBorrowerId(null);
             book.setBorrowDate(null);
         }

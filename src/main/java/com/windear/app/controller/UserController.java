@@ -1,5 +1,6 @@
 package com.windear.app.controller;
 
+import com.windear.app.entity.ExternalBook;
 import com.windear.app.entity.User;
 import com.windear.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,8 @@ public class UserController {
         return userService.update(user);
     }
 
-    @PostMapping("/users/{id}/{action}")
-    public User returnBook(@PathVariable int id, @PathVariable String action, @RequestBody int bookId) {
-        return userService.handleBookAction(action, id, bookId);
+    @GetMapping("/users/{userId}/borrow/{bookId}")
+    public ExternalBook borrowBook(@PathVariable int userId, @PathVariable int bookId) {
+        return userService.borrowBook(userId, bookId);
     }
 }
