@@ -39,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService{
         if (review.isPresent()) {
             return review.get();
         } else {
-            throw new RuntimeException("User with title not found: " + reviewId);
+            throw new RuntimeException("Review with id not found:" + reviewId);
         }
     }
 
