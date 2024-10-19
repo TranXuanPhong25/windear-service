@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -27,11 +28,16 @@ public class SecurityConfig {
                   .requestMatchers("/api/public","api/news").permitAll()
                   .requestMatchers("/api/private").authenticated()
                   .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
-                  
+                  .requestMatchers("/api/admin").hasAuthority("ROLE_admin")
+            
             )
             .cors(withDefaults())
             .oauth2ResourceServer(oauth2 -> oauth2
-                  .jwt(withDefaults())
+                  .jwt(customize->{
+                     JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+                     jwtConverter.setJwtGrantedAuthoritiesConverter(new CustomRoleConverter());
+                     customize.jwtAuthenticationConverter(jwtConverter);
+                  })
             )
             .build();
    }

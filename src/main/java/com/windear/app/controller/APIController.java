@@ -1,4 +1,5 @@
 package com.windear.app.controller;
+
 import com.windear.app.model.Message;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,5 +25,10 @@ public class APIController {
    @GetMapping(value = "/private-scoped")
    public Message privateScopedEndpoint() {
       return new Message("All good. You can see this because you are Authenticated with a Token granted the 'read:messages' scope");
+   }
+   
+   @GetMapping(value = "/admin")
+   public Message adminRoleBasedEndpoint() {
+      return new Message("admin message");
    }
 }
