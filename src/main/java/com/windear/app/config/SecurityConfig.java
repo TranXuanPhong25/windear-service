@@ -1,7 +1,9 @@
 package com.windear.app.config;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,7 +17,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
  */
 @EnableWebSecurity
 @Configuration
+@ComponentScan
 public class SecurityConfig {
+   @Value("${app.security.role.namespace}")
+   private String customRoleNamespace;
    
    @Bean
    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -25,7 +30,7 @@ public class SecurityConfig {
         */
       return http
             .authorizeHttpRequests((authorize) -> authorize
-                  .requestMatchers("/api/public","api/news").permitAll()
+                  .requestMatchers("/api/public", "api/news").permitAll()
                   .requestMatchers("/api/private").authenticated()
                   .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                   .requestMatchers("/api/admin").hasAuthority("ROLE_admin")
@@ -33,9 +38,9 @@ public class SecurityConfig {
             )
             .cors(withDefaults())
             .oauth2ResourceServer(oauth2 -> oauth2
-                  .jwt(customize->{
+                  .jwt(customize -> {
                      JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-                     jwtConverter.setJwtGrantedAuthoritiesConverter(new CustomRoleConverter());
+                     jwtConverter.setJwtGrantedAuthoritiesConverter(new CustomRoleConverter(customRoleNamespace));
                      customize.jwtAuthenticationConverter(jwtConverter);
                   })
             )

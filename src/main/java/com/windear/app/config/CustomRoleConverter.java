@@ -11,9 +11,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Component
 public class CustomRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
-   public String roleNamespace = "https://windear.vercel.app/roles";
+   private final String roleNamespace;
+   
+   public CustomRoleConverter(@Value("${app.security.role.namespace}") String roleNamespace) {
+      this.roleNamespace = roleNamespace;
+   }
    
    @Override
    public Collection<GrantedAuthority> convert(Jwt jwt) {
