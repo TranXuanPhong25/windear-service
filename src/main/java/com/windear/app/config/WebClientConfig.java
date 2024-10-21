@@ -11,6 +11,9 @@ public class WebClientConfig {
     @Value("${API_KEY}")
     private String apiKey;
 
+    @Value("${API_URL}")
+    private String apiUrl;
+
     @Bean
     public WebClient webClient() {
         final int size = 16 * 1024 * 1024;
@@ -18,7 +21,7 @@ public class WebClientConfig {
                 .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
                 .build();
         return WebClient.builder()
-                .baseUrl("https://api.hardcover.app/v1/graphql")
+                .baseUrl(apiUrl)
                 .defaultHeader("authorization", apiKey)
                 .exchangeStrategies(strategies)
                 .build();
