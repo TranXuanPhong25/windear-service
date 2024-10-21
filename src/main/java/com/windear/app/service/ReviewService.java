@@ -7,9 +7,8 @@ import java.util.List;
 
 public interface ReviewService {
     Review save(Review review);
-    List<Review> findAllReview();
     List<Review> findReviewByBookId(int bookId);
     Review findReviewById(int reviewId);
     Review update(Review review);
-    boolean delete(int reviewId);
+    void delete(int reviewId);
 }

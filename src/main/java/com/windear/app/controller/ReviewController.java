@@ -22,12 +22,7 @@ public class ReviewController {
     public Review createReview(@RequestBody Review review) {
         return reviewService.save(review);
     }
-    // TODO: remove get mapping
-    @GetMapping("/review")
-    public List<Review> getReviewList() {
-        return reviewService.findAllReview();
-    }
-    //TODO: fix 500 error code with id not found
+
     @GetMapping("/review/{reviewId}")
     public Review getReview(@PathVariable int reviewId) {
         return reviewService.findReviewById(reviewId);
@@ -42,12 +37,9 @@ public class ReviewController {
     public Review updateReview(@RequestBody Review review) {
         return reviewService.update(review);
     }
-
-    //TODO: thow exception
+    
     @DeleteMapping("/review/{reviewId}")
     public void deleteReview(@PathVariable int reviewId) {
-        if(reviewService.delete(reviewId)){
-        
-        }
+        reviewService.delete(reviewId);
     }
 }
