@@ -32,8 +32,9 @@ public class NewsController {
         return newsService.findNewsById(newsId);
     }
     //TODO: add {newsId}
-    @PutMapping("/news")
-    public News updateNews(@RequestBody News news) {
+    @PutMapping("/news/{newsId}")
+    public News updateNews(@RequestBody News news, @PathVariable int newsId) {
+        news.setNewsId(newsId);
         return newsService.update(news);
     }
 
