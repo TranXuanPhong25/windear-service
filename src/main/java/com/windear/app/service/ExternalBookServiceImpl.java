@@ -37,7 +37,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     }
 
     public List<ExternalBook> mapResponseToEntityList(List<Map<String, Object>> booksData) {
-        List<ExternalBook> books = booksData.stream().map(bookData -> {
+        return booksData.stream().map(bookData -> {
             ExternalBook book = new ExternalBook();
             book.setId((Integer) bookData.get("id"));
             book.setTitle((String) bookData.get("title"));
@@ -49,7 +49,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
             book.setAuthors(authors);
             return book;
         }).collect(Collectors.toList());
-        return books;
+        
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "}";
         List<Map<String, Object>> booksData = getQueryResult(query);
         List<ExternalBook> externalBookList = mapResponseToEntityList(booksData);
-        if (externalBookList.size() == 0) {
+        if (externalBookList.isEmpty()) {
             throw new BookNotFoundException("Book with id not found: " + id);
         }
         return externalBookList;
@@ -97,7 +97,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "}";
         List<Map<String, Object>> booksData = getQueryResult(query);
         List<ExternalBook> externalBookList = mapResponseToEntityList(booksData);
-        if (externalBookList.size() == 0) {
+        if (externalBookList.isEmpty()) {
             throw new BookNotFoundException("Book with title not found: " + title);
         }
         return externalBookList;

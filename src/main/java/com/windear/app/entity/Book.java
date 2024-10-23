@@ -1,20 +1,18 @@
 package com.windear.app.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 
 import java.time.LocalDate;
 
-import org.springframework.data.annotation.Id;
 
 @Entity
-@Table(name = "book", schema = "book")
+@Table(name = "book", schema = "public")
 public class Book {
    @Id
    @Column(name = "id")
-   private Long id;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private int id;
    
    @Column(name = "title")
    private String title;
@@ -33,11 +31,11 @@ public class Book {
       borrowDate = null;
    }
    
-   public Long getId() {
+   public int getId() {
       return id;
    }
    
-   public void setId(Long id) {
+   public void setId(int id) {
       this.id = id;
    }
    

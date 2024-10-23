@@ -8,10 +8,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-    @Value("${API_KEY}")
+    @Value("${hardcover.api.key}")
     private String apiKey;
 
-    @Value("${API_URL}")
+    @Value("${hardcover.api.url}")
     private String apiUrl;
 
     @Bean
@@ -22,7 +22,7 @@ public class WebClientConfig {
                 .build();
         return WebClient.builder()
                 .baseUrl(apiUrl)
-                .defaultHeader("authorization", apiKey)
+                .defaultHeader("authorization", "Bearer " + apiKey)
                 .exchangeStrategies(strategies)
                 .build();
     }
