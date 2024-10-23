@@ -7,6 +7,9 @@ import java.util.List;
 
 @Service
 public interface BookService {
-   public List<Book> findAll() ;
-   public Book save(Book book) ;
+   List<Book> findAll() ;
+   Book findById(int id);
+   Book add(Book book);
+   Book update(Book book);
+   void delete(int id);
 }
