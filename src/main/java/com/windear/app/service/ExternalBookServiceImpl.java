@@ -81,6 +81,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "  books(\n" +
                 "    where: {title: {_ilike: \"%" + title + "%\"}}\n" +
                 "    order_by: {users_read_count: desc_nulls_last}\n" +
+                "    limit:10\n"+
                 "  ) {\n" +
                 "    id\n" +
                 "    title\n" +
