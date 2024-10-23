@@ -48,7 +48,7 @@ public class News {
         return newsId;
     }
 
-    public void setNewsId() {
+    public void setNewsId(Integer newsId) {
         this.newsId = newsId;
     }
 }

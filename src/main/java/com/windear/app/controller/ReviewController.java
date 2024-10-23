@@ -33,8 +33,9 @@ public class ReviewController {
         return reviewService.findReviewByBookId(bookId);
     }
 
-    @PutMapping("/review")
-    public Review updateReview(@RequestBody Review review) {
+    @PutMapping("/review/{reviewId}")
+    public Review updateReview(@RequestBody Review review, @PathVariable int reviewId) {
+        review.setReviewId(reviewId);
         return reviewService.update(review);
     }
     
