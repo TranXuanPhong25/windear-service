@@ -9,7 +9,7 @@ public class News {
     @Id
     @Column(name = "news_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int newsId;
+    private Integer newsId;
 
     @Column(name = "title")
     private String title;
@@ -44,11 +44,11 @@ public class News {
         this.imageUrl = imageUrl;
     }
 
-    public int getNewsId() {
+    public Integer getNewsId() {
         return newsId;
     }
 
-    public void setNewsId(int newsId) {
+    public void setNewsId(Integer newsId) {
         this.newsId = newsId;
     }
 }
