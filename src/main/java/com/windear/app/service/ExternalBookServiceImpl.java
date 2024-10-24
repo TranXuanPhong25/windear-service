@@ -42,6 +42,10 @@ public class ExternalBookServiceImpl implements ExternalBookService {
             book.setId((Integer) bookData.get("id"));
             book.setTitle((String) bookData.get("title"));
             book.setRating((Double) bookData.get("rating"));
+            Map<String, Object> image = (Map<String, Object>) bookData.get("image");
+            if (image != null) {
+                book.setImageUrl((String) image.get("url"));
+            }
             List<Map<String, Object>> contributions = (List<Map<String, Object>>) bookData.get("contributions");
             String authors = contributions.stream()
                     .map(contribution -> (String) ((Map<String, Object>) contribution.get("author")).get("name"))
@@ -52,10 +56,25 @@ public class ExternalBookServiceImpl implements ExternalBookService {
         return books;
     }
 
+    public String validateTitle(String title) {
+        StringBuilder validatedTitle = new StringBuilder();
+        for (char c : title.toCharArray()) {
+            if (Character.isLetterOrDigit(c) || c == ' ') {
+                validatedTitle.append(c);
+            } else {
+                validatedTitle.append('%');
+            }
+        }
+        return validatedTitle.toString();
+    }
+
     @Override
     public List<ExternalBook> findById(int id) {
         String query = "{\n" +
                 "  books(where: {id: {_eq: "+ id + "}}) {\n" +
+                "    image {\n" +
+                "      url\n" +
+                "    }" +
                 "    id\n" +
                 "    title\n" +
                 "    release_date\n" +
@@ -77,11 +96,15 @@ public class ExternalBookServiceImpl implements ExternalBookService {
 
     @Override
     public List<ExternalBook> findByTitle(String title) {
+        title = validateTitle(title);
         String query = "{\n" +
                 "  books(\n" +
                 "    where: {title: {_ilike: \"%" + title + "%\"}}\n" +
                 "    order_by: {users_read_count: desc_nulls_last}\n" +
                 "  ) {\n" +
+                "    image {\n" +
+                "      url\n" +
+                "    }" +
                 "    id\n" +
                 "    title\n" +
                 "    release_date\n" +

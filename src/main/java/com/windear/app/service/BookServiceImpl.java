@@ -63,8 +63,4 @@ public class BookServiceImpl implements BookService {
       bookRepository.delete(book);
    }
 
-//   public Book convertToBook(ExternalBook externalBook) {
-//      Book book = new Book();
-//
-//   }
 }
