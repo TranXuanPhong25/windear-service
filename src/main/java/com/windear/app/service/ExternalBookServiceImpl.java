@@ -59,13 +59,13 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     public String validateTitle(String title) {
         StringBuilder validatedTitle = new StringBuilder();
         for (char c : title.toCharArray()) {
-            if (Character.isLetterOrDigit(c) || c == ' ') {
+            if (Character.isLetterOrDigit(c)) {
                 validatedTitle.append(c);
             } else {
                 validatedTitle.append('%');
             }
         }
-        return validatedTitle.toString();
+        return validatedTitle.toString().replace("%20", " ");
     }
 
     @Override
