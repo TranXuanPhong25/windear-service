@@ -30,7 +30,7 @@ public class SecurityConfig {
         */
       return http
             .authorizeHttpRequests((authorize) -> authorize
-                  .requestMatchers("/api/public", "api/**").permitAll()
+                  .requestMatchers("/api/public", "api/external/**","/api/news/**","api/auth0/**").permitAll()
                   .requestMatchers("/api/private").authenticated()
 //                  .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                   .requestMatchers("/api/admin").hasAuthority("ROLE_admin")
