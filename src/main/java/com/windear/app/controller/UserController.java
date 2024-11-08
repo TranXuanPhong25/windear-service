@@ -1,6 +1,5 @@
 package com.windear.app.controller;
 
-import com.windear.app.entity.ExternalBook;
 import com.windear.app.entity.User;
 import com.windear.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +43,12 @@ public class UserController {
     }
 
     @PostMapping("/users/{userId}/borrow/{bookId}")
-    public ExternalBook borrowBook(@PathVariable int userId, @PathVariable int bookId) {
+    public String borrowBook(@PathVariable int userId, @PathVariable String bookId) {
         return userService.borrowBook(userId, bookId);
     }
 
     @PostMapping("users/{userId}/return/{bookId}")
-    public ExternalBook returnBook(@PathVariable int userId, @PathVariable int bookId) {
+    public String returnBook(@PathVariable int userId, @PathVariable String bookId) {
         return userService.returnBook(userId, bookId);
     }
 }

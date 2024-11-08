@@ -1,7 +1,7 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.Book;
-import com.windear.app.entity.ExternalBook;
+import com.windear.app.entity.BookId;
 import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,12 @@ public class BookServiceImpl implements BookService {
    }
 
    @Override
-   public Book findById(int id) {
-      Optional<Book> book = bookRepository.findById(id);
-      if (book.isPresent()) {
-         return book.get();
-      }
-      else {
+   public List<Book> findById(String id) {
+      List<Book> book = bookRepository.findById(id);
+      if (book.size() == 0) {
          throw new BookNotFoundException("Book with id not found: " + id);
       }
+      return book;
    }
 
    @Override
@@ -44,23 +42,8 @@ public class BookServiceImpl implements BookService {
 
    @Override
    @Transactional
-   public Book update(Book book) {
-      Book bookFromDB = findById(book.getId());
-      if (book.getAuthor() != null) {
-         bookFromDB.setAuthor(book.getAuthor());
-      }
-      if (book.getTitle() != null) {
-         bookFromDB.setTitle(book.getTitle());
-      }
-      bookRepository.save(bookFromDB);
-      return bookFromDB;
-   }
-
-   @Override
-   @Transactional
-   public void delete(int id) {
-      Book book = findById(id);
-      bookRepository.delete(book);
+   public void delete(BookId id) {
+      bookRepository.deleteById(id);
    }
 
 //   public Book convertToBook(ExternalBook externalBook) {
