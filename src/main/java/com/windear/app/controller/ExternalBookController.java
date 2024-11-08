@@ -1,6 +1,5 @@
 package com.windear.app.controller;
 
-import com.windear.app.entity.ExternalBook;
 import com.windear.app.service.ExternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +17,14 @@ public class ExternalBookController {
     }
 
     @GetMapping("/books/{id}")
-    public List<ExternalBook> findById(@PathVariable int id) {
+    public String findById(@PathVariable String id) {
         return externalBookService.findById(id);
     }
 
     @GetMapping("/books/search")
-    public List<ExternalBook> findByTitle(@RequestParam String title) {
-        return externalBookService.findByTitle(title);
+    public String findByTitle(@RequestParam String title,
+                               @RequestParam(defaultValue = "0") int pageNo) {
+        return externalBookService.findByTitle(title, pageNo);
     }
 
 

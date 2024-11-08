@@ -1,6 +1,5 @@
 package com.windear.app.service;
 
-import com.windear.app.entity.ExternalBook;
 import com.windear.app.exception.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,65 +22,74 @@ public class ExternalBookServiceImpl implements ExternalBookService {
         this.bookService = bookService;
     }
 
-    public List<Map<String, Object>> getQueryResult(String query) {
+    public String getQueryResultAsString(String query) {
         Map<String, String> graphqlQuery = new HashMap<>();
         graphqlQuery.put("query", query);
 
-        Map<String, Object> response = webClient.post()
+        String response = webClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(graphqlQuery)
                 .retrieve()
-                .bodyToMono(Map.class)
+                .bodyToMono(String.class)
                 .block();
-        return (List<Map<String, Object>>) ((Map<String, Object>) response.get("data")).get("books");
-    }
-
-    public List<ExternalBook> mapResponseToEntityList(List<Map<String, Object>> booksData) {
-        return booksData.stream().map(bookData -> {
-            ExternalBook book = new ExternalBook();
-            book.setId((Integer) bookData.get("id"));
-            book.setTitle((String) bookData.get("title"));
-            book.setRating((Double) bookData.get("rating"));
-            List<Map<String, Object>> contributions = (List<Map<String, Object>>) bookData.get("contributions");
-            String authors = contributions.stream()
-                    .map(contribution -> (String) ((Map<String, Object>) contribution.get("author")).get("name"))
-                    .collect(Collectors.joining(", "));
-            book.setAuthors(authors);
-            return book;
-        }).collect(Collectors.toList());
-        
+        return response;
     }
 
     @Override
-    public List<ExternalBook> findById(int id) {
+    public String findById(String id) {
         String query = "{\n" +
-                "  books(where: {id: {_eq: "+ id + "}}) {\n" +
-                "    id\n" +
-                "    title\n" +
-                "    release_date\n" +
+                "  books(where: {id: {_eq: " + id + "}}) {\n" +
+                "    image {\n" +
+                "      url\n" +
+                "    }\n" +
                 "    rating\n" +
+                "    ratings_count\n" +
+                "    users_count\n" +
+                "    users_read_count\n" +
+                "    release_date\n" +
+                "    release_year\n" +
+                "    pages\n" +
+                "    alternative_titles\n" +
                 "    contributions {\n" +
                 "      author {\n" +
+                "        id\n" +
+                "        image {\n" +
+                "          url\n" +
+                "        }\n" +
                 "        name\n" +
+                "      }\n" +
+                "    }\n" +
+                "    editions_count\n" +
+                "    ratings_distribution\n" +
+                "    title\n" +
+                "    reviews_count\n" +
+                "    taggings(distinct_on: tag_id) {\n" +
+                "      tag {\n" +
+                "        tag\n" +
+                "        slug\n" +
+                "        tag_category {\n" +
+                "          category\n" +
+                "        }\n" +
+                "        count\n" +
                 "      }\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
-        List<Map<String, Object>> booksData = getQueryResult(query);
-        List<ExternalBook> externalBookList = mapResponseToEntityList(booksData);
-        if (externalBookList.isEmpty()) {
+        String response = getQueryResultAsString(query);
+        if (response.contains("\"books\":[]")) {
             throw new BookNotFoundException("Book with id not found: " + id);
         }
-        return externalBookList;
+        return getQueryResultAsString(query);
     }
 
     @Override
-    public List<ExternalBook> findByTitle(String title) {
+    public String findByTitle(String title, int pageNo) {
         String query = "{\n" +
                 "  books(\n" +
                 "    where: {title: {_ilike: \"%" + title + "%\"}}\n" +
                 "    order_by: {users_read_count: desc_nulls_last}\n" +
-                "    limit:10\n"+
+                "    limit: 10\n"+
+                "    offset: " + pageNo * 10 + "\n" +
                 "  ) {\n" +
                 "    id\n" +
                 "    title\n" +
@@ -96,11 +104,10 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    \n" +
                 "  }\n" +
                 "}";
-        List<Map<String, Object>> booksData = getQueryResult(query);
-        List<ExternalBook> externalBookList = mapResponseToEntityList(booksData);
-        if (externalBookList.isEmpty()) {
+        String response = getQueryResultAsString(query);
+        if (response.contains("\"books\":[]")) {
             throw new BookNotFoundException("Book with title not found: " + title);
         }
-        return externalBookList;
+        return getQueryResultAsString(query);
     }
 }
