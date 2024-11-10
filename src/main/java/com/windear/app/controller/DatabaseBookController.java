@@ -27,18 +27,8 @@ public class DatabaseBookController {
         return bookService.add(book);
     }
 
-    @PutMapping("/books")
-    public Book updateBook(@RequestBody Book book) {
-        return bookService.update(book);
-    }
-
     @GetMapping("/books/{id}")
-    public Book findBookById(@PathVariable int id) {
+    public List<Book> findBookById(@PathVariable String id) {
         return bookService.findById(id);
-    }
-
-    @DeleteMapping("/books/{id}")
-    public void deleteBook(@PathVariable int id) {
-        bookService.delete(id);
     }
 }
