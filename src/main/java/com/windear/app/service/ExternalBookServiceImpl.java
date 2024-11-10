@@ -42,6 +42,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    image {\n" +
                 "      url\n" +
                 "    }\n" +
+                "    description\n" +
                 "    rating\n" +
                 "    ratings_count\n" +
                 "    users_count\n" +
@@ -88,11 +89,20 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "  books(\n" +
                 "    where: {title: {_ilike: \"%" + title + "%\"}}\n" +
                 "    order_by: {users_read_count: desc_nulls_last}\n" +
-                "    limit: 10\n"+
+                "    limit: 10\n" +
                 "    offset: " + pageNo * 10 + "\n" +
                 "  ) {\n" +
                 "    id\n" +
-                "    title\n" +
+                "    image {\n" +
+                "      url\n" +
+                "    }\n" +
+                "    title\n"+
+                "    contributions {\n" +
+                "      author {\n" +
+                "        id\n" +
+                "        name\n" +
+                "      }\n" +
+                "    }\n" +
                 "    release_date\n" +
                 "    rating\n" +
                 "    contributions {\n" +

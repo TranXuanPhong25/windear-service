@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -28,7 +29,7 @@ public class SecurityConfig {
         This is where we configure the security required for our endpoints and setup our app to serve as
         an OAuth2 Resource Server, using JWT validation.
         */
-      return http.csrf().disable()
+      return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
                   .requestMatchers("/api/public", "api/**").permitAll()
                   .requestMatchers("/api/private").authenticated()
