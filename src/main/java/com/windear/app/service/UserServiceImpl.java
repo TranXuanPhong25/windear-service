@@ -1,7 +1,7 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.Book;
-import com.windear.app.entity.ExternalBook;
+import com.windear.app.entity.BookId;
 import com.windear.app.entity.User;
 import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.exception.UserNotFoundException;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         User user = findById(id);
         List<Book> books = user.getBorrowedBooks();
         for (Book book : books) {
-            bookService.delete(book.getId());
+            bookService.delete(new BookId(book.getId(), id));
         }
         userRepository.delete(user);
     }
@@ -79,12 +79,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ExternalBook borrowBook(int userId, int bookId) {
+    public String borrowBook(int userId, String bookId) {
         User user = findById(userId);
-        ExternalBook externalBook = externalBookService.findById(bookId).get(0);
-        Book book = externalBook.convertToBook();
-        book.setId(bookId);
-        book.setBorrowerId(userId);
+        String externalBook = externalBookService.findById(bookId);
+        Book book = new Book();
+        book.setBookId(new BookId(bookId, userId));
         book.setBorrowDate(LocalDate.now());
         bookService.add(book);
         return externalBook;
@@ -92,12 +91,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ExternalBook returnBook(int userId, int bookId) {
+    public String returnBook(int userId, String bookId) {
         User user = findById(userId);
-        ExternalBook externalBook = externalBookService.findById(bookId).get(0);
+        String externalBook = externalBookService.findById(bookId);
         for (Book book : user.getBorrowedBooks()) {
-            if (book.getId() == bookId) {
-                bookService.delete(bookId);
+            if (book.getId().equals(bookId)) {
+                book.setReturnDate(LocalDate.now());
                 return externalBook;
             }
         }
