@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -28,12 +29,12 @@ public class SecurityConfig {
         This is where we configure the security required for our endpoints and setup our app to serve as
         an OAuth2 Resource Server, using JWT validation.
         */
-      return http
+      return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
-                  .requestMatchers("/api/public", "api/external/**","/api/news/**","api/auth0/**").permitAll()
-                  .requestMatchers("/api/private").authenticated()
+                  .requestMatchers("/api/public", "api/external/**","/api/news/**").permitAll()
+                  .requestMatchers("/api/private","api/auth0/user/profile/**").authenticated()
 //                  .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
-                  .requestMatchers("/api/admin").hasAuthority("ROLE_admin")
+                  .requestMatchers("/api/admin","api/auth0/user/").hasAuthority("ROLE_admin")
             
             )
             .cors(withDefaults())
