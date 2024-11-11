@@ -32,9 +32,9 @@ public class SecurityConfig {
       return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
                   .requestMatchers("/api/public", "api/external/**","/api/news/**").permitAll()
-                  .requestMatchers("/api/private","api/auth0/user/profile/**").authenticated()
+                  .requestMatchers("/api/private","api/auth0/user/**").authenticated()
 //                  .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
-                  .requestMatchers("/api/admin","api/auth0/user/").hasAuthority("ROLE_admin")
+                  .requestMatchers("/api/admin","api/auth0/user").hasAuthority("ROLE_admin")
             
             )
             .cors(withDefaults())
