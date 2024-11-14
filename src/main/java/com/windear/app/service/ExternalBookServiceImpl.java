@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.windear.app.entity.BookInShelf;
 import com.windear.app.exception.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,12 +15,10 @@ import java.util.stream.Collectors;
 @Service
 public class ExternalBookServiceImpl implements ExternalBookService {
     private WebClient webClient;
-    private BookService bookService;
 
     @Autowired
-    public ExternalBookServiceImpl(WebClient webClient, BookService bookService) {
+    public ExternalBookServiceImpl(WebClient webClient) {
         this.webClient = webClient;
-        this.bookService = bookService;
     }
 
     public String getQueryResultAsString(String query) {

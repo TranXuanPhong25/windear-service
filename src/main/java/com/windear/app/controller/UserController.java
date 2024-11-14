@@ -32,23 +32,9 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable int id) {
-        userService.delete(id);
-    }
-
     @PutMapping("/users")
     public User updateUser(@RequestBody User user) {
         return userService.update(user);
     }
 
-    @PostMapping("/users/{userId}/borrow/{bookId}")
-    public String borrowBook(@PathVariable int userId, @PathVariable String bookId) {
-        return userService.borrowBook(userId, bookId);
-    }
-
-    @PostMapping("users/{userId}/return/{bookId}")
-    public String returnBook(@PathVariable int userId, @PathVariable String bookId) {
-        return userService.returnBook(userId, bookId);
-    }
 }

@@ -16,11 +16,6 @@ public class ExternalBookController {
         this.externalBookService = externalBookService;
     }
 
-    @GetMapping("/books/{id}")
-    public String findById(@PathVariable String id) {
-        return externalBookService.findById(id);
-    }
-
     @GetMapping("/books/search")
     public String findByTitle(@RequestParam String title,
                                @RequestParam(defaultValue = "0") int pageNo) {
