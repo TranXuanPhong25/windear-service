@@ -25,12 +25,12 @@ public class ExternalBookController {
     }
 
     @GetMapping("/reviews")
-    public String getReviews() {
-        return externalBookService.getReviews();
+    public String getReviews(@RequestBody String wordId) {
+        return externalBookService.getReviews(wordId);
     }
 
     @GetMapping("/books/{id}")
-    public String getBookByLegacyId(@PathVariable String id) {
+    public String getBookByLegacyId(@PathVariable int id) {
         return externalBookService.getBookByLegacyId(id);
     }
 
@@ -50,7 +50,7 @@ public class ExternalBookController {
     }
 
     @GetMapping("/books/{id}/similar")
-    public String getSimilarBooks(@PathVariable String id) {
+    public String getSimilarBooks(@PathVariable int id) {
         return externalBookService.getSimilarBooks(id);
     }
 }

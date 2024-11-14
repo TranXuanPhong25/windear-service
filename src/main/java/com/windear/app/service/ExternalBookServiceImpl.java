@@ -124,10 +124,10 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     }
 
     @Override
-    public String getReviews() {
+    public String getReviews(String workId) {
         String query = "{" +
                 "getReviews(\n" +
-                "    filters: {resourceId: \"workId\", resourceType: WORK, sort: NEWEST}\n" +
+                "    filters: {resourceId: + " + workId + ", resourceType: WORK, sort: NEWEST}\n" +
                 "    pagination: {}\n" +
                 "  ) {\n" +
                 "    pageInfo {\n" +
@@ -162,7 +162,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     }
 
     @Override
-    public String getBookByLegacyId(String id) {
+    public String getBookByLegacyId(int id) {
         String query = "{\n" +
                 "    getBookByLegacyId(legacyId: " + id + ") {\n" +
                 "      stats {\n" +
@@ -346,7 +346,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     }
 
     @Override
-    public String getSimilarBooks(String id) {
+    public String getSimilarBooks(int id) {
         String query = "{" +
                 "getSimilarBooks(\n" +
                 "    id: " + id + "\n" +
