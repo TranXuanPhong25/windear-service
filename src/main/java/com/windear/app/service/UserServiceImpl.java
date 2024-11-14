@@ -81,18 +81,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String borrowBook(int userId, String bookId) {
         User user = findById(userId);
+        return "";
+        /*
         String externalBook = externalBookService.findById(bookId);
         Book book = new Book();
         book.setBookId(new BookId(bookId, userId));
         book.setBorrowDate(LocalDate.now());
         bookService.add(book);
         return externalBook;
+         */
     }
 
     @Override
     @Transactional
     public String returnBook(int userId, String bookId) {
         User user = findById(userId);
+        return "";
+        /*
         String externalBook = externalBookService.findById(bookId);
         for (Book book : user.getBorrowedBooks()) {
             if (book.getId().equals(bookId)) {
@@ -101,5 +106,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         throw new BookNotFoundException("Book with id not found: " + bookId);
+         */
     }
 }

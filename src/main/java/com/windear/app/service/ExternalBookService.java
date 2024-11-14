@@ -4,6 +4,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ExternalBookService {
-    String findById(String id);
-    String findByTitle(String title, int pageNo);
+    String getBasicGenres();
+    String getTaggedBooks(String tagName);
+    String getReviews();
+    String getBookByLegacyId(String id);
+    String getSearchSuggestions(String q);
+    String getFeaturedBookLists();
+    String getPopularBookLists();
+    String getSimilarBooks(String id);
 }
