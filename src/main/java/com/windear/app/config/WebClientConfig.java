@@ -8,10 +8,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-    @Value("${GOODREADS_API_KEY}")
+    @Value("${goodreads.api.key}")
     private String apiKey;
 
-    @Value("${GOODREADS_API_URL}")
+    @Value("${goodreads.api.url}")
     private String apiUrl;
 
     @Bean
