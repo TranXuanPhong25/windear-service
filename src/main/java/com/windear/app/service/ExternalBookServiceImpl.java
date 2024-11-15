@@ -247,7 +247,6 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "        details {\n" +
                 "          originalTitle\n" +
                 "          publicationTime\n" +
-                "          publishers\n" +
                 "        }\n" +
                 "        reviews {\n" +
                 "          totalCount\n" +
@@ -280,7 +279,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     @Override
     public String getSearchSuggestions(String q) {
         String query = "{\n" +
-                "getSearchSuggestions(query: " + q + ") {\n" +
+                "getSearchSuggestions(query: \"" + q + "\") {\n" +
                 "    edges {\n" +
                 "      ... on SearchBookEdge {\n" +
                 "        node {\n" +
@@ -289,6 +288,11 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "          imageUrl\n" +
                 "          stats {\n" +
                 "            averageRating\n" +
+                "          }\n" +
+                "          primaryContributorEdge {\n " +
+                "            node {\n" +
+                "               name\n" +
+                "            }\n"+
                 "          }\n" +
                 "        }\n" +
                 "      }\n" +
