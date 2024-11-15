@@ -1,63 +1,53 @@
 package com.windear.app.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-
-@Entity
-@Table(name = "book", schema = "public")
 public class Book {
-   @EmbeddedId
-   private BookId bookId;
-   
-   @Column(name = "borrow_date")
-   private LocalDate borrowDate;
+    protected String id;
+    protected String title;
+    protected String author;
+    protected double rating;
 
-   @Column(name = "return_date")
-   private LocalDate returnDate;
-   
-   public Book() {
-      borrowDate = null;
-      returnDate = null;
-   }
-   
-   public BookId getBookId() {
-      return bookId;
-   }
+    public Book() {
 
-   public void setBookId(BookId bookId) {
-      this.bookId = bookId;
-   }
+    }
 
-   public void setId(String id) {
-      bookId.setId(id);
-   }
+    public Book(String id, String title, String author, double rating) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.rating = rating;
+    }
 
-   public String getId() {
-      return bookId.getId();
-   }
+    public String getId() {
+        return id;
+    }
 
-   public void setBorrowerId(int id) {
-      bookId.setBorrowerId(id);
-   }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-   public int getBorrowerId() {
-      return bookId.getBorrowerId();
-   }
-   
-   public LocalDate getReturnDate() {
-      return returnDate;
-   }
+    public String getTitle() {
+        return title;
+    }
 
-   public void setReturnDate(LocalDate returnDate) {
-      this.returnDate = returnDate;
-   }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-   public LocalDate getBorrowDate() {
-      return borrowDate;
-   }
-   
-   public void setBorrowDate(LocalDate borrowDate) {
-      this.borrowDate = borrowDate;
-   }
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 }

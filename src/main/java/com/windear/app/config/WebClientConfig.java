@@ -8,10 +8,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-    @Value("${hardcover.api.key}")
+    @Value("${goodreads.api.key}")
     private String apiKey;
 
-    @Value("${hardcover.api.url}")
+    @Value("${goodreads.api.url}")
     private String apiUrl;
 
     @Bean
@@ -22,7 +22,7 @@ public class WebClientConfig {
                 .build();
         return WebClient.builder()
                 .baseUrl(apiUrl)
-                .defaultHeader("authorization", "Bearer " + apiKey)
+                .defaultHeader("X-api-key", apiKey)
                 .exchangeStrategies(strategies)
                 .build();
     }

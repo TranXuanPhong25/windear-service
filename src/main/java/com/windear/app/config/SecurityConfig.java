@@ -34,7 +34,6 @@ public class SecurityConfig {
                   .requestMatchers("/api/private").authenticated()
 //                  .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                   .requestMatchers("/api/admin").hasAuthority("ROLE_admin")
-            
             )
             .cors(withDefaults())
             .oauth2ResourceServer(oauth2 -> oauth2

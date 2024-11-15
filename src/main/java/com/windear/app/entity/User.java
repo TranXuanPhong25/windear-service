@@ -23,10 +23,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany
-    @JoinColumn(name = "borrower_id")
-    private List<Book> borrowedBooks = new ArrayList<>();
-
     public int getId() {
         return id;
     }
@@ -59,11 +55,4 @@ public class User {
         this.password = password;
     }
 
-    public List<Book> getBorrowedBooks() {
-        return borrowedBooks;
-    }
-
-    public void setBorrowedBooks(List<Book> borrowedBooks) {
-        this.borrowedBooks = borrowedBooks;
-    }
 }
