@@ -163,114 +163,82 @@ public class ExternalBookServiceImpl implements ExternalBookService {
 
     @Override
     public String getBookByLegacyId(int id) {
-        String query = "{\n" +
-                "    getBookByLegacyId(legacyId: " + id + ") {\n" +
-                "      stats {\n" +
-                "        ratingsCount\n" +
-                "        averageRating\n" +
-                "        textReviewsCount\n" +
-                "      }\n" +
-                "      title\n" +
-                "      details {\n" +
-                "        asin\n" +
-                "        format\n" +
-                "        isbn\n" +
-                "        isbn13\n" +
-                "        numPages\n" +
-                "        officialUrl\n" +
-                "        publicationTime\n" +
-                "        publisher\n" +
-                "      }\n" +
-                "      description\n" +
-                "      primaryContributorEdge {\n" +
-                "        role\n" +
-                "        node {\n" +
-                "          name\n" +
-                "          description\n" +
-                "          followers {\n" +
-                "            totalCount\n" +
-                "          }\n" +
-                "          works {\n" +
-                "            totalCount\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "      secondaryContributorEdges {\n" +
-                "        node {\n" +
-                "          name\n" +
-                "        }\n" +
-                "      }\n" +
-                "      similarBooks(pagination: {}) {\n" +
-                "        edges {\n" +
-                "          node {\n" +
-                "            title\n" +
-                "            stats {\n" +
-                "              averageRating\n" +
-                "            }\n" +
-                "            primaryContributorEdge {\n" +
-                "              node {\n" +
-                "                name\n" +
-                "              }\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "      bookGenres {\n" +
-                "        genre {\n" +
-                "          name\n" +
-                "        }\n" +
-                "      }\n" +
-                "      links {\n" +
-                "        primaryAffiliateLink {\n" +
-                "          url\n" +
-                "          name\n" +
-                "          ... on BookLink {\n" +
-                "            url\n" +
-                "          }\n" +
-                "        }\n" +
-                "        secondaryAffiliateLinks {\n" +
-                "          name\n" +
-                "          url\n" +
-                "        }\n" +
-                "      }\n" +
-                "      imageUrl\n" +
-                "      socialSignals(shelfStatus: ALL) {\n" +
-                "        count\n" +
+        String query = "{" +
+                "   getBookByLegacyId(legacyId: " + id + ") {\n" +
+                "          stats {\n" +
+                "      ratingsCount\n" +
+                "      averageRating\n" +
+                "      textReviewsCount\n" +
+                "    }\n" +
+                "    title\n" +
+                "    details {\n" +
+                "      asin\n" +
+                "      format\n" +
+                "      isbn\n" +
+                "      isbn13\n" +
+                "      numPages\n" +
+                "      officialUrl\n" +
+                "      publicationTime\n" +
+                "      publisher\n" +
+                "    }\n" +
+                "    description\n" +
+                "    primaryContributorEdge {\n" +
+                "      role\n" +
+                "      node {\n" +
                 "        name\n" +
-                "        users {\n" +
-                "          node {\n" +
-                "            imageUrl\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "      work {\n" +
-                "        details {\n" +
-                "          originalTitle\n" +
-                "          publicationTime\n" +
-                "        }\n" +
-                "        reviews {\n" +
+                "        description\n" +
+                "        followers {\n" +
                 "          totalCount\n" +
                 "        }\n" +
-                "        editions {\n" +
+                "        works {\n" +
                 "          totalCount\n" +
-                "          edges {\n" +
-                "            node {\n" +
-                "              imageUrl\n" +
-                "              legacyId\n" +
-                "              details {\n" +
-                "                publisher\n" +
-                "                publicationTime\n" +
-                "                numPages\n" +
-                "                language {\n" +
-                "                  name\n" +
-                "                }\n" +
-                "                format\n" +
-                "              }\n" +
-                "            }\n" +
-                "          }\n" +
                 "        }\n" +
                 "      }\n" +
-                "      webUrl\n" +
+                "    }\n" +
+                "    secondaryContributorEdges {\n" +
+                "      node {\n" +
+                "        name\n" +
+                "      }\n" +
+                "      role\n" +
+                "    }\n" +
+                "    bookGenres {\n" +
+                "      genre {\n" +
+                "        name\n" +
+                "      }\n" +
+                "    }\n" +
+                "    links {\n" +
+                "      primaryAffiliateLink {\n" +
+                "        url\n" +
+                "        name\n" +
+                "        ... on BookLink {\n" +
+                "          url\n" +
+                "        }\n" +
+                "      }\n" +
+                "      secondaryAffiliateLinks {\n" +
+                "        name\n" +
+                "        url\n" +
+                "      }\n" +
+                "    }\n" +
+                "    imageUrl\n" +
+                "    socialSignals(shelfStatus: ALL) {\n" +
+                "      count\n" +
+                "      name\n" +
+                "      users {\n" +
+                "        node {\n" +
+                "          imageUrl\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "    webUrl\n" +
+                "    work {\n" +
+                "      details {\n" +
+                "        originalTitle\n" +
+                "        publicationTime\n" +
+                "      }\n" +
+                "      reviews {\n" +
+                "        totalCount\n" +
+                "      }\n" +
+                "    }\n" +
                 "    }\n" +
                 "  }";
         return getQueryResultAsString(query);
