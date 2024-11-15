@@ -1,5 +1,6 @@
 package com.windear.app.controller;
 
+import com.windear.app.dto.AddBookRequest;
 import com.windear.app.entity.BookInShelf;
 import com.windear.app.entity.Shelves;
 import com.windear.app.service.ShelvesService;
@@ -29,10 +30,9 @@ public class ShelvesController {
     }
 
     @PostMapping("/{userId}")
-    public Shelves addBookToShelf(@RequestBody BookInShelf book,
-                                  @RequestBody String shelfName,
+    public Shelves addBookToShelf(@RequestBody AddBookRequest request,
                                   @PathVariable String userId) {
-        return shelvesService.addBookToShelf(userId, shelfName, book);
+        return shelvesService.addBookToShelf(userId, request.getShelfName(), request.getBook());
     }
 
     @DeleteMapping("/{userId}")

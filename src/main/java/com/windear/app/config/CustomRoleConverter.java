@@ -14,20 +14,20 @@ import java.util.stream.Collectors;
 
 @Component
 public class CustomRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
-   private final String roleNamespace;
-   
-   public CustomRoleConverter(@Value("${app.security.role.namespace}") String roleNamespace) {
-      this.roleNamespace = roleNamespace;
-   }
-   
-   @Override
-   public Collection<GrantedAuthority> convert(Jwt jwt) {
-      List<String> roles = jwt.getClaimAsStringList(roleNamespace); // Extracting roles from the "roles" claim
-      if (roles == null) {
-         return Collections.emptyList();
-      }
-      return roles.stream()
-            .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Prefix with "ROLE_"
-            .collect(Collectors.toList());
-   }
+    private final String roleNamespace;
+
+    public CustomRoleConverter(@Value("${app.security.role.namespace}") String roleNamespace) {
+        this.roleNamespace = roleNamespace;
+    }
+
+    @Override
+    public Collection<GrantedAuthority> convert(Jwt jwt) {
+        List<String> roles = jwt.getClaimAsStringList(roleNamespace); // Extracting roles from the "roles" claim
+        if (roles == null) {
+            return Collections.emptyList();
+        }
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Prefix with "ROLE_"
+                .collect(Collectors.toList());
+    }
 }

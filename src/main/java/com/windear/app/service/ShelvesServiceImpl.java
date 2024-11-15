@@ -3,7 +3,6 @@ package com.windear.app.service;
 import com.windear.app.entity.BookInShelf;
 import com.windear.app.entity.Shelf;
 import com.windear.app.entity.Shelves;
-import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.repository.ShelvesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class ShelvesServiceImpl implements ShelvesService {
         Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(shelfName);
         shelf.addBook(book);
-        System.out.println(shelf);
         return shelvesRepository.save(shelves);
     }
 
