@@ -6,6 +6,7 @@ import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Review save(Review review) {
+        review.setCreateAt(LocalDate.now());
         return reviewRepository.save(review);
     }
 
@@ -42,8 +44,8 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Review update(Review review) {
         Review reviewFromDB = findReviewById(review.getReviewId());
-        if(review.getReviewContent() != null) {
-            reviewFromDB.setReviewContent(review.getReviewContent());
+        if(review.getContent() != null) {
+            reviewFromDB.setContent(review.getContent());
         }
         if(review.getBookId() != 0) {
             reviewFromDB.setBookId(review.getBookId());

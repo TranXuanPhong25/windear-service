@@ -2,6 +2,9 @@ package com.windear.app.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @Table(name = "news")
 public class News {
@@ -19,6 +22,9 @@ public class News {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "create_at")
+    private LocalDate createAt;
 
     public String getTitle() {
         return title;
@@ -50,5 +56,13 @@ public class News {
 
     public void setNewsId(Integer newsId) {
         this.newsId = newsId;
+    }
+
+    public LocalDate getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(LocalDate createAt) {
+        this.createAt = createAt;
     }
 }
