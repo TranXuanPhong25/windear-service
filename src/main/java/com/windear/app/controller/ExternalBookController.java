@@ -4,8 +4,6 @@ import com.windear.app.service.ExternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/external")
 public class ExternalBookController {
@@ -16,11 +14,38 @@ public class ExternalBookController {
         this.externalBookService = externalBookService;
     }
 
-    @GetMapping("/books/search")
-    public String findByTitle(@RequestParam String title,
-                               @RequestParam(defaultValue = "0") int pageNo) {
-        return externalBookService.findByTitle(title, pageNo);
+    @GetMapping("/tags")
+    public String getBasicGenres() {
+        return externalBookService.getBasicGenres();
     }
 
+    @GetMapping("tag/{tagName}")
+    public String getTaggedBooks(@PathVariable String tagName) {
+        return externalBookService.getTaggedBooks(tagName);
+    }
 
+    @GetMapping("/reviews")
+    public String getReviews(@RequestBody String wordId) {
+        return externalBookService.getReviews(wordId);
+    }
+
+    @GetMapping("/books/{id}")
+    public String getBookByLegacyId(@PathVariable int id) {
+        return externalBookService.getBookByLegacyId(id);
+    }
+
+    @GetMapping("/list/featured")
+    public String getFeaturedBookLists() {
+        return externalBookService.getFeaturedBookLists();
+    }
+
+    @GetMapping("/list/popular")
+    public String getPopularBookLists() {
+        return externalBookService.getPopularBookLists();
+    }
+
+    @GetMapping("/books/{id}/similar")
+    public String getSimilarBooks(@PathVariable int id) {
+        return externalBookService.getSimilarBooks(id);
+    }
 }
