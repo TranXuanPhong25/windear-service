@@ -8,15 +8,15 @@ import java.time.LocalDate;
 public class Book {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Integer bookId;
-   private String title;
-   private Integer authorId;
-   private LocalDate releaseDate;
-   private double rating;
+   protected Integer bookId;
+   protected String title;
+   protected String authorId;
+   protected LocalDate releaseDate;
+   protected double rating;
 
    public Book() {}
 
-   public Book(Integer bookId, String title, Integer authorId, LocalDate releaseDate, double rating) {
+   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating) {
       this.bookId = bookId;
       this.title = title;
       this.authorId = authorId;
@@ -40,11 +40,11 @@ public class Book {
       this.title = title;
    }
 
-   public Integer getAuthorId() {
+   public String getAuthorId() {
       return authorId;
    }
 
-   public void setAuthorId(Integer authorId) {
+   public void setAuthorId(String authorId) {
       this.authorId = authorId;
    }
 

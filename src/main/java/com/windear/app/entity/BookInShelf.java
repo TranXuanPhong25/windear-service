@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 public class BookInShelf extends Book {
     private String imageUrl;
-    private LocalDate releaseDate;
     private LocalDate addedDate;
     private LocalDate readDate;
     private int bookStatus;
@@ -16,17 +15,16 @@ public class BookInShelf extends Book {
         super();
     }
 
-    public BookInShelf(String id, String title, String author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus) {
-        super(id, title, author, rating);
+    public BookInShelf(Integer id, String title, String author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus) {
+        super(id, title, author,releaseDate, rating);
         this.imageUrl = imageUrl;
-        this.releaseDate = releaseDate;
         this.addedDate = addedDate;
         this.readDate = readDate;
         this.bookStatus = bookStatus;
     }
 
-    public BookInShelf(String id, String title, String author, double rating) {
-        super(id, title, author, rating);
+    public BookInShelf(Integer id, String title, String author,LocalDate releaseDate, double rating) {
+        super(id, title, author, releaseDate,rating);
     }
 
     public String getImageUrl() {
@@ -35,14 +33,6 @@ public class BookInShelf extends Book {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public LocalDate getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     public LocalDate getAddedDate() {
