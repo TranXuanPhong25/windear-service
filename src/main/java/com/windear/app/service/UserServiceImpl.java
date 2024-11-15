@@ -17,13 +17,11 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final BookService bookService;
     private final ExternalBookService externalBookService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BookServiceImpl bookService, ExternalBookService externalBookService) {
+    public UserServiceImpl(UserRepository userRepository, ExternalBookService externalBookService) {
         this.userRepository = userRepository;
-        this.bookService = bookService;
         this.externalBookService = externalBookService;
     }
 
@@ -51,17 +49,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void delete(int id) {
-        User user = findById(id);
-        List<Book> books = user.getBorrowedBooks();
-        for (Book book : books) {
-            bookService.delete(new BookId(book.getId(), id));
-        }
-        userRepository.delete(user);
-    }
-
-    @Override
-    @Transactional
     public User update(User user) {
         User userFromDB = findById(user.getId());
         if (user.getAge() != null) {
@@ -76,6 +63,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userFromDB);
         return userFromDB;
     }
+
 
     @Override
     @Transactional

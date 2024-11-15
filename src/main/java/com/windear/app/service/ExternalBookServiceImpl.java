@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.windear.app.entity.BookInShelf;
 import com.windear.app.exception.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
