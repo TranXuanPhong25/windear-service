@@ -7,17 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ExternalBookServiceImpl implements ExternalBookService {
     private WebClient webClient;
-    private BookService bookService;
+    private InternalBookService bookService;
 
     @Autowired
-    public ExternalBookServiceImpl(WebClient webClient, BookService bookService) {
+    public ExternalBookServiceImpl(WebClient webClient, InternalBookService bookService) {
         this.webClient = webClient;
         this.bookService = bookService;
     }
