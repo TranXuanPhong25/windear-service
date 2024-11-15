@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -11,10 +12,14 @@ public class Shelves {
     @MongoId(targetType = FieldType.STRING)
     String userId;
 
-    List<Shelf> shelves;
+    List<Shelf> shelves = new ArrayList<>();
 
     public Shelves() {
 
+    }
+
+    public Shelves(String userId) {
+        this.userId = userId;
     }
 
     public Shelves(String userId, List<Shelf> shelves) {
@@ -39,9 +44,14 @@ public class Shelves {
     }
 
     public Shelf getShelfByName(String name) {
-        for (Shelf shelf : shelves) {
-            if (shelf.getName().equals(name)) return shelf;
+        if (shelves == null || shelves.isEmpty()) {
+            Shelf shelf = new Shelf(name);
+            shelves.add(shelf);
+            return shelf;
         }
-        return null;
+        return shelves.stream()
+                .filter(shelf -> shelf.getName().equals(name))
+                .findFirst()
+                .orElse(new Shelf(name));
     }
 }

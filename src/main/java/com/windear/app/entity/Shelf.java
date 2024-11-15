@@ -1,13 +1,18 @@
 package com.windear.app.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Shelf {
     String name;
-    List<BookInShelf> books;
+    List<BookInShelf> books = new ArrayList<>();
 
     public Shelf() {
 
+    }
+
+    public Shelf(String name) {
+        this.name = name;
     }
 
     public Shelf(String name, List<BookInShelf> books) {

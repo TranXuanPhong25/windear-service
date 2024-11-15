@@ -13,30 +13,40 @@ import java.util.Optional;
 
 @Service
 public class ShelvesServiceImpl implements ShelvesService {
-    @Autowired
     private ShelvesRepository shelvesRepository;
+
+    @Autowired
+    public ShelvesServiceImpl(ShelvesRepository shelvesRepository) {
+        this.shelvesRepository = shelvesRepository;
+    }
 
     @Override
     public Shelves addBookToShelf(String userId, String shelfName, BookInShelf book) {
-        Shelves shelves = findShelvesByUserName(userId);
+        Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(shelfName);
         shelf.addBook(book);
+        System.out.println(shelf);
         return shelvesRepository.save(shelves);
     }
 
     @Override
-    public Shelves findShelvesByUserName(String userId) {
+    public Shelves findShelvesByUserId(String userId) {
         Optional<Shelves> shelves = shelvesRepository.findById(userId);
         if (shelves.isPresent()) {
             return shelves.get();
         } else {
-            throw new BookNotFoundException("Test");
+            return new Shelves(userId);
         }
     }
 
     @Override
     public Shelves addShelves(Shelves shelves) {
         return shelvesRepository.save(shelves);
+    }
+
+    @Override
+    public void deleteShelves(String userId) {
+        shelvesRepository.deleteById(userId);
     }
 
     @Override
