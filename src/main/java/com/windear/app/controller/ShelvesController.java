@@ -28,9 +28,9 @@ public class ShelvesController {
         return shelvesService.getAll();
     }
 
-    @PostMapping("/{userId}/{shelfName}")
+    @PostMapping("/{userId}")
     public Shelves addBookToShelf(@RequestBody BookInShelf book,
-                                  @PathVariable String shelfName,
+                                  @RequestBody String shelfName,
                                   @PathVariable String userId) {
         return shelvesService.addBookToShelf(userId, shelfName, book);
     }
