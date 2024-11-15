@@ -20,7 +20,7 @@ public class InternalBook extends Book {
 
     public InternalBook() {}
 
-    public InternalBook(Integer bookId, String title, Integer authorId, LocalDate releaseDate, double rating, String description, String isbn10, String isbn13) {
+    public InternalBook(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating, String description, String isbn10, String isbn13) {
         super(bookId, title, authorId, releaseDate, rating);
         this.description = description;
         this.isbn10 = isbn10;
