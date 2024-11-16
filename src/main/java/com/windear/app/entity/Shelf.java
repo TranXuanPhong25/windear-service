@@ -44,7 +44,7 @@ public class Shelf {
 
     public BookInShelf findBookById(int bookId) {
         return books.stream()
-                .filter(book -> book.getId() == bookId)
+                .filter(book -> book.getBookId() == bookId)
                 .findFirst()
                 .orElse(null);
     }
