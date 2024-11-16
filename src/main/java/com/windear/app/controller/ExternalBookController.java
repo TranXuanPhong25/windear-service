@@ -4,6 +4,8 @@ import com.windear.app.service.ExternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/external")
 public class ExternalBookController {
@@ -47,5 +49,10 @@ public class ExternalBookController {
     @GetMapping("/books/{id}/similar")
     public String getSimilarBooks(@PathVariable int id) {
         return externalBookService.getSimilarBooks(id);
+    }
+
+    @PostMapping("/editions")
+    public String getEditions(@RequestBody Map<String,String> payload) {
+        return externalBookService.getEditions(payload.get("data"));
     }
 }

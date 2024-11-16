@@ -365,4 +365,29 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "}";
         return getQueryResultAsString(query);
     }
+
+    @Override
+    public String getEditions(String id) {
+        String query = "{" +
+                "   getEditions(\n" +
+                "    id: \"" + id + "\"\n" +
+                "    pagination: {limit: 20}\n" +
+                "  ) {\n" +
+                "    edges {\n" +
+                "      node {\n" +
+                "        legacyId\n" +
+                "        imageUrl\n" +
+                "        details {\n" +
+                "          publisher\n" +
+                "          publicationTime\n" +
+                "          format\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+
 }
