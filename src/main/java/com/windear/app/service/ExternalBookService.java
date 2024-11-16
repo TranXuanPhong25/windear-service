@@ -11,5 +11,5 @@ public interface ExternalBookService {
     String getSearchSuggestions(String q);
     String getFeaturedBookLists();
     String getPopularBookLists();
-    String getSimilarBooks(int id);
+    String getSimilarBooks(String id);
 }
