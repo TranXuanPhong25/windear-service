@@ -12,4 +12,5 @@ public interface ExternalBookService {
     String getFeaturedBookLists();
     String getPopularBookLists();
     String getSimilarBooks(String id);
+    String getEditions(String id);
 }
