@@ -195,6 +195,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    }\n" +
                 "    webUrl\n" +
                 "    work {\n" +
+                "       id\n"+
                 "      details {\n" +
                 "        booksCount\n" +
                 "        originalTitle\n" +
