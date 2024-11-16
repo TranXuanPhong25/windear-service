@@ -2,52 +2,64 @@ package com.windear.app.entity;
 
 import java.time.LocalDate;
 
+
+@MappedSuperclass
 public class Book {
-    protected int id;
-    protected String title;
-    protected String author;
-    protected double rating;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   protected Integer bookId;
+   protected String title;
+   protected String authorId;
+   protected LocalDate releaseDate;
+   protected double rating;
 
-    public Book() {
+   public Book() {}
 
-    }
+   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating) {
+      this.bookId = bookId;
+      this.title = title;
+      this.authorId = authorId;
+      this.releaseDate = releaseDate;
+      this.rating = rating;
+   }
 
-    public Book(int id, String title, String author, double rating) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.rating = rating;
-    }
+   public Integer getBookId() {
+      return bookId;
+   }
 
-    public int getId() {
-        return id;
-    }
+   public void setBookId(Integer bookId) {
+      this.bookId = bookId;
+   }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+   public String getTitle() {
+      return title;
+   }
 
-    public String getTitle() {
-        return title;
-    }
+   public void setTitle(String title) {
+      this.title = title;
+   }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+   public String getAuthorId() {
+      return authorId;
+   }
 
-    public String getAuthor() {
-        return author;
-    }
+   public void setAuthorId(String authorId) {
+      this.authorId = authorId;
+   }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+   public LocalDate getReleaseDate() {
+      return releaseDate;
+   }
 
-    public double getRating() {
-        return rating;
-    }
+   public void setReleaseDate(LocalDate releaseDate) {
+      this.releaseDate = releaseDate;
+   }
 
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
+   public double getRating() {
+      return rating;
+   }
+
+   public void setRating(double rating) {
+      this.rating = rating;
+   }
 }
