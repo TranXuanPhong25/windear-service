@@ -16,7 +16,7 @@ public class BookInShelf extends Book {
         super();
     }
 
-    public BookInShelf(String id, String title, String author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus) {
+    public BookInShelf(int id, String title, String author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus) {
         super(id, title, author, rating);
         this.imageUrl = imageUrl;
         this.releaseDate = releaseDate;
@@ -25,7 +25,7 @@ public class BookInShelf extends Book {
         this.bookStatus = bookStatus;
     }
 
-    public BookInShelf(String id, String title, String author, double rating) {
+    public BookInShelf(int id, String title, String author, double rating) {
         super(id, title, author, rating);
     }
 

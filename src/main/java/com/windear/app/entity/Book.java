@@ -3,7 +3,7 @@ package com.windear.app.entity;
 import java.time.LocalDate;
 
 public class Book {
-    protected String id;
+    protected int id;
     protected String title;
     protected String author;
     protected double rating;
@@ -12,18 +12,18 @@ public class Book {
 
     }
 
-    public Book(String id, String title, String author, double rating) {
+    public Book(int id, String title, String author, double rating) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.rating = rating;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
