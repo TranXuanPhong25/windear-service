@@ -27,8 +27,8 @@ public class ExternalBookController {
     }
 
     @GetMapping("/reviews")
-    public String getReviews(@RequestBody String wordId) {
-        return externalBookService.getReviews(wordId);
+    public String getReviews(@RequestBody String workId) {
+        return externalBookService.getReviews(workId);
     }
 
     @GetMapping("/books/{id}")
@@ -46,9 +46,9 @@ public class ExternalBookController {
         return externalBookService.getPopularBookLists();
     }
 
-    @GetMapping("/books/{id}/similar")
-    public String getSimilarBooks(@PathVariable int id) {
-        return externalBookService.getSimilarBooks(id);
+    @PostMapping("/similar")
+    public String getSimilarBooks(@RequestBody Map<String,String> payload) {
+        return externalBookService.getSimilarBooks(payload.get("data"));
     }
 
     @PostMapping("/editions")

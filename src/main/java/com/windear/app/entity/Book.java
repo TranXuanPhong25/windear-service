@@ -4,60 +4,63 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 
-@Entity
-@Table(name = "book", schema = "public")
+@MappedSuperclass
 public class Book {
-   @EmbeddedId
-   private BookId bookId;
-   
-   @Column(name = "borrow_date")
-   private LocalDate borrowDate;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   protected Integer bookId;
+   protected String title;
+   protected String authorId;
+   protected LocalDate releaseDate;
+   protected double rating;
 
-   @Column(name = "return_date")
-   private LocalDate returnDate;
-   
-   public Book() {
-      borrowDate = null;
-      returnDate = null;
+   public Book() {}
+
+   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating) {
+      this.bookId = bookId;
+      this.title = title;
+      this.authorId = authorId;
+      this.releaseDate = releaseDate;
+      this.rating = rating;
    }
-   
-   public BookId getBookId() {
+
+   public Integer getBookId() {
       return bookId;
    }
 
-   public void setBookId(BookId bookId) {
+   public void setBookId(Integer bookId) {
       this.bookId = bookId;
    }
 
-   public void setId(String id) {
-      bookId.setId(id);
+   public String getTitle() {
+      return title;
    }
 
-   public String getId() {
-      return bookId.getId();
+   public void setTitle(String title) {
+      this.title = title;
    }
 
-   public void setBorrowerId(int id) {
-      bookId.setBorrowerId(id);
+   public String getAuthorId() {
+      return authorId;
    }
 
-   public int getBorrowerId() {
-      return bookId.getBorrowerId();
-   }
-   
-   public LocalDate getReturnDate() {
-      return returnDate;
+   public void setAuthorId(String authorId) {
+      this.authorId = authorId;
    }
 
-   public void setReturnDate(LocalDate returnDate) {
-      this.returnDate = returnDate;
+   public LocalDate getReleaseDate() {
+      return releaseDate;
    }
 
-   public LocalDate getBorrowDate() {
-      return borrowDate;
+   public void setReleaseDate(LocalDate releaseDate) {
+      this.releaseDate = releaseDate;
    }
-   
-   public void setBorrowDate(LocalDate borrowDate) {
-      this.borrowDate = borrowDate;
+
+   public double getRating() {
+      return rating;
+   }
+
+   public void setRating(double rating) {
+      this.rating = rating;
    }
 }

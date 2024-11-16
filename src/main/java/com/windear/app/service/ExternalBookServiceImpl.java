@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.windear.app.entity.BookInShelf;
 import com.windear.app.exception.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,53 +33,6 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 .block();
         return response;
     }
-
-//    @Override
-//    public String findById(String id) {
-//        String query = "{\n" +
-//                "  books(where: {id: {_eq: " + id + "}}) {\n" +
-//                "    image {\n" +
-//                "      url\n" +
-//                "    }\n" +
-//                "    rating\n" +
-//                "    ratings_count\n" +
-//                "    users_count\n" +
-//                "    users_read_count\n" +
-//                "    release_date\n" +
-//                "    release_year\n" +
-//                "    pages\n" +
-//                "    alternative_titles\n" +
-//                "    contributions {\n" +
-//                "      author {\n" +
-//                "        id\n" +
-//                "        image {\n" +
-//                "          url\n" +
-//                "        }\n" +
-//                "        name\n" +
-//                "      }\n" +
-//                "    }\n" +
-//                "    editions_count\n" +
-//                "    ratings_distribution\n" +
-//                "    title\n" +
-//                "    reviews_count\n" +
-//                "    taggings(distinct_on: tag_id) {\n" +
-//                "      tag {\n" +
-//                "        tag\n" +
-//                "        slug\n" +
-//                "        tag_category {\n" +
-//                "          category\n" +
-//                "        }\n" +
-//                "        count\n" +
-//                "      }\n" +
-//                "    }\n" +
-//                "  }\n" +
-//                "}";
-//        String response = getQueryResultAsString(query);
-//        if (response.contains("\"books\":[]")) {
-//            throw new BookNotFoundException("Book with id not found: " + id);
-//        }
-//        return getQueryResultAsString(response);
-//    }
 
     @Override
     public String getBasicGenres() {
@@ -165,6 +119,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     public String getBookByLegacyId(int id) {
         String query = "{\n" +
                 "   getBookByLegacyId(legacyId: " + id + ") {\n" +
+                "    id\n" +
                 "    stats {\n" +
                 "      ratingsCount\n" +
                 "      averageRating\n" +
@@ -240,6 +195,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    }\n" +
                 "    webUrl\n" +
                 "    work {\n" +
+                "       id\n"+
                 "      details {\n" +
                 "        booksCount\n" +
                 "        originalTitle\n" +
@@ -270,8 +226,8 @@ public class ExternalBookServiceImpl implements ExternalBookService {
 
     @Override
     public String getSearchSuggestions(String q) {
-        String query = "{\n" +
-                "getSearchSuggestions(query: \""+ q +"\") {\n" +
+        String query = "{" +
+                "   getSearchSuggestions(query: \"" + q + "\") {\n" +
                 "    edges {\n" +
                 "      ... on SearchBookEdge {\n" +
                 "        node {\n" +
@@ -287,6 +243,11 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "              totalCount\n" +
                 "            }\n" +
                 "          }\n" +
+                "          primaryContributorEdge{\n" +
+                "            node{\n" +
+                "               name\n" +
+                "            }\n" +
+                "           }\n" +
                 "           \n" +
                 "        }\n" +
                 "      }\n" +
@@ -343,17 +304,26 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     }
 
     @Override
-    public String getSimilarBooks(int id) {
+    public String getSimilarBooks(String id) {
         String query = "{" +
                 "getSimilarBooks(\n" +
-                "    id: " + id + "\n" +
-                "    pagination: {limit: 20}\n" +
+                "    id: \"" + id + "\"\n" +
+                "    pagination: {limit: 12}\n" +
                 "  ) {\n" +
                 "    edges {\n" +
                 "      node {\n" +
                 "        imageUrl\n" +
                 "        legacyId\n" +
-                "      }\n" +
+                "        title\n"+
+                "        primaryContributorEdge {\n"+
+                "           node {\n"+
+                "               name\n"+
+                "           }\n"+
+                "       }\n"+
+                "       stats {\n"+
+                "           averageRating\n"+
+                "       }\n"+
+                "     }\n" +
                 "    }\n" +
                 "    pageInfo {\n" +
                 "      hasNextPage\n" +
