@@ -95,7 +95,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
 
     @Override
     public String getTaggedBooks(String tagName) {
-        String query = "{" +
+        String query = "{\n" +
                 "getTaggedBooks(tagName: " + tagName + ") {\n" +
                 "    edges {\n" +
                 "      node {\n" +
@@ -125,7 +125,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
 
     @Override
     public String getReviews(String workId) {
-        String query = "{" +
+        String query = "{\n" +
                 "getReviews(\n" +
                 "    filters: {resourceId: + " + workId + ", resourceType: WORK, sort: NEWEST}\n" +
                 "    pagination: {}\n" +
@@ -163,12 +163,11 @@ public class ExternalBookServiceImpl implements ExternalBookService {
 
     @Override
     public String getBookByLegacyId(int id) {
-        String query = "{" +
+        String query = "{\n" +
                 "   getBookByLegacyId(legacyId: " + id + ") {\n" +
-                "          stats {\n" +
+                "    stats {\n" +
                 "      ratingsCount\n" +
                 "      averageRating\n" +
-                "      textReviewsCount\n" +
                 "    }\n" +
                 "    title\n" +
                 "    details {\n" +
@@ -176,6 +175,9 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "      format\n" +
                 "      isbn\n" +
                 "      isbn13\n" +
+                "      language {\n" +
+                "        name\n" +
+                "      }\n" +
                 "      numPages\n" +
                 "      officialUrl\n" +
                 "      publicationTime\n" +
@@ -186,6 +188,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "      role\n" +
                 "      node {\n" +
                 "        name\n" +
+                "        profileImageUrl\n" +
                 "        description\n" +
                 "        followers {\n" +
                 "          totalCount\n" +
@@ -229,25 +232,46 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "        }\n" +
                 "      }\n" +
                 "    }\n" +
+                "    bookSeries {\n" +
+                "      seriesPlacement\n" +
+                "      series {\n" +
+                "        title\n" +
+                "      }\n" +
+                "    }\n" +
                 "    webUrl\n" +
                 "    work {\n" +
                 "      details {\n" +
+                "        booksCount\n" +
                 "        originalTitle\n" +
-                "        publicationTime\n" +
+                "        characters {\n" +
+                "          name\n" +
+                "          webUrl\n" +
+                "        }\n" +
+                "        awardsWon {\n" +
+                "          awardedAt\n" +
+                "          name\n" +
+                "          webUrl\n" +
+                "        }\n" +
                 "      }\n" +
                 "      reviews {\n" +
                 "        totalCount\n" +
                 "      }\n" +
                 "    }\n" +
+                "    bookSeries {\n" +
+                "      seriesPlacement\n" +
+                "      series {\n" +
+                "        title\n" +
+                "      }\n" +
                 "    }\n" +
-                "  }";
+                "  }" +
+                "}";
         return getQueryResultAsString(query);
     }
 
     @Override
     public String getSearchSuggestions(String q) {
         String query = "{\n" +
-                "getSearchSuggestions(query: \"" + q + "\") {\n" +
+                "getSearchSuggestions(query: \""+ q +"\") {\n" +
                 "    edges {\n" +
                 "      ... on SearchBookEdge {\n" +
                 "        node {\n" +
@@ -255,18 +279,19 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "          legacyId\n" +
                 "          imageUrl\n" +
                 "          stats {\n" +
+                "            ratingsCount\n" +
                 "            averageRating\n" +
                 "          }\n" +
-                "          primaryContributorEdge {\n " +
-                "            node {\n" +
-                "               name\n" +
-                "            }\n"+
+                "          work {\n" +
+                "            reviews {\n" +
+                "              totalCount\n" +
+                "            }\n" +
                 "          }\n" +
+                "           \n" +
                 "        }\n" +
                 "      }\n" +
                 "    }\n" +
-                "  }" +
-                "}";
+                "  }}";
         return getQueryResultAsString(query);
     }
 
