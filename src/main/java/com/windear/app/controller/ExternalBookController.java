@@ -50,4 +50,9 @@ public class ExternalBookController {
     public String getSimilarBooks(@RequestBody Map<String,String> payload) {
         return externalBookService.getSimilarBooks(payload.get("data"));
     }
+
+    @PostMapping("/editions")
+    public String getEditions(@RequestBody Map<String,String> payload) {
+        return externalBookService.getEditions(payload.get("data"));
+    }
 }
