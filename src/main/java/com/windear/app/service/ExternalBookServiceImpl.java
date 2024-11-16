@@ -227,7 +227,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     @Override
     public String getSearchSuggestions(String q) {
         String query = "{" +
-                "   getSearchSuggestions(query: \"" + q + "\") {\n" +
+                "   getSearchSuggestions(query: \" + q + \") {\n" +
                 "    edges {\n" +
                 "      ... on SearchBookEdge {\n" +
                 "        node {\n" +
@@ -252,7 +252,8 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "        }\n" +
                 "      }\n" +
                 "    }\n" +
-                "  }}";
+                "  }" +
+                "}";
         return getQueryResultAsString(query);
     }
 

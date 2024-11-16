@@ -52,6 +52,10 @@ public class Shelves {
         return shelves.stream()
                 .filter(shelf -> shelf.getName().equals(name))
                 .findFirst()
-                .orElse(new Shelf(name));
+                .orElseGet(() -> {
+                    Shelf newShelf = new Shelf(name);
+                    shelves.add(newShelf);
+                    return newShelf;
+                });
     }
 }
