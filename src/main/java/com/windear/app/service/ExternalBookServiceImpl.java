@@ -119,6 +119,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     public String getBookByLegacyId(int id) {
         String query = "{" +
                 "   getBookByLegacyId(legacyId: " + id + ") {\n" +
+                "    id\n" +
                 "    stats {\n" +
                 "      ratingsCount\n" +
                 "      averageRating\n" +
@@ -241,6 +242,11 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "              totalCount\n" +
                 "            }\n" +
                 "          }\n" +
+                "          primaryContributorEdge{\n" +
+                "            node{\n" +
+                "               name\n" +
+                "            }\n" +
+                "           }\n" +
                 "           \n" +
                 "        }\n" +
                 "      }\n" +
@@ -297,17 +303,26 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     }
 
     @Override
-    public String getSimilarBooks(int id) {
+    public String getSimilarBooks(String id) {
         String query = "{" +
                 "getSimilarBooks(\n" +
-                "    id: " + id + "\n" +
-                "    pagination: {limit: 20}\n" +
+                "    id: \"" + id + "\"\n" +
+                "    pagination: {limit: 12}\n" +
                 "  ) {\n" +
                 "    edges {\n" +
                 "      node {\n" +
                 "        imageUrl\n" +
                 "        legacyId\n" +
-                "      }\n" +
+                "        title\n"+
+                "        primaryContributorEdge {\n"+
+                "           node {\n"+
+                "               name\n"+
+                "           }\n"+
+                "       }\n"+
+                "       stats {\n"+
+                "           averageRating\n"+
+                "       }\n"+
+                "     }\n" +
                 "    }\n" +
                 "    pageInfo {\n" +
                 "      hasNextPage\n" +
