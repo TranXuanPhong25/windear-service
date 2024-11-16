@@ -27,8 +27,8 @@ public class ExternalBookController {
     }
 
     @GetMapping("/reviews")
-    public String getReviews(@RequestBody String wordId) {
-        return externalBookService.getReviews(wordId);
+    public String getReviews(@RequestBody String workId) {
+        return externalBookService.getReviews(workId);
     }
 
     @GetMapping("/books/{id}")
