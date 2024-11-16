@@ -63,37 +63,4 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userFromDB);
         return userFromDB;
     }
-
-
-    @Override
-    @Transactional
-    public String borrowBook(int userId, String bookId) {
-        User user = findById(userId);
-        return "";
-        /*
-        String externalBook = externalBookService.findById(bookId);
-        Book book = new Book();
-        book.setBookId(new BookId(bookId, userId));
-        book.setBorrowDate(LocalDate.now());
-        bookService.add(book);
-        return externalBook;
-         */
-    }
-
-    @Override
-    @Transactional
-    public String returnBook(int userId, String bookId) {
-        User user = findById(userId);
-        return "";
-        /*
-        String externalBook = externalBookService.findById(bookId);
-        for (Book book : user.getBorrowedBooks()) {
-            if (book.getId().equals(bookId)) {
-                book.setReturnDate(LocalDate.now());
-                return externalBook;
-            }
-        }
-        throw new BookNotFoundException("Book with id not found: " + bookId);
-         */
-    }
 }
