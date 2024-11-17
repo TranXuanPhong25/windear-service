@@ -50,7 +50,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     @Override
     public String getTaggedBooks(String tagName) {
         String query = "{\n" +
-                "getTaggedBooks(tagName: " + tagName + ") {\n" +
+                "getTaggedBooks(tagName: \"" + tagName + "\") {\n" +
                 "    edges {\n" +
                 "      node {\n" +
                 "        legacyId\n" +
