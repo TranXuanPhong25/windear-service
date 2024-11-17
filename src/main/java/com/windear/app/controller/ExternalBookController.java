@@ -27,8 +27,8 @@ public class ExternalBookController {
     }
 
     @PostMapping("/reviews")
-    public String getReviews(@RequestBody String workId) {
-        return externalBookService.getReviews(workId);
+    public String getReviews(@RequestBody Map<String,String> payload) {
+        return externalBookService.getReviews(payload.get("data"));
     }
 
     @GetMapping("/books/{id}")

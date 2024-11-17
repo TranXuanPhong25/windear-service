@@ -81,8 +81,8 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     public String getReviews(String workId) {
         String query = "{\n" +
                 "getReviews(\n" +
-                "    filters: {resourceId: + " + workId + ", resourceType: WORK, sort: NEWEST}\n" +
-                "    pagination: {}\n" +
+                "    filters: {resourceId: \"" + workId + "\", resourceType: WORK, sort: NEWEST}\n" +
+                "    pagination: {limit:6}\n" +
                 "  ) {\n" +
                 "    pageInfo {\n" +
                 "      hasNextPage\n" +
@@ -195,7 +195,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    }\n" +
                 "    webUrl\n" +
                 "    work {\n" +
-                "       id\n"+
+                "       id\n" +
                 "      details {\n" +
                 "        booksCount\n" +
                 "        originalTitle\n" +
@@ -315,15 +315,15 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "      node {\n" +
                 "        imageUrl\n" +
                 "        legacyId\n" +
-                "        title\n"+
-                "        primaryContributorEdge {\n"+
-                "           node {\n"+
-                "               name\n"+
-                "           }\n"+
-                "       }\n"+
-                "       stats {\n"+
-                "           averageRating\n"+
-                "       }\n"+
+                "        title\n" +
+                "        primaryContributorEdge {\n" +
+                "           node {\n" +
+                "               name\n" +
+                "           }\n" +
+                "       }\n" +
+                "       stats {\n" +
+                "           averageRating\n" +
+                "       }\n" +
                 "     }\n" +
                 "    }\n" +
                 "    pageInfo {\n" +

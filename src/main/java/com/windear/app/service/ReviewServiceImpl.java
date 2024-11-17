@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService{
         if(review.getBookId() != 0) {
             reviewFromDB.setBookId(review.getBookId());
         }
-        if(review.getUserId()!= 0) {
+        if(!review.getUserId().isEmpty()) {
             reviewFromDB.setUserId(review.getUserId());
         }
         if(review.getRating() != 0) {

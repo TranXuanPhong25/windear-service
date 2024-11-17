@@ -14,7 +14,7 @@ public class Review {
     private int reviewId;
 
     @Column(name = "user_id")
-    private int userId;
+    private String userId;
 
     @Column(name = "book_id")
     private int bookId;
@@ -59,11 +59,11 @@ public class Review {
         this.reviewId = reviewId;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
