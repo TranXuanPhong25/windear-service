@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ExternalBookServiceImpl implements ExternalBookService {
-    private WebClient webClient;
+    private final WebClient webClient;
 
     @Autowired
     public ExternalBookServiceImpl(WebClient webClient) {
@@ -25,13 +25,12 @@ public class ExternalBookServiceImpl implements ExternalBookService {
         Map<String, String> graphqlQuery = new HashMap<>();
         graphqlQuery.put("query", query);
 
-        String response = webClient.post()
+        return webClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(graphqlQuery)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-        return response;
     }
 
     @Override
@@ -43,8 +42,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    }\n" +
                 "  }\n" +
                 "}";
-        String response = getQueryResultAsString(query);
-        return response;
+        return getQueryResultAsString(query);
     }
 
     @Override
