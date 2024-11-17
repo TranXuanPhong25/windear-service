@@ -13,9 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-/**
- * Configures our application with Spring Security to restrict access to our API endpoints.
- */
 @EnableWebSecurity
 @Configuration
 @ComponentScan
@@ -31,7 +28,7 @@ public class SecurityConfig {
         */
       return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
-                  .requestMatchers("/api/public", "api/external/**","/api/news/**","api/books/**").permitAll()
+                  .requestMatchers("/api/public","/api/search", "api/external/**","/api/news/**","api/books/**").permitAll()
                   .requestMatchers("/api/private","api/auth0/user/**").authenticated()
                   .requestMatchers("/api/admin","api/auth0/user").hasAuthority("ROLE_admin")
 
