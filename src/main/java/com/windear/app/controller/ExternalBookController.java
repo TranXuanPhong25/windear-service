@@ -26,7 +26,7 @@ public class ExternalBookController {
         return externalBookService.getTaggedBooks(tagName);
     }
 
-    @GetMapping("/reviews")
+    @PostMapping("/reviews")
     public String getReviews(@RequestBody String workId) {
         return externalBookService.getReviews(workId);
     }
