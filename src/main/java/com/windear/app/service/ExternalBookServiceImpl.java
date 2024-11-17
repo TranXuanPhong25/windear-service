@@ -1,6 +1,6 @@
 package com.windear.app.service;
 
-import com.windear.app.entity.ExternalBook;
+import com.windear.app.entity.BookInShelf;
 import com.windear.app.exception.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,93 +14,349 @@ import java.util.stream.Collectors;
 
 @Service
 public class ExternalBookServiceImpl implements ExternalBookService {
-    private WebClient webClient;
-    private BookService bookService;
+    private final WebClient webClient;
 
     @Autowired
-    public ExternalBookServiceImpl(WebClient webClient, BookService bookService) {
+    public ExternalBookServiceImpl(WebClient webClient) {
         this.webClient = webClient;
-        this.bookService = bookService;
     }
 
-    public List<Map<String, Object>> getQueryResult(String query) {
+    public String getQueryResultAsString(String query) {
         Map<String, String> graphqlQuery = new HashMap<>();
         graphqlQuery.put("query", query);
 
-        Map<String, Object> response = webClient.post()
+        return webClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(graphqlQuery)
                 .retrieve()
-                .bodyToMono(Map.class)
+                .bodyToMono(String.class)
                 .block();
-        return (List<Map<String, Object>>) ((Map<String, Object>) response.get("data")).get("books");
-    }
-
-    public List<ExternalBook> mapResponseToEntityList(List<Map<String, Object>> booksData) {
-        return booksData.stream().map(bookData -> {
-            ExternalBook book = new ExternalBook();
-            book.setId((Integer) bookData.get("id"));
-            book.setTitle((String) bookData.get("title"));
-            book.setRating((Double) bookData.get("rating"));
-            List<Map<String, Object>> contributions = (List<Map<String, Object>>) bookData.get("contributions");
-            String authors = contributions.stream()
-                    .map(contribution -> (String) ((Map<String, Object>) contribution.get("author")).get("name"))
-                    .collect(Collectors.joining(", "));
-            book.setAuthors(authors);
-            return book;
-        }).collect(Collectors.toList());
-        
     }
 
     @Override
-    public List<ExternalBook> findById(int id) {
+    public String getBasicGenres() {
         String query = "{\n" +
-                "  books(where: {id: {_eq: "+ id + "}}) {\n" +
-                "    id\n" +
-                "    title\n" +
-                "    release_date\n" +
-                "    rating\n" +
-                "    contributions {\n" +
-                "      author {\n" +
-                "        name\n" +
-                "      }\n" +
+                "  getBasicGenres {\n" +
+                "    genres {\n" +
+                "      name\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
-        List<Map<String, Object>> booksData = getQueryResult(query);
-        List<ExternalBook> externalBookList = mapResponseToEntityList(booksData);
-        if (externalBookList.isEmpty()) {
-            throw new BookNotFoundException("Book with id not found: " + id);
-        }
-        return externalBookList;
+        return getQueryResultAsString(query);
     }
 
     @Override
-    public List<ExternalBook> findByTitle(String title) {
+    public String getTaggedBooks(String tagName) {
         String query = "{\n" +
-                "  books(\n" +
-                "    where: {title: {_ilike: \"%" + title + "%\"}}\n" +
-                "    order_by: {users_read_count: desc_nulls_last}\n" +
-                "    limit:10\n"+
+                "getTaggedBooks(tagName: \"" + tagName + "\") {\n" +
+                "    edges {\n" +
+                "      node {\n" +
+                "        legacyId\n" +
+                "        imageUrl\n" +
+                "        title\n" +
+                "        primaryContributorEdge {\n" +
+                "          node {\n" +
+                "            name\n" +
+                "          }\n" +
+                "        }\n" +
+                "        stats {\n" +
+                "          averageRating\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "    pageInfo {\n" +
+                "      hasNextPage\n" +
+                "      hasPrevPage\n" +
+                "      nextPageToken\n" +
+                "      prevPageToken\n" +
+                "    }\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+    @Override
+    public String getReviews(String workId) {
+        String query = "{\n" +
+                "getReviews(\n" +
+                "    filters: {resourceId: \"" + workId + "\", resourceType: WORK, sort: DEFAULT}\n" +
+                "    pagination: {limit:6}\n" +
                 "  ) {\n" +
+                "    pageInfo {\n" +
+                "      hasNextPage\n" +
+                "      hasPrevPage\n" +
+                "      nextPageToken\n" +
+                "      prevPageToken\n" +
+                "    }\n" +
+                "    edges {\n" +
+                "      node {\n" +
+                "        rating\n" +
+                "        text\n" +
+                "        createdAt\n" +
+                "        creator {\n" +
+                "          imageUrlSquare\n" +
+                "          name\n" +
+                "          isAuthor\n" +
+                "        }\n" +
+                "        shelving {\n" +
+                "          taggings {\n" +
+                "            tag {\n" +
+                "              name\n" +
+                "            }\n" +
+                "          }\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "    totalCount\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+    @Override
+    public String getBookByLegacyId(int id) {
+        String query = "{\n" +
+                "   getBookByLegacyId(legacyId: " + id + ") {\n" +
                 "    id\n" +
+                "    stats {\n" +
+                "      ratingsCount\n" +
+                "      averageRating\n" +
+                "    }\n" +
                 "    title\n" +
-                "    release_date\n" +
-                "    rating\n" +
-                "    contributions {\n" +
-                "      author {\n" +
-                "        id\n" +
+                "    details {\n" +
+                "      asin\n" +
+                "      format\n" +
+                "      isbn\n" +
+                "      isbn13\n" +
+                "      language {\n" +
+                "        name\n" +
+                "      }\n" +
+                "      numPages\n" +
+                "      officialUrl\n" +
+                "      publicationTime\n" +
+                "      publisher\n" +
+                "    }\n" +
+                "    description\n" +
+                "    primaryContributorEdge {\n" +
+                "      role\n" +
+                "      node {\n" +
+                "        name\n" +
+                "        profileImageUrl\n" +
+                "        description\n" +
+                "        followers {\n" +
+                "          totalCount\n" +
+                "        }\n" +
+                "        works {\n" +
+                "          totalCount\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "    secondaryContributorEdges {\n" +
+                "      node {\n" +
+                "        name\n" +
+                "      }\n" +
+                "      role\n" +
+                "    }\n" +
+                "    bookGenres {\n" +
+                "      genre {\n" +
                 "        name\n" +
                 "      }\n" +
                 "    }\n" +
-                "    \n" +
-                "  }\n" +
+                "    links {\n" +
+                "      primaryAffiliateLink {\n" +
+                "        url\n" +
+                "        name\n" +
+                "        ... on BookLink {\n" +
+                "          url\n" +
+                "        }\n" +
+                "      }\n" +
+                "      secondaryAffiliateLinks {\n" +
+                "        name\n" +
+                "        url\n" +
+                "      }\n" +
+                "    }\n" +
+                "    imageUrl\n" +
+                "    socialSignals(shelfStatus: ALL) {\n" +
+                "      count\n" +
+                "      name\n" +
+                "      users {\n" +
+                "        node {\n" +
+                "          imageUrl\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "    bookSeries {\n" +
+                "      seriesPlacement\n" +
+                "      series {\n" +
+                "        title\n" +
+                "      }\n" +
+                "    }\n" +
+                "    webUrl\n" +
+                "    work {\n" +
+                "       id\n" +
+                "      details {\n" +
+                "        booksCount\n" +
+                "        originalTitle\n" +
+                "        characters {\n" +
+                "          name\n" +
+                "          webUrl\n" +
+                "        }\n" +
+                "        awardsWon {\n" +
+                "          awardedAt\n" +
+                "          name\n" +
+                "          webUrl\n" +
+                "        }\n" +
+                "      }\n" +
+                "      reviews {\n" +
+                "        totalCount\n" +
+                "      }\n" +
+                "    }\n" +
+                "    bookSeries {\n" +
+                "      seriesPlacement\n" +
+                "      series {\n" +
+                "        title\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }" +
                 "}";
-        List<Map<String, Object>> booksData = getQueryResult(query);
-        List<ExternalBook> externalBookList = mapResponseToEntityList(booksData);
-        if (externalBookList.isEmpty()) {
-            throw new BookNotFoundException("Book with title not found: " + title);
-        }
-        return externalBookList;
+        return getQueryResultAsString(query);
     }
+
+    @Override
+    public String getSearchSuggestions(String q) {
+        String query = "{" +
+                "   getSearchSuggestions(query: \"" + q + "\") {\n" +
+                "    edges {\n" +
+                "      ... on SearchBookEdge {\n" +
+                "        node {\n" +
+                "          title\n" +
+                "          legacyId\n" +
+                "          imageUrl\n" +
+                "          stats {\n" +
+                "            ratingsCount\n" +
+                "            averageRating\n" +
+                "          }\n" +
+                "          work {\n" +
+                "            reviews {\n" +
+                "              totalCount\n" +
+                "            }\n" +
+                "          }\n" +
+                "          primaryContributorEdge{\n" +
+                "            node{\n" +
+                "               name\n" +
+                "            }\n" +
+                "           }\n" +
+                "           \n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+    @Override
+    public String getFeaturedBookLists() {
+        String query = "{" +
+                "getFeaturedBookLists {\n" +
+                "    edges {\n" +
+                "      node {\n" +
+                "        title\n" +
+                "        books {\n" +
+                "          edges {\n" +
+                "            node {\n" +
+                "              imageUrl\n" +
+                "              legacyId\n" +
+                "              title\n" +
+                "            }\n" +
+                "          }\n" +
+                "        }\n" +
+                "        description\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+    @Override
+    public String getPopularBookLists() {
+        String query = "{" +
+                "getPopularBookLists {\n" +
+                "    edges {\n" +
+                "      node {\n" +
+                "        title\n" +
+                "        books {\n" +
+                "          edges {\n" +
+                "            node {\n" +
+                "              title\n" +
+                "              imageUrl\n" +
+                "              legacyId\n" +
+                "            }\n" +
+                "          }\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+    @Override
+    public String getSimilarBooks(String id) {
+        String query = "{" +
+                "getSimilarBooks(\n" +
+                "    id: \"" + id + "\"\n" +
+                "    pagination: {limit: 12}\n" +
+                "  ) {\n" +
+                "    edges {\n" +
+                "      node {\n" +
+                "        imageUrl\n" +
+                "        legacyId\n" +
+                "        title\n" +
+                "        primaryContributorEdge {\n" +
+                "           node {\n" +
+                "               name\n" +
+                "           }\n" +
+                "       }\n" +
+                "       stats {\n" +
+                "           averageRating\n" +
+                "       }\n" +
+                "     }\n" +
+                "    }\n" +
+                "    pageInfo {\n" +
+                "      hasNextPage\n" +
+                "      hasPrevPage\n" +
+                "      nextPageToken\n" +
+                "      prevPageToken\n" +
+                "    }\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+    @Override
+    public String getEditions(String id) {
+        String query = "{" +
+                "   getEditions(\n" +
+                "    id: \"" + id + "\"\n" +
+                "    pagination: {limit: 20}\n" +
+                "  ) {\n" +
+                "    edges {\n" +
+                "      node {\n" +
+                "        legacyId\n" +
+                "        imageUrl\n" +
+                "        details {\n" +
+                "          publisher\n" +
+                "          publicationTime\n" +
+                "          format\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }" +
+                "}";
+        return getQueryResultAsString(query);
+    }
+
+
 }

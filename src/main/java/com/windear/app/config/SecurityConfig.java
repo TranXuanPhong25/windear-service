@@ -31,11 +31,10 @@ public class SecurityConfig {
         */
       return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
-                  .requestMatchers("/api/public", "api/external/**","/api/news/**").permitAll()
+                  .requestMatchers("/api/public", "api/external/**","/api/news/**","api/books/**").permitAll()
                   .requestMatchers("/api/private","api/auth0/user/**").authenticated()
-//                  .requestMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                   .requestMatchers("/api/admin","api/auth0/user").hasAuthority("ROLE_admin")
-            
+
             )
             .cors(withDefaults())
             .oauth2ResourceServer(oauth2 -> oauth2

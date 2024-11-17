@@ -1,73 +1,70 @@
 package com.windear.app.entity;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 import java.time.LocalDate;
 
 
-@Entity
-@Table(name = "book", schema = "public")
+@MappedSuperclass
 public class Book {
    @Id
-   @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private int id;
-   
-   @Column(name = "title")
-   private String title;
-   
-   @Column(name = "author")
-   private String author;
-   
-   @Column(name = "borrower_id")
-   private Integer borrowerId;
-   
-   @Column(name = "borrow_date")
-   private LocalDate borrowDate;
-   
-   public Book() {
-      borrowerId = null;
-      borrowDate = null;
-   }
-   
-   public int getId() {
-      return id;
-   }
-   
-   public void setId(int id) {
-      this.id = id;
-   }
-   
-   public void setTitle(String title) {
+   protected Integer bookId;
+   protected String title;
+   protected String authorId;
+   protected LocalDate releaseDate;
+   protected double rating;
+
+   public Book() {}
+
+   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating) {
+      this.bookId = bookId;
       this.title = title;
+      this.authorId = authorId;
+      this.releaseDate = releaseDate;
+      this.rating = rating;
    }
-   
+
+   public Integer getBookId() {
+      return bookId;
+   }
+
+   public void setBookId(Integer bookId) {
+      this.bookId = bookId;
+   }
+
    public String getTitle() {
       return title;
    }
-   
-   public String getAuthor() {
-      return author;
+
+   public void setTitle(String title) {
+      this.title = title;
    }
-   
-   public void setAuthor(String author) {
-      this.author = author;
+
+   public String getAuthorId() {
+      return authorId;
    }
-   
-   public Integer getBorrowerId() {
-      return borrowerId;
+
+   public void setAuthorId(String authorId) {
+      this.authorId = authorId;
    }
-   
-   public void setBorrowerId(Integer borrowerId) {
-      this.borrowerId = borrowerId;
+
+   public LocalDate getReleaseDate() {
+      return releaseDate;
    }
-   
-   public LocalDate getBorrowDate() {
-      return borrowDate;
+
+   public void setReleaseDate(LocalDate releaseDate) {
+      this.releaseDate = releaseDate;
    }
-   
-   public void setBorrowDate(LocalDate borrowDate) {
-      this.borrowDate = borrowDate;
+
+   public double getRating() {
+      return rating;
+   }
+
+   public void setRating(double rating) {
+      this.rating = rating;
    }
 }
