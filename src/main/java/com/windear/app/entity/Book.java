@@ -7,7 +7,8 @@ import java.time.LocalDate;
 @MappedSuperclass
 public class Book {
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq")
+   @SequenceGenerator(name = "book_seq", sequenceName = "book_id_seq", initialValue = 1000000000, allocationSize = 1)
    protected Integer bookId;
    protected String title;
    protected String authorId;

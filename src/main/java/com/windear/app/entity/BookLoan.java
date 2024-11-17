@@ -14,7 +14,7 @@ public class BookLoan {
     private BookLoanId bookLoanId;
 
     @Column(name = "borrow_time")
-    private int borrowTime;
+    private Integer borrowTime;
 
     @Column(name = "borrow_date")
     private LocalDate borrowDate;
@@ -22,13 +22,17 @@ public class BookLoan {
     @Column(name = "return_date")
     private LocalDate returnDate;
 
+    @Column(name = "rating")
+    private Double rating;
+
     public BookLoan() {}
 
-    public BookLoan(BookLoanId bookLoanId, int borrowTime, LocalDate borrowDate, LocalDate returnDate) {
+    public BookLoan(BookLoanId bookLoanId, int borrowTime, LocalDate borrowDate, LocalDate returnDate, double rating) {
         this.bookLoanId = bookLoanId;
         this.borrowTime = borrowTime;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
+        this.rating = rating;
     }
 
     public BookLoanId getBookLoanId() {
@@ -61,5 +65,13 @@ public class BookLoan {
 
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }
