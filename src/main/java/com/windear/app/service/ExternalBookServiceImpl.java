@@ -81,7 +81,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     public String getReviews(String workId) {
         String query = "{\n" +
                 "getReviews(\n" +
-                "    filters: {resourceId: \"" + workId + "\", resourceType: WORK, sort: NEWEST}\n" +
+                "    filters: {resourceId: \"" + workId + "\", resourceType: WORK, sort: DEFAULT}\n" +
                 "    pagination: {limit:6}\n" +
                 "  ) {\n" +
                 "    pageInfo {\n" +
@@ -227,7 +227,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     @Override
     public String getSearchSuggestions(String q) {
         String query = "{" +
-                "   getSearchSuggestions(query: \" + q + \") {\n" +
+                "   getSearchSuggestions(query: \"" + q + "\") {\n" +
                 "    edges {\n" +
                 "      ... on SearchBookEdge {\n" +
                 "        node {\n" +
