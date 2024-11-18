@@ -14,18 +14,20 @@ public class Book {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    protected Integer bookId;
    protected String title;
-   protected String authorId;
+   protected Integer authorId;
    protected LocalDate releaseDate;
    protected double rating;
+   protected String imageUrl;
 
    public Book() {}
 
-   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating) {
+   public Book(Integer bookId, String title, Integer authorId, LocalDate releaseDate, double rating, String imageUrl) {
       this.bookId = bookId;
       this.title = title;
       this.authorId = authorId;
       this.releaseDate = releaseDate;
       this.rating = rating;
+      this.imageUrl = imageUrl;
    }
 
    public Integer getBookId() {
@@ -44,11 +46,11 @@ public class Book {
       this.title = title;
    }
 
-   public String getAuthorId() {
+   public Integer getAuthorId() {
       return authorId;
    }
 
-   public void setAuthorId(String authorId) {
+   public void setAuthorId(Integer authorId) {
       this.authorId = authorId;
    }
 
