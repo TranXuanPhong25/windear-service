@@ -23,7 +23,11 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Review save(Review review) {
         review.setCreateAt(LocalDate.now());
-        return reviewRepository.save(review);
+        Optional<Review> reviewFromDB = reviewRepository.findByBookIdAndUserId(review.getBookId(), review.getUserId());
+        if (reviewFromDB.isPresent()) {
+            throw new RuntimeException("UserId " + review.getUserId() + " have reviewed the bookId: " + review.getBookId());
+        }
+        else return reviewRepository.save(review);
     }
 
     @Override
@@ -47,10 +51,10 @@ public class ReviewServiceImpl implements ReviewService{
         if(review.getContent() != null) {
             reviewFromDB.setContent(review.getContent());
         }
-        if(review.getBookId() != 0) {
+        if(review.getBookId() != null) {
             reviewFromDB.setBookId(review.getBookId());
         }
-        if(!review.getUserId().isEmpty()) {
+        if(review.getUserId()!= null) {
             reviewFromDB.setUserId(review.getUserId());
         }
         if(review.getRating() != 0) {

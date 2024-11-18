@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "interal_book", schema = "public")
+@Table(name = "internal_book", schema = "public")
 public class InternalBook extends Book {
     @Column(name = "description")
     private String description;
