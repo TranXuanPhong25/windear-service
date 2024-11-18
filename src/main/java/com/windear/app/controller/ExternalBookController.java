@@ -26,9 +26,9 @@ public class ExternalBookController {
         return externalBookService.getTaggedBooks(tagName);
     }
 
-    @GetMapping("/reviews")
-    public String getReviews(@RequestBody String workId) {
-        return externalBookService.getReviews(workId);
+    @PostMapping("/reviews")
+    public String getReviews(@RequestBody Map<String,String> payload) {
+        return externalBookService.getReviews(payload.get("data"));
     }
 
     @GetMapping("/books/{id}")
@@ -49,5 +49,10 @@ public class ExternalBookController {
     @PostMapping("/similar")
     public String getSimilarBooks(@RequestBody Map<String,String> payload) {
         return externalBookService.getSimilarBooks(payload.get("data"));
+    }
+
+    @PostMapping("/editions")
+    public String getEditions(@RequestBody Map<String,String> payload) {
+        return externalBookService.getEditions(payload.get("data"));
     }
 }

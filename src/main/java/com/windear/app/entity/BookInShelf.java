@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 public class BookInShelf extends Book {
-    private String imageUrl;
     private LocalDate addedDate;
     private LocalDate readDate;
     private int bookStatus;
@@ -15,16 +14,16 @@ public class BookInShelf extends Book {
         super();
     }
 
-    public BookInShelf(Integer id, String title, String author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus) {
-        super(id, title, author,releaseDate, rating);
+    public BookInShelf(Integer id, String title, Integer author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus) {
+        super(id, title, author,releaseDate, rating,imageUrl);
         this.imageUrl = imageUrl;
         this.addedDate = addedDate;
         this.readDate = readDate;
         this.bookStatus = bookStatus;
     }
 
-    public BookInShelf(Integer id, String title, String author,LocalDate releaseDate, double rating) {
-        super(id, title, author, releaseDate,rating);
+    public BookInShelf(Integer id, String title, Integer author,LocalDate releaseDate, double rating,String imageUrl) {
+        super(id, title, author, releaseDate,rating,imageUrl);
     }
 
     public String getImageUrl() {
