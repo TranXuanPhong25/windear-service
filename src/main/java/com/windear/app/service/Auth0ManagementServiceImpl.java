@@ -55,21 +55,19 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
                 .retrieve()
                 .bodyToMono(Map.class)
                 .block();
+        assert result != null;
         return result.get("access_token");
     }
 
     @Override
     public String getUsers() {
         accessToken = getAccessToken();
-        List<Map<String, Object>> users = webClient.get()
-                .uri("/api/v2/users")
-                .header("authorization", "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
-                })
-                .block();
-        assert users != null;
-        return users.toString();
+        return webClient.get()
+                 .uri("/api/v2/users?include_totals=true")
+                 .header("authorization", "Bearer " + accessToken)
+                 .retrieve()
+                 .bodyToMono(String.class)
+                 .block();
     }
 
     @Override

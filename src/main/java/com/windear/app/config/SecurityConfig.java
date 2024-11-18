@@ -29,8 +29,8 @@ public class SecurityConfig {
       return http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
                   .requestMatchers("/api/public","/api/search", "api/external/**","/api/news/**","api/books/**").permitAll()
-                  .requestMatchers("/api/private","api/auth0/user/**").authenticated()
-                  .requestMatchers("/api/admin","api/auth0/user").hasAuthority("ROLE_admin")
+                  .requestMatchers("/api/private","api/auth0/user/**","api/review","api/review/**").authenticated()
+                  .requestMatchers("/api/admin","api/auth0/users").hasAuthority("ROLE_admin")
 
             )
             .cors(withDefaults())
