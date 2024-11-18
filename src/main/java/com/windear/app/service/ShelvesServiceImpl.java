@@ -32,11 +32,7 @@ public class ShelvesServiceImpl implements ShelvesService {
     @Override
     public Shelves findShelvesByUserId(String userId) {
         Optional<Shelves> shelves = shelvesRepository.findById(userId);
-        if (shelves.isPresent()) {
-            return shelves.get();
-        } else {
-            return new Shelves(userId);
-        }
+        return shelves.orElseGet(() -> new Shelves(userId));
     }
 
     @Override

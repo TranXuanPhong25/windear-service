@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 public class BookInShelf extends Book {
-    private String imageUrl;
     private LocalDate addedDate;
     private LocalDate readDate;
     private int bookStatus;
