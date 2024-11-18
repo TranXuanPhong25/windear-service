@@ -42,21 +42,50 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
+    public Review findReviewByBookIdAndUserId(Integer bookId, String userId) {
+        Optional<Review> review = reviewRepository.findByBookIdAndUserId(bookId, userId);
+        if (review.isPresent()) {
+            return review.get();
+        } else {
+            throw new ReviewNotFoundException("UserId: " + userId + " or BookId: " + bookId +" not found");
+        }
+    }
+
+    @Override
+    public double findRateByBookIdAndUserId(Integer bookId, String userId) {
+        Optional<Review> review = reviewRepository.findByBookIdAndUserId(bookId, userId);
+        if (review.isPresent()) {
+            return review.get().getRating();
+        }
+        return 0;
+    }
+
+    @Override
+    public Review updateRate(Review review) {
+        Optional<Review> reviewFromDb = reviewRepository.findByBookIdAndUserId(review.getBookId(), review.getUserId());
+        if(reviewFromDb.isPresent()) {
+            reviewFromDb.get().setRating(review.getRating());
+            return reviewRepository.save(reviewFromDb.get());
+        } else {
+            return reviewRepository.save(review);
+        }
+    }
+
+    @Override
     public Review update(Review review) {
         Review reviewFromDB = findReviewById(review.getReviewId());
         if(review.getContent() != null) {
             reviewFromDB.setContent(review.getContent());
         }
-        if(review.getBookId() != 0) {
+        if(review.getBookId() != null) {
             reviewFromDB.setBookId(review.getBookId());
         }
-        if(review.getUserId()!= 0) {
+        if(review.getUserId()!= null) {
             reviewFromDB.setUserId(review.getUserId());
         }
         if(review.getRating() != 0) {
             reviewFromDB.setRating(review.getRating());
         }
-
         return reviewRepository.save(reviewFromDB);
 
     }
