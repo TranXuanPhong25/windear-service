@@ -46,6 +46,36 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
+    public Review findReviewByBookIdAndUserId(Integer bookId, String userId) {
+        Optional<Review> review = reviewRepository.findByBookIdAndUserId(bookId, userId);
+        if (review.isPresent()) {
+            return review.get();
+        } else {
+            throw new ReviewNotFoundException("UserId: " + userId + " or BookId: " + bookId +" not found");
+        }
+    }
+
+    @Override
+    public double findRateByBookIdAndUserId(Integer bookId, String userId) {
+        Optional<Review> review = reviewRepository.findByBookIdAndUserId(bookId, userId);
+        if (review.isPresent()) {
+            return review.get().getRating();
+        }
+        return 0;
+    }
+
+    @Override
+    public Review updateRate(Review review) {
+        Optional<Review> reviewFromDb = reviewRepository.findByBookIdAndUserId(review.getBookId(), review.getUserId());
+        if(reviewFromDb.isPresent()) {
+            reviewFromDb.get().setRating(review.getRating());
+            return reviewRepository.save(reviewFromDb.get());
+        } else {
+            return reviewRepository.save(review);
+        }
+    }
+
+    @Override
     public Review update(Review review) {
         Review reviewFromDB = findReviewById(review.getReviewId());
         if(review.getContent() != null) {
@@ -60,7 +90,6 @@ public class ReviewServiceImpl implements ReviewService{
         if(review.getRating() != 0) {
             reviewFromDB.setRating(review.getRating());
         }
-
         return reviewRepository.save(reviewFromDB);
 
     }
