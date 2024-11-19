@@ -1,31 +1,27 @@
 package com.windear.app.service;
 
-import com.windear.app.entity.BookInShelf;
-import com.windear.app.exception.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ExternalBookServiceImpl implements ExternalBookService {
-    private final WebClient webClient;
+    private final WebClient goodreadsWebClient;
 
-    @Autowired
-    public ExternalBookServiceImpl(WebClient webClient) {
-        this.webClient = webClient;
+    public ExternalBookServiceImpl(@Qualifier("goodreadsWebClient") WebClient goodreadsWebClient) {
+        this.goodreadsWebClient = goodreadsWebClient;
     }
 
     public String getQueryResultAsString(String query) {
         Map<String, String> graphqlQuery = new HashMap<>();
         graphqlQuery.put("query", query);
 
-        return webClient.post()
+        return goodreadsWebClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(graphqlQuery)
                 .retrieve()
