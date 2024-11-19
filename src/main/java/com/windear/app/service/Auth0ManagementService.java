@@ -12,4 +12,6 @@ public interface Auth0ManagementService {
     ResponseEntity<String> deleteUser(String id);
     ResponseEntity<String> resetPassword(String id);
     ResponseEntity<String> updateProfile(String userId, String data);
+    ResponseEntity<String> resendVerificationEmail(String userId);
+    ResponseEntity<String> getActiveUsers();
 }

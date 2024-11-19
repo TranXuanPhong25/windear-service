@@ -30,7 +30,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) -> authorize
                   .requestMatchers("/api/public","/api/search", "api/external/**","/api/news/**","api/books/**").permitAll()
                   .requestMatchers("/api/private","api/auth0/user/**","api/review","api/review/**").authenticated()
-                  .requestMatchers("/api/admin","api/auth0/users").hasAuthority("ROLE_admin")
+                  .requestMatchers("/api/admin","api/auth0/users","api/auth0/stats/**").hasAuthority("ROLE_admin")
 
             )
             .cors(withDefaults())

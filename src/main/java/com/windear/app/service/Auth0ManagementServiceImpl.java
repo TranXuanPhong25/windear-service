@@ -2,6 +2,7 @@ package com.windear.app.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.windear.app.dto.SendEmailVerificationPayload;
 import com.windear.app.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -142,8 +143,8 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
                 .retrieve()
                 .onStatus(
                         status -> status.is4xxClientError() || status.is5xxServerError(),
-                        clientResponse -> clientResponse.bodyToMono(String.class).map(errorBody -> {
-                            throw new RuntimeException("Error updating profile: " + errorBody);
+                        clientResponse -> clientResponse.bodyToMono(String.class).handle((errorBody, sink) -> {
+                            sink.error(new RuntimeException("Error updating profile: " + errorBody));
                         })
                 )
                 .bodyToMono(String.class)
@@ -184,6 +185,66 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
         }
 
     }
+    @Override
+    public ResponseEntity<String> resendVerificationEmail(String userId){
+        accessToken = getAccessToken();
+        try {
+            SendEmailVerificationPayload payload = new SendEmailVerificationPayload(auth0ClientId, userId);
+            webClient.post()
+                    .uri("/api/v2/jobs/verification-email")
+                    .header("authorization", "Bearer " + accessToken)
+                    .bodyValue(payload)
+                    .retrieve()
+                    .onStatus(
+                            status -> status.is4xxClientError() || status.is5xxServerError(),
+                            clientResponse -> clientResponse.bodyToMono(Map.class).handle((errorBody, sink) -> {
+                                sink.error(new RuntimeException(errorBody.get("message").toString()));
+                            })
+                    )
+                    .bodyToMono(String.class)
+                    .block();
 
+            return ResponseEntity.ok("201");
+
+        } catch (WebClientResponseException e) {
+            // Handle specific HTTP error responses here
+            return ResponseEntity.status(e.getStatusCode())
+                    .body("Failed to receive ticket: " + e.getResponseBodyAsString());
+        } catch (Exception e) {
+            // Handle any other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getActiveUsers() {
+        accessToken = getAccessToken();
+        try {
+            String numberOfActiveUsers = webClient.get()
+                    .uri("/api/v2/stats/active-users")
+                    .header("authorization", "Bearer " + accessToken)
+                    .retrieve()
+                    .onStatus(
+                            status -> status.is4xxClientError() || status.is5xxServerError(),
+                            clientResponse -> clientResponse.bodyToMono(Map.class).handle((errorBody, sink) -> {
+                                sink.error(new RuntimeException(errorBody.get("message").toString()));
+                            })
+                    )
+                    .bodyToMono(String.class)
+                    .block();
+
+            return ResponseEntity.ok(numberOfActiveUsers);
+
+        } catch (WebClientResponseException e) {
+            // Handle specific HTTP error responses here
+            return ResponseEntity.status(e.getStatusCode())
+                    .body("Failed to get active user: " + e.getResponseBodyAsString());
+        } catch (Exception e) {
+            // Handle any other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Unexpected error: " + e.getMessage());
+        }
+    }
 
 }

@@ -48,4 +48,14 @@ public class Auth0UserController {
     public ResponseEntity<String> deleteUser(@PathVariable String userId) {
         return auth0ManagementService.deleteUser(userId);
     }
+
+    @PostMapping("/user/resend-verification-email")
+    public ResponseEntity<String> resendVerificationEmail(@RequestBody Map<String,String> data) {
+        return auth0ManagementService.resendVerificationEmail(data.get("data"));
+    }
+
+    @GetMapping("/stats/active-users")
+    public ResponseEntity<String> getsActiveUsers() {
+        return auth0ManagementService.getActiveUsers();
+    }
 }
