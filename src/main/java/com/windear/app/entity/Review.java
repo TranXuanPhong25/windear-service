@@ -19,6 +19,7 @@ public class Review {
     @Column(name = "book_id")
     private Integer bookId;
 
+    @Lob
     @Column(name = "content")
     private String content;
 
@@ -28,6 +29,7 @@ public class Review {
     @Column(name = "create_at")
     private LocalDate createAt;
 
+    @Lob
     @Column(name = "user_image_url")
     private String userImageUrl;
 
