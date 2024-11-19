@@ -35,6 +35,30 @@ public class Review {
     private String userName;
 
 
+    public Integer getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(Integer reviewId) {
+        this.reviewId = reviewId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Integer getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
+    }
+
     public String getContent() {
         return content;
     }
@@ -49,30 +73,6 @@ public class Review {
 
     public void setRating(double rating) {
         this.rating = rating;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Integer getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(Integer reviewId) {
-        this.reviewId = reviewId;
-    }
-
-    public Integer getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
     }
 
     public LocalDate getCreateAt() {

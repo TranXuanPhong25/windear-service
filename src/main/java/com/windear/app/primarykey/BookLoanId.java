@@ -8,23 +8,23 @@ import java.util.Objects;
 @Embeddable
 public class BookLoanId {
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     @Column(name = "book_id")
     private Integer bookId;
 
     public BookLoanId() {}
 
-    public BookLoanId(Integer userId, Integer bookId) {
+    public BookLoanId(String userId, Integer bookId) {
         this.userId = userId;
         this.bookId = bookId;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
