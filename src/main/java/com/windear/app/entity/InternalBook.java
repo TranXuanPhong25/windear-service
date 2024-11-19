@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "interal_book", schema = "public")
+@Table(name = "internal_book", schema = "public")
 public class InternalBook extends Book {
     @Column(name = "description")
     private String description;
@@ -20,8 +20,8 @@ public class InternalBook extends Book {
 
     public InternalBook() {}
 
-    public InternalBook(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating, String description, String isbn10, String isbn13) {
-        super(bookId, title, authorId, releaseDate, rating);
+    public InternalBook(Integer bookId, String title, Integer authorId, LocalDate releaseDate, double rating,String imageUrl, String description, String isbn10, String isbn13) {
+        super(bookId, title, authorId, releaseDate, rating,imageUrl);
         this.description = description;
         this.isbn10 = isbn10;
         this.isbn13 = isbn13;

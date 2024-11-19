@@ -1,5 +1,7 @@
 package com.windear.app.entity;
 
+import com.windear.app.exception.BookNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,5 +40,12 @@ public class Shelf {
 
     public void addBook(BookInShelf book) {
         books.add(book);
+    }
+
+    public BookInShelf findBookById(int bookId) {
+        return books.stream()
+                .filter(book -> book.getBookId() == bookId)
+                .findFirst()
+                .orElse(null);
     }
 }

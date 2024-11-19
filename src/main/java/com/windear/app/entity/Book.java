@@ -1,27 +1,31 @@
 package com.windear.app.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 
 @MappedSuperclass
 public class Book {
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq")
+   @SequenceGenerator(name = "book_seq", sequenceName = "book_id_seq", initialValue = 1000000000, allocationSize = 1)
    protected Integer bookId;
    protected String title;
-   protected String authorId;
+   protected Integer authorId;
    protected LocalDate releaseDate;
    protected double rating;
+   protected String imageUrl;
 
    public Book() {}
 
-   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating) {
+   public Book(Integer bookId, String title, Integer authorId, LocalDate releaseDate, double rating, String imageUrl) {
       this.bookId = bookId;
       this.title = title;
       this.authorId = authorId;
       this.releaseDate = releaseDate;
       this.rating = rating;
+      this.imageUrl = imageUrl;
    }
 
    public Integer getBookId() {
@@ -40,11 +44,11 @@ public class Book {
       this.title = title;
    }
 
-   public String getAuthorId() {
+   public Integer getAuthorId() {
       return authorId;
    }
 
-   public void setAuthorId(String authorId) {
+   public void setAuthorId(Integer authorId) {
       this.authorId = authorId;
    }
 
