@@ -19,7 +19,8 @@ public class Review {
     @Column(name = "book_id")
     private Integer bookId;
 
-    @Column(name = "content")
+    @Lob
+    @Column(name = "content", nullable = true)
     private String content;
 
     @Column(name = "rating")
@@ -28,12 +29,24 @@ public class Review {
     @Column(name = "create_at")
     private LocalDate createAt;
 
-    @Column(name = "user_image_url")
+    @Lob
+    @Column(name = "user_image_url", nullable = true)
     private String userImageUrl;
 
     @Column(name = "user_name")
     private String userName;
 
+    public Review() {}
+
+    public Review(String userId, Integer bookId, String content, double rating, LocalDate createAt, String userImageUrl, String userName) {
+        this.userId = userId;
+        this.bookId = bookId;
+        this.content = content;
+        this.rating = rating;
+        this.createAt = createAt;
+        this.userImageUrl = userImageUrl;
+        this.userName = userName;
+    }
 
     public Integer getReviewId() {
         return reviewId;

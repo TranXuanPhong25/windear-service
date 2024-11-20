@@ -49,9 +49,9 @@ public class ReviewController {
         return reviewService.update(review);
     }
 
-    @PutMapping("/review/rate")
-    public Review updateRate(@RequestBody Review review) {
-        return reviewService.updateRate(review);
+    @PutMapping("/review/rate/{bookId}/{userId}/{rating}/{userImageUrl}/{userName}")
+    public Review updateRate(@PathVariable Integer bookId, @PathVariable String userId, @PathVariable double rating, @PathVariable String userImageUrl, @PathVariable String userName) {
+        return reviewService.updateRate(bookId, userId, rating, userImageUrl, userName);
     }
 
     @DeleteMapping("/review/{reviewId}")

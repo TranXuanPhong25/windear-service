@@ -5,11 +5,13 @@ import com.windear.app.exception.ReviewNotFoundException;
 import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class ReviewServiceImpl implements ReviewService{
 
@@ -65,13 +67,14 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Review updateRate(Review review) {
-        Optional<Review> reviewFromDb = reviewRepository.findByBookIdAndUserId(review.getBookId(), review.getUserId());
+    public Review updateRate(Integer bookId, String userId, double rating, String userImageUrl, String userName) {
+        Optional<Review> reviewFromDb = reviewRepository.findByBookIdAndUserId(bookId, userId);
         if(reviewFromDb.isPresent()) {
-            reviewFromDb.get().setRating(review.getRating());
+            reviewFromDb.get().setRating(rating);
             return reviewRepository.save(reviewFromDb.get());
         } else {
-            return reviewRepository.save(review);
+            Review review = new Review(userId, bookId, null, rating, null, userImageUrl, userName);
+            return save(review);
         }
     }
 
