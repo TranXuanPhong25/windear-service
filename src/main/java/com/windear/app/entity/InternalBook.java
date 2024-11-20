@@ -33,8 +33,8 @@ public class InternalBook extends Book {
     @Column(name = "language")
     private String language;
 
-    @Column(name = "pages")
-    private Integer pages;
+    @Column(name = "numPages")
+    private Integer numPages;
 
     public InternalBook() {}
 
@@ -48,7 +48,7 @@ public class InternalBook extends Book {
         this.publisher = publisher;
         this.format = format;
         this.language = language;
-        this.pages = pages;
+        this.numPages = pages;
     }
 
     public String getIsbn10() {
@@ -115,11 +115,11 @@ public class InternalBook extends Book {
         this.language = language;
     }
 
-    public Integer getPages() {
-        return pages;
+    public Integer getNumPages() {
+        return numPages;
     }
 
-    public void setPages(Integer pages) {
-        this.pages = pages;
+    public void setNumPages(Integer numPages) {
+        this.numPages = numPages;
     }
 }
