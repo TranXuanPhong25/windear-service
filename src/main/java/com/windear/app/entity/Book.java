@@ -12,17 +12,18 @@ public class Book {
    @SequenceGenerator(name = "book_seq", sequenceName = "book_id_seq", initialValue = 1000000000, allocationSize = 1)
    protected Integer bookId;
    protected String title;
-   protected Integer authorId;
+   protected String authorName;
    protected LocalDate releaseDate;
    protected double rating;
+   @Column(name = "image_url", nullable = true,columnDefinition = "TEXT")
    protected String imageUrl;
 
    public Book() {}
 
-   public Book(Integer bookId, String title, Integer authorId, LocalDate releaseDate, double rating, String imageUrl) {
+   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating, String imageUrl) {
       this.bookId = bookId;
       this.title = title;
-      this.authorId = authorId;
+      this.authorName = authorId;
       this.releaseDate = releaseDate;
       this.rating = rating;
       this.imageUrl = imageUrl;
@@ -44,12 +45,12 @@ public class Book {
       this.title = title;
    }
 
-   public Integer getAuthorId() {
-      return authorId;
+   public String getAuthorName() {
+      return authorName;
    }
 
-   public void setAuthorId(Integer authorId) {
-      this.authorId = authorId;
+   public void setAuthorName(String authorName) {
+      this.authorName = authorName;
    }
 
    public LocalDate getReleaseDate() {

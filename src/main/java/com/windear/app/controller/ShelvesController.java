@@ -60,4 +60,9 @@ public class ShelvesController {
                                   @RequestParam String name) {
         return shelvesService.getShelves(userId, name);
     }
+
+    @GetMapping("/{userId}/name")
+    public List<String> getShelves(@PathVariable String userId) {
+        return shelvesService.getAllShelvesNames(userId);
+    }
 }

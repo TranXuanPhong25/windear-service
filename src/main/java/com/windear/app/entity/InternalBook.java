@@ -18,13 +18,20 @@ public class InternalBook extends Book {
     @Column(name = "isbn13")
     private String isbn13;
 
-    public InternalBook() {}
+    @Column(name = "author_image_url", columnDefinition = "TEXT")
+    private String authorImageUrl;
 
-    public InternalBook(Integer bookId, String title, Integer authorId, LocalDate releaseDate, double rating,String imageUrl, String description, String isbn10, String isbn13) {
+    @Column(name = "author_description", columnDefinition = "TEXT")
+    private String authorDescription;
+
+
+    public InternalBook(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorImageUrl, String authorDescription) {
         super(bookId, title, authorId, releaseDate, rating,imageUrl);
         this.description = description;
         this.isbn10 = isbn10;
         this.isbn13 = isbn13;
+        this.authorImageUrl=authorImageUrl;
+        this.authorDescription = authorDescription;
     }
 
     public String getIsbn10() {
@@ -49,5 +56,21 @@ public class InternalBook extends Book {
 
     public void setIsbn13(String isbn13) {
         this.isbn13 = isbn13;
+    }
+
+    public String getAuthorImageUrl() {
+        return authorImageUrl;
+    }
+
+    public void setAuthorImageUrl(String authorImageUrl) {
+        this.authorImageUrl = authorImageUrl;
+    }
+
+    public String getAuthorDescription() {
+        return authorDescription;
+    }
+
+    public void setAuthorDescription(String authorDescription) {
+        this.authorDescription = authorDescription;
     }
 }
