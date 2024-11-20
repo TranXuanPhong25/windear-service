@@ -58,4 +58,7 @@ public class Auth0UserController {
     public ResponseEntity<String> getsActiveUsers() {
         return auth0ManagementService.getActiveUsers();
     }
+
+    @GetMapping("/logs")
+    public ResponseEntity<String> getLogs() {return auth0ManagementService.getLogs();}
 }

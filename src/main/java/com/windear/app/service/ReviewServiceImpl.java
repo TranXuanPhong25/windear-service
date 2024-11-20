@@ -60,10 +60,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public double findRateByBookIdAndUserId(Integer bookId, String userId) {
         Optional<Review> review = reviewRepository.findByBookIdAndUserId(bookId, userId);
-        if (review.isPresent()) {
-            return review.get().getRating();
-        }
-        return 0;
+        return review.map(Review::getRating).orElse(0.0);
     }
 
     @Override

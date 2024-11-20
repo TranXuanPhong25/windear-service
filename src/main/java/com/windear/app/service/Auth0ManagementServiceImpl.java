@@ -23,18 +23,18 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     private final WebClient auth0WebClient;
 
-    private final Auth0AccessToken auth0AccessToken;
+    private final Auth0AccessTokenService auth0AccessTokenService;
 
-    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient) {
+    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient, Auth0AccessTokenService auth0AccessTokenService) {
         this.auth0WebClient = auth0WebClient;
-        this.auth0AccessToken = new Auth0AccessToken(auth0WebClient);
+        this.auth0AccessTokenService = auth0AccessTokenService;
     }
 
     @Override
     public String getUsers() {
         return auth0WebClient.get()
                 .uri("/api/v2/users?include_totals=true")
-                .header("authorization", "Bearer " + auth0AccessToken.getAccessToken())
+                .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -45,7 +45,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
         try {
             String response = auth0WebClient.delete()
                     .uri("/api/v2/users/" + id)
-                    .header("authorization", "Bearer " + auth0AccessToken.getAccessToken())
+                    .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
                     .retrieve()
                     .onStatus(
                             status -> status.is4xxClientError() || status.is5xxServerError(),
@@ -77,7 +77,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
             String ticket =
                     auth0WebClient.post()
                             .uri("/api/v2/tickets/password-change")
-                            .header("authorization", "Bearer " + auth0AccessToken.getAccessToken())
+                            .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
                             .bodyValue(payload)
                             .retrieve()
                             .onStatus(
@@ -105,7 +105,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
     private void updateProfile(String userId, UserProfile profile) throws WebClientResponseException {
         auth0WebClient.patch()
                 .uri("/api/v2/users/" + userId)
-                .header("authorization", "Bearer " + auth0AccessToken.getAccessToken())
+                .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
                 .bodyValue(profile)
                 .retrieve()
                 .onStatus(
@@ -156,7 +156,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
             SendEmailVerificationPayload payload = new SendEmailVerificationPayload(auth0ClientId, userId);
             auth0WebClient.post()
                     .uri("/api/v2/jobs/verification-email")
-                    .header("authorization", "Bearer " + auth0AccessToken.getAccessToken())
+                    .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
                     .bodyValue(payload)
                     .retrieve()
                     .onStatus(
@@ -186,7 +186,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
         try {
             String numberOfActiveUsers = auth0WebClient.get()
                     .uri("/api/v2/stats/active-users")
-                    .header("authorization", "Bearer " + auth0AccessToken.getAccessToken())
+                    .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
                     .retrieve()
                     .onStatus(
                             status -> status.is4xxClientError() || status.is5xxServerError(),
@@ -198,6 +198,35 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
                     .block();
 
             return ResponseEntity.ok(numberOfActiveUsers);
+
+        } catch (WebClientResponseException e) {
+            // Handle specific HTTP error responses here
+            return ResponseEntity.status(e.getStatusCode())
+                    .body("Failed to get active user: " + e.getResponseBodyAsString());
+        } catch (Exception e) {
+            // Handle any other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Unexpected error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> getLogs() {
+        try {
+            String logs = auth0WebClient.get()
+                    .uri("/api/v2/logs?fields=date%2Cip%2Cuser_agent%2Cuser_id%2Cuser_name%2CisMobile&include_fields=false&q=%22s%22")
+                    .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
+                    .retrieve()
+                    .onStatus(
+                            status -> status.is4xxClientError() || status.is5xxServerError(),
+                            clientResponse -> clientResponse.bodyToMono(Map.class).handle((errorBody, sink) -> {
+                                sink.error(new RuntimeException(errorBody.get("message").toString()));
+                            })
+                    )
+                    .bodyToMono(String.class)
+                    .block();
+
+            return ResponseEntity.ok(logs);
 
         } catch (WebClientResponseException e) {
             // Handle specific HTTP error responses here

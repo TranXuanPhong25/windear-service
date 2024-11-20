@@ -31,8 +31,7 @@ public class SecurityConfig {
                                 "/api/news/**",
                                 "/api/books/**",
                                 "/api/review/book/**",
-                                "/api/bookloan",
-                                "/api/review/**"
+                                "/api/bookloan"
                         )
                         .permitAll()
                         .requestMatchers(

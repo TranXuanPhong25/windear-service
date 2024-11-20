@@ -14,4 +14,5 @@ public interface Auth0ManagementService {
     ResponseEntity<String> updateProfile(String userId, String data);
     ResponseEntity<String> resendVerificationEmail(String userId);
     ResponseEntity<String> getActiveUsers();
+    ResponseEntity<String> getLogs();
 }

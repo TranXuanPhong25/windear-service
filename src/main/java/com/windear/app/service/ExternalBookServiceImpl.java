@@ -76,7 +76,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
         String query = "{\n" +
                 "getReviews(\n" +
                 "    filters: {resourceId: \"" + workId + "\", resourceType: WORK, sort: DEFAULT}\n" +
-                "    pagination: {limit:6}\n" +
+                "    pagination: {limit:8}\n" +
                 "  ) {\n" +
                 "    pageInfo {\n" +
                 "      hasNextPage\n" +

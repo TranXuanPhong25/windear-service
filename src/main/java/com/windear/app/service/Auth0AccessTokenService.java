@@ -3,11 +3,13 @@ package com.windear.app.service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Map;
 
-public class Auth0AccessToken {
+@Service
+public class Auth0AccessTokenService {
     @Value("${management.api.client.id}")
     private String clientId;
 
@@ -24,9 +26,10 @@ public class Auth0AccessToken {
 
     private String accessToken;
 
-    public Auth0AccessToken(@Qualifier("auth0WebClient") WebClient auth0WebClient) {
+    public Auth0AccessTokenService(@Qualifier("auth0WebClient") WebClient auth0WebClient) {
         this.auth0WebClient = auth0WebClient;
         this.expirationTime = 0;
+//        this.accessToken = refreshToken();
     }
 
 
@@ -44,16 +47,16 @@ public class Auth0AccessToken {
                 .retrieve()
                 .bodyToMono(Map.class)
                 .block();
-        if(result == null) {
+        if (result == null) {
             return refreshToken();
         }
-        accessToken = result.get("access_token");
-        expirationTime = System.currentTimeMillis() + ACCESS_TOKEN_EXPIRES_IN_SECONDS * 1000;
+        this.accessToken = result.get("access_token");
+        this.expirationTime = System.currentTimeMillis() + ACCESS_TOKEN_EXPIRES_IN_SECONDS * 1000;
         return accessToken;
     }
 
     public String getAccessToken() {
-        if(expirationTime < System.currentTimeMillis()) {
+        if (expirationTime > 0 && expirationTime < System.currentTimeMillis()) {
             return accessToken;
         }
         return refreshToken();

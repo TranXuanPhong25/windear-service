@@ -41,7 +41,7 @@ public class BookLoanId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookLoanId other = (BookLoanId) o;
-        return bookId == other.bookId && userId == other.userId;
+        return Objects.equals(bookId, other.bookId) && Objects.equals(userId, other.userId);
     }
 
     @Override
