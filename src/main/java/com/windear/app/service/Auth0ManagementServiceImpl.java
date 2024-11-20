@@ -2,17 +2,22 @@ package com.windear.app.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.windear.app.dto.Auth0LogDTO;
 import com.windear.app.dto.SendEmailVerificationPayload;
+import com.windear.app.entity.Auth0Log;
 import com.windear.app.model.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class Auth0ManagementServiceImpl implements Auth0ManagementService {
@@ -25,9 +30,12 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     private final Auth0AccessTokenService auth0AccessTokenService;
 
-    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient, Auth0AccessTokenService auth0AccessTokenService) {
+    private final Auth0LogService auth0LogService;
+
+    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient, Auth0AccessTokenService auth0AccessTokenService, Auth0LogService auth0LogService) {
         this.auth0WebClient = auth0WebClient;
         this.auth0AccessTokenService = auth0AccessTokenService;
+        this.auth0LogService = auth0LogService;
     }
 
     @Override
@@ -210,11 +218,38 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
         }
     }
 
+    private int findLessRecentLog(Auth0Log[] logs, Auth0Log latestLog) {
+        int left = 0;
+        int right = logs.length - 1;
+        int mid = logs.length - 1;
+        while (left <= right) {
+            mid = left + (right - left) / 2;
+            Auth0Log midLog = logs[mid];
+
+            int comparison = midLog.getDate().compareTo(latestLog.getDate());
+
+            if (comparison > 0) {
+                left = mid + 1;
+            } else if (comparison < 0) {
+                right = mid - 1;
+            } else {
+                break;
+            }
+        }
+
+        return mid;
+    }
+
     @Override
-    public ResponseEntity<String> getLogs() {
+    public ResponseEntity<?> getLogs() {
         try {
-            String logs = auth0WebClient.get()
-                    .uri("/api/v2/logs?fields=date%2Cip%2Cuser_agent%2Cuser_id%2Cuser_name%2CisMobile&include_fields=false&q=%22s%22")
+            Auth0Log[] logs = auth0WebClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/api/v2/logs")
+                            .queryParam("fields", "date,ip,user_agent,user_id,user_name,isMobile,type")
+                            .queryParam("include_fields", false)
+                            .queryParam("q", "\"s\" or \"ss\" or \"slo\" or \"sdu\" or \"sce\" or \"scu\" or \"scp\" or \"scpr\" or \"fce\" or \"fcu\" or \"fcp\" or \"fcpr\"\n")
+                            .build())
                     .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
                     .retrieve()
                     .onStatus(
@@ -223,10 +258,29 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
                                 sink.error(new RuntimeException(errorBody.get("message").toString()));
                             })
                     )
-                    .bodyToMono(String.class)
+                    .bodyToMono(Auth0Log[].class)
                     .block();
+            if (logs == null || logs.length == 0) {
+                return ResponseEntity.noContent().build();
+            }
+            Auth0Log latestLog = auth0LogService.getLatestLog();
+            int lessRecentLogIndex = findLessRecentLog(logs, latestLog);
+            for (int i = lessRecentLogIndex; i >= 0; i--) {
+                auth0LogService.addLog(logs[i]);
+            }
+            Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 20);
+            List<Auth0LogDTO> logsDTO = logsPage.getContent().stream()
+                    .map(log -> new Auth0LogDTO(
+                            log.getDate(),
+                            log.getIp(),
+                            log.getUser_agent(),
+                            log.getUser_id(),
+                            log.getUser_name(),
+                            log.isMobile(),
+                            log.getType()))
+                    .collect(Collectors.toList());
 
-            return ResponseEntity.ok(logs);
+            return ResponseEntity.ok(logsDTO);
 
         } catch (WebClientResponseException e) {
             // Handle specific HTTP error responses here

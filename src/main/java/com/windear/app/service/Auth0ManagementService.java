@@ -1,6 +1,6 @@
 package com.windear.app.service;
 
-import com.windear.app.entity.Book;
+import com.windear.app.entity.Auth0Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +14,5 @@ public interface Auth0ManagementService {
     ResponseEntity<String> updateProfile(String userId, String data);
     ResponseEntity<String> resendVerificationEmail(String userId);
     ResponseEntity<String> getActiveUsers();
-    ResponseEntity<String> getLogs();
+    ResponseEntity<?> getLogs();
 }
