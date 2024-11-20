@@ -101,4 +101,11 @@ public class ShelvesServiceImpl implements ShelvesService {
         Shelves shelves = findShelvesByUserId(userId);
         return shelves.getShelves().stream().map(Shelf::getName).collect(Collectors.toList());
     }
+
+    @Override
+    public Shelves addShelfWithName(String userId, String shelfName) {
+        Shelves shelves = findShelvesByUserId(userId);
+        Shelf shelf = shelves.getShelfByName(shelfName);
+        return shelvesRepository.save(shelves);
+    }
 }
