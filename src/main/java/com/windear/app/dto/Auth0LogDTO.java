@@ -1,5 +1,7 @@
 package com.windear.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Auth0LogDTO {
 
     private String date;
@@ -7,6 +9,8 @@ public class Auth0LogDTO {
     private String user_agent;
     private String user_id;
     private String user_name;
+
+    @JsonProperty("isMobile") // Ensure JSON field is 'isMobile'
     private boolean isMobile;
     private String type;
 

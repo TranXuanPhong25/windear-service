@@ -1,5 +1,6 @@
 package com.windear.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -21,6 +22,7 @@ public class Auth0Log {
     @Column(name = "user_agent", nullable = false)
     private String user_agent;
 
+    @JsonProperty("isMobile") // Ensure JSON field is 'isMobile'
     @Column(name = "is_mobile", nullable = false)
     private boolean isMobile;
 
