@@ -19,8 +19,7 @@ public class Review {
     @Column(name = "book_id")
     private Integer bookId;
 
-    @Lob
-    @Column(name = "content", nullable = true)
+    @Column(name = "content", nullable = true,columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "rating")
@@ -29,8 +28,7 @@ public class Review {
     @Column(name = "create_at")
     private LocalDate createAt;
 
-    @Lob
-    @Column(name = "user_image_url", nullable = true)
+    @Column(name = "user_image_url", nullable = true,columnDefinition = "TEXT")
     private String userImageUrl;
 
     @Column(name = "user_name")

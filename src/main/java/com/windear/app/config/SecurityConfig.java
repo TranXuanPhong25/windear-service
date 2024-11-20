@@ -44,7 +44,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/admin",
                                 "/api/auth0/users",
-                                "/api/auth0/stats/**"
+                                "/api/auth0/stats/**",
+                                "/api/auth0/logs"
+
+
                         )
                         .hasAuthority("ROLE_admin")
 

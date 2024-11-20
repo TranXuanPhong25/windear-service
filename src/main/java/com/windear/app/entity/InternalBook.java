@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "internal_book", schema = "public")
 public class InternalBook extends Book {
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "isbn10")
