@@ -10,21 +10,29 @@ import java.util.List;
 @Document
 public class Shelves {
     @MongoId(targetType = FieldType.STRING)
-    String userId;
+    private String userId;
 
-    List<Shelf> shelves = new ArrayList<>();
+    private List<Shelf> shelves = new ArrayList<>();
+
+    private void addDefaultShelf() {
+        shelves.add(new Shelf("Want to read"));
+        shelves.add(new Shelf("Currently reading"));
+        shelves.add(new Shelf("Read"));
+    }
 
     public Shelves() {
-
+        addDefaultShelf();
     }
 
     public Shelves(String userId) {
+        addDefaultShelf();
         this.userId = userId;
     }
 
     public Shelves(String userId, List<Shelf> shelves) {
         this.userId = userId;
         this.shelves = shelves;
+        addDefaultShelf();
     }
 
     public String getUserId() {

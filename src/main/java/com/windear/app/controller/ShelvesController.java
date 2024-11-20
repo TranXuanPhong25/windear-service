@@ -65,4 +65,10 @@ public class ShelvesController {
     public List<String> getShelves(@PathVariable String userId) {
         return shelvesService.getAllShelvesNames(userId);
     }
+
+    @PostMapping("/{userId}/shelf")
+    public Shelves addShelf(@PathVariable String userId,
+                            @RequestParam String name) {
+        return shelvesService.addShelfWithName(userId, name);
+    }
 }
