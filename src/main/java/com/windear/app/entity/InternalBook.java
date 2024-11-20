@@ -24,14 +24,31 @@ public class InternalBook extends Book {
     @Column(name = "author_description", columnDefinition = "TEXT")
     private String authorDescription;
 
+    @Column(name = "publisher")
+    private String publisher;
 
-    public InternalBook(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorImageUrl, String authorDescription) {
-        super(bookId, title, authorId, releaseDate, rating,imageUrl);
+    @Column(name = "format")
+    private String format;
+
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "pages")
+    private Integer pages;
+
+    public InternalBook() {}
+
+    public InternalBook(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorImageUrl, String authorDescription, String publisher, String format, String language, Integer pages) {
+        super(bookId, title, authorId, releaseDate, rating, imageUrl);
         this.description = description;
         this.isbn10 = isbn10;
         this.isbn13 = isbn13;
-        this.authorImageUrl=authorImageUrl;
+        this.authorImageUrl = authorImageUrl;
         this.authorDescription = authorDescription;
+        this.publisher = publisher;
+        this.format = format;
+        this.language = language;
+        this.pages = pages;
     }
 
     public String getIsbn10() {
@@ -72,5 +89,37 @@ public class InternalBook extends Book {
 
     public void setAuthorDescription(String authorDescription) {
         this.authorDescription = authorDescription;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public Integer getPages() {
+        return pages;
+    }
+
+    public void setPages(Integer pages) {
+        this.pages = pages;
     }
 }
