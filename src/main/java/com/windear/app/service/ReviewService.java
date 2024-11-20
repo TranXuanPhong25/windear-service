@@ -9,6 +9,9 @@ public interface ReviewService {
     Review save(Review review);
     List<Review> findReviewByBookId(int bookId);
     Review findReviewById(int reviewId);
+    Review findReviewByBookIdAndUserId(Integer bookId, String userId);
+    double findRateByBookIdAndUserId(Integer bookId, String userId);
+    Review updateRate(Integer bookId, String userId, double rating, String userImageUrl, String userName);
     Review update(Review review);
     void delete(int reviewId);
 }

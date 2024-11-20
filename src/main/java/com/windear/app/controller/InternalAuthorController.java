@@ -26,8 +26,8 @@ public class InternalAuthorController {
     }
 
     @GetMapping("/author/{id}")
-    public InternalAuthor findById(@PathVariable Integer id) {
-        return authorService.findById(id);
+    public InternalAuthor findById(@PathVariable String id) {
+        return authorService.findById(Integer.parseInt(id));
     }
 
     @GetMapping("/author")
@@ -36,8 +36,8 @@ public class InternalAuthorController {
     }
 
     @DeleteMapping("/author/{id}")
-    public void delete(@PathVariable Integer id) {
-        authorService.delete(id);
+    public void delete(@PathVariable String id) {
+        authorService.delete(Integer.parseInt(id));
     }
 
 }

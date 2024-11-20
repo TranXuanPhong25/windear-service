@@ -24,7 +24,7 @@ public class InternalAuthor {
     public InternalAuthor() {
     }
 
-    public InternalAuthor(Integer authorId, String name, String descripiton, LocalDate dayOfBirth) {
+    public InternalAuthor(Integer authorId, String name, String description, LocalDate dayOfBirth) {
         this.authorId = authorId;
         this.name = name;
         this.description = description;
