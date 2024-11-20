@@ -22,17 +22,21 @@ public class BookLoan {
     @Column(name = "return_date")
     private LocalDate returnDate;
 
-    @Column(name = "rating")
-    private Double rating;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "author_name")
+    private String authorName;
 
     public BookLoan() {}
 
-    public BookLoan(BookLoanId bookLoanId, int borrowTime, LocalDate borrowDate, LocalDate returnDate, double rating) {
+    public BookLoan(BookLoanId bookLoanId, Integer borrowTime, LocalDate borrowDate, LocalDate returnDate, String title, String authorName) {
         this.bookLoanId = bookLoanId;
         this.borrowTime = borrowTime;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
-        this.rating = rating;
+        this.title = title;
+        this.authorName = authorName;
     }
 
     public BookLoanId getBookLoanId() {
@@ -67,11 +71,19 @@ public class BookLoan {
         this.returnDate = returnDate;
     }
 
-    public Double getRating() {
-        return rating;
+    public String getTitle() {
+        return title;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 }
