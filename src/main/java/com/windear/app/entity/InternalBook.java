@@ -18,9 +18,6 @@ public class InternalBook extends Book {
     @Column(name = "isbn13")
     private String isbn13;
 
-    @Column(name = "author_image_url", columnDefinition = "TEXT")
-    private String authorImageUrl;
-
     @Column(name = "author_description", columnDefinition = "TEXT")
     private String authorDescription;
 
@@ -33,8 +30,8 @@ public class InternalBook extends Book {
     @Column(name = "language")
     private String language;
 
-    @Column(name = "pages")
-    private Integer pages;
+    @Column(name = "num_pages")
+    private Integer numPages;
 
     public InternalBook() {
     }
@@ -43,17 +40,16 @@ public class InternalBook extends Book {
         super(bookId, title, author, releaseDate, rating, imageUrl);
     }
 
-    public InternalBook(Integer id, String title, String author, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorImageUrl, String authorDescription, String publisher, String format, String language, Integer pages) {
+    public InternalBook(Integer id, String title, String author, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorDescription, String publisher, String format, String language, Integer pages) {
         super(id, title, author, releaseDate, rating, imageUrl);
         this.description = description;
         this.isbn10 = isbn10;
         this.isbn13 = isbn13;
-        this.authorImageUrl = authorImageUrl;
         this.authorDescription = authorDescription;
         this.publisher = publisher;
         this.format = format;
         this.language = language;
-        this.pages = pages;
+        this.numPages = pages;
     }
 
     public String getIsbn10() {
@@ -78,14 +74,6 @@ public class InternalBook extends Book {
 
     public void setIsbn13(String isbn13) {
         this.isbn13 = isbn13;
-    }
-
-    public String getAuthorImageUrl() {
-        return authorImageUrl;
-    }
-
-    public void setAuthorImageUrl(String authorImageUrl) {
-        this.authorImageUrl = authorImageUrl;
     }
 
     public String getAuthorDescription() {
@@ -120,11 +108,11 @@ public class InternalBook extends Book {
         this.language = language;
     }
 
-    public Integer getPages() {
-        return pages;
+    public Integer getNumPages() {
+        return numPages;
     }
 
-    public void setPages(Integer pages) {
-        this.pages = pages;
+    public void setNumPages(Integer numPages) {
+        this.numPages = numPages;
     }
 }

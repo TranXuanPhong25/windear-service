@@ -15,7 +15,7 @@ public class Book {
    protected String author;
    protected LocalDate releaseDate;
    protected double rating;
-   @Column(name = "image_url", nullable = true,columnDefinition = "TEXT")
+   @Column(name = "image_url", columnDefinition = "TEXT")
    protected String imageUrl;
 
    public Book() {}
@@ -45,11 +45,11 @@ public class Book {
       this.title = title;
    }
 
-   public String getAuthorName() {
+   public String getAuthor() {
       return author;
    }
 
-   public void setAuthorName(String authorName) {
+   public void setAuthor(String authorName) {
       this.author = authorName;
    }
 
@@ -67,5 +67,13 @@ public class Book {
 
    public void setRating(double rating) {
       this.rating = rating;
+   }
+
+   public void setImageUrl(String imageUrl) {
+      this.imageUrl = imageUrl;
+   }
+
+   public String getImageUrl() {
+      return imageUrl;
    }
 }
