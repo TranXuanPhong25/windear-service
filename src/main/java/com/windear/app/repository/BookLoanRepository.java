@@ -23,7 +23,7 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, BookLoanId> 
     @Query("SELECT b FROM BookLoan b WHERE b.bookLoanId.userId = :userId AND b.isPending = true")
     List<BookLoan> findBorrowRequestByUserId(String userId);
 
-    @Query("SELECT b FROM BookLoan b WHERE b.bookLoanId.userId = :userId AND b.isPending = false AND b.returnDate = null")
+    @Query("SELECT b FROM BookLoan b WHERE b.bookLoanId.userId = :userId AND b.isPending = false AND b.returnDate IS NULL")
     List<BookLoan> findBorrowedBookByUserId(String userId);
 
     @Query("SELECT b FROM BookLoan b WHERE b.bookLoanId.userId = :userId AND b.returnDate IS NOT NULL")
