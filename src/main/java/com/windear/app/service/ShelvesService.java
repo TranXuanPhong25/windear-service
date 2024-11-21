@@ -16,4 +16,6 @@ public interface ShelvesService {
     Shelves deleteShelfByName(String userId, String shelfName);
     Shelves deleteBookInShelves(String userId, String shelfName, int bookId);
     List<Shelf> getShelves(String userId, String shelfName);
+    List<String> getAllShelvesNames(String userId);
+    Shelves addShelfWithName(String userId, String shelfName);
 }

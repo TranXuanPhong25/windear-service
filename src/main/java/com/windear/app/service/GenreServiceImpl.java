@@ -2,7 +2,6 @@ package com.windear.app.service;
 
 
 import com.windear.app.entity.Genre;
-import com.windear.app.entity.InternalAuthor;
 import com.windear.app.repository.GenreRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

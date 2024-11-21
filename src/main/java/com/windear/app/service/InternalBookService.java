@@ -10,4 +10,5 @@ public interface InternalBookService {
    InternalBook add(InternalBook internalBook);
    void delete(Integer id);
    List<InternalBook> findTop10ByReleaseDate();
+   long getBookInLast30Day();
 }

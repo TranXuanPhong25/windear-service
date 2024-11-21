@@ -27,11 +27,15 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/public",
                                 "/api/search",
-                                "api/external/**",
+                                "/api/external/**",
                                 "/api/news/**",
                                 "/api/books/**",
                                 "/api/review/book/**",
-                                "/api/bookloan"
+                                "/api/bookloan",
+                                "/api/shelves/**",
+                                "/api/shelves",
+                                "/api/db/books",
+                                "/api/db/books/**"
                         )
                         .permitAll()
                         .requestMatchers(
@@ -46,8 +50,6 @@ public class SecurityConfig {
                                 "/api/auth0/users",
                                 "/api/auth0/stats/**",
                                 "/api/auth0/logs"
-
-
                         )
                         .hasAuthority("ROLE_admin")
 

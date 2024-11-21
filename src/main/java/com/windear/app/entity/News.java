@@ -26,6 +26,16 @@ public class News {
     @Column(name = "create_at")
     private LocalDate createAt;
 
+    public News() {}
+
+    public News(Integer newsId, String title, String description, String imageUrl, LocalDate createAt) {
+        this.newsId = newsId;
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.createAt = createAt;
+    }
+
     public String getTitle() {
         return title;
     }

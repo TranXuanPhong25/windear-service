@@ -11,10 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShelvesServiceImpl implements ShelvesService {
-    private ShelvesRepository shelvesRepository;
+    private final ShelvesRepository shelvesRepository;
 
     @Autowired
     public ShelvesServiceImpl(ShelvesRepository shelvesRepository) {
@@ -93,5 +94,18 @@ public class ShelvesServiceImpl implements ShelvesService {
             listOfShelf.add(shelves.getShelfByName(shelfName));
             return listOfShelf;
         }
+    }
+
+    @Override
+    public List<String> getAllShelvesNames(String userId) {
+        Shelves shelves = findShelvesByUserId(userId);
+        return shelves.getShelves().stream().map(Shelf::getName).collect(Collectors.toList());
+    }
+
+    @Override
+    public Shelves addShelfWithName(String userId, String shelfName) {
+        Shelves shelves = findShelvesByUserId(userId);
+        Shelf shelf = shelves.getShelfByName(shelfName);
+        return shelvesRepository.save(shelves);
     }
 }
