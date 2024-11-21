@@ -1,6 +1,5 @@
 package com.windear.app.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.service.BookLoanService;
@@ -54,19 +53,8 @@ public class BookLoanController {
         return bookLoanService.acceptBorrowRequest(loanId);
     }
 
-    /*
-    @PutMapping("/users")
-    public BookLoan updateUser(@RequestBody BookLoan user) {
-        return userService.update(user);
+    @PutMapping("/return")
+    public BookLoan returnBook(@RequestBody BookLoanId loanId) {
+        return bookLoanService.returnBook(loanId);
     }
-    /*
-    @PostMapping("/users/{userId}/borrow/{bookId}")
-    public String borrowBook(@PathVariable int userId, @PathVariable String bookId) {
-        return userService.borrowBook(userId, bookId);
-    }
-
-    @PostMapping("users/{userId}/return/{bookId}")
-    public String returnBook(@PathVariable int userId, @PathVariable String bookId) {
-        return userService.returnBook(userId, bookId);
-    }*/
 }

@@ -1,6 +1,8 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.BookLoan;
+import com.windear.app.exception.BookLoanNotFoundException;
+import com.windear.app.exception.BorrowSameBookException;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.repository.BookLoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,10 +73,35 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     @Transactional
-    public BookLoan borrowBook(BookLoan book) {
-        book.setPending(true);
-        book.getBookLoanId().setBorrowDate(LocalDate.now());
-        return add(book);
+    public BookLoan returnBook(BookLoanId bookLoanId) {
+        Optional<BookLoan> bookLoan = bookLoanRepository.findById(bookLoanId);
+        if (bookLoan.isPresent()) {
+            BookLoan loan = bookLoan.get();
+            loan.setReturnDate(LocalDate.now());
+            return add(loan);
+        } else {
+            throw new BookLoanNotFoundException("Bookloan with id not found: "
+                    + "BookId: " + bookLoanId.getBookId() + " "
+                    + "UserId: " + bookLoanId.getUserId());
+        }
+    }
+
+    @Override
+    @Transactional
+    public BookLoan borrowBook(BookLoan bookLoan) {
+        List<BookLoan> bookLoans = bookLoanRepository.findByUserIdAndBookID(
+                bookLoan.getBookLoanId().getUserId(), bookLoan.getBookLoanId().getBookId());
+        for (BookLoan otherBookLoan : bookLoans) {
+            if (otherBookLoan.getReturnDate() == null) {
+                throw new BorrowSameBookException("User with id: "
+                        + otherBookLoan.getBookLoanId().getUserId()
+                        + " has already sent a borrow request with book id: "
+                        + otherBookLoan.getBookLoanId().getBookId());
+            }
+        }
+        bookLoan.setPending(true);
+        bookLoan.getBookLoanId().setBorrowDate(LocalDate.now());
+        return add(bookLoan);
     }
 
     @Override
@@ -84,4 +111,6 @@ public class BookLoanServiceImpl implements BookLoanService {
         bookLoan.setPending(false);
         return add(bookLoan);
     }
+
+
 }

@@ -16,4 +16,5 @@ public interface BookLoanService {
     BookLoan borrowBook(BookLoan book);
     BookLoan acceptBorrowRequest(BookLoanId bookLoanId);
     void declineBorrowRequest(BookLoanId bookLoanId);
+    BookLoan returnBook(BookLoanId bookLoanId);
 }
