@@ -33,7 +33,7 @@ public class InternalBookController {
         return bookService.findTop10ByReleaseDate();
     }
 
-    @GetMapping("books/count-last-30-day")
+    @GetMapping("/books/count-last-30-day")
     public long getBookInLast30Day() {
         return bookService.getBookInLast30Day();
     }

@@ -54,8 +54,7 @@ public class NewsControllerTest {
                         {
                             "title": "Test Title",
                             "description": "Test Description",
-                            "imageUrl": "https://example.com/image.png",
-                            "createAt": "2024-11-20"
+                            "imageUrl": "https://example.com/image.png"
                         }
                         """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -161,9 +160,7 @@ public class NewsControllerTest {
                         .content("""
                         {
                             "title": "Test Title",
-                            "description": "Test Description",
-                            "imageUrl": "https://example.com/image.png",
-                            "createAt": "2024-11-20"
+                            "description": "Test Description"
                         }
                         """))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -174,9 +171,23 @@ public class NewsControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("createAt").value("2024-11-20"));
     }
 
+    @Test
+    void testDeleteNews() throws Exception{
+        Mockito.doNothing().when(newsService).deleteNews(1);
 
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/api/news/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+    }
 
+    @Test
+    void testDeleteNews_NotFound() throws Exception {
+        Mockito.doThrow(new RuntimeException()).when(newsService).deleteNews(1);
 
-
-
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/api/news/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+    }
 }
