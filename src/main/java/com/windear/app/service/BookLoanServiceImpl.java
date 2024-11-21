@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookLoanServiceImpl implements BookLoanService {
@@ -40,6 +41,28 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Override
     public List<BookLoan> findAllByUserIdAndBookId(String userId, Integer bookId) {
         return bookLoanRepository.findByUserIdAndBookID(userId, bookId);
+    }
+
+    @Override
+    public List<BookLoan> findAllBorrowRequest() {
+        return bookLoanRepository.findAll().stream()
+                .filter(BookLoan::isPending)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookLoan> getBorrowRequestByUserId(String userId) {
+        return bookLoanRepository.findBorrowRequestByUserId(userId);
+    }
+
+    @Override
+    public List<BookLoan> getBorrowedBookByUserId(String userId) {
+        return bookLoanRepository.findBorrowedBookByUserId(userId);
+    }
+
+    @Override
+    public List<BookLoan> getReturnedBookByUserId(String userId) {
+        return bookLoanRepository.findReturnedBookByUserId(userId);
     }
 
     @Override
@@ -111,6 +134,4 @@ public class BookLoanServiceImpl implements BookLoanService {
         bookLoan.setPending(false);
         return add(bookLoan);
     }
-
-
 }

@@ -38,6 +38,27 @@ public class BookLoanController {
         return bookLoanService.findAllByUserIdAndBookId(userId, bookId);
     }
 
+    @GetMapping("/request")
+    public List<BookLoan> getAllRequest() {
+        return bookLoanService.findAllBorrowRequest();
+    }
+
+    @GetMapping("/request/{userId}")
+    public List<BookLoan> getBorrowRequestByUserId(@PathVariable String userId) {
+        return bookLoanService.getBorrowRequestByUserId(userId);
+    }
+
+    @GetMapping("/borrow/{userId}")
+    public List<BookLoan> getBorrowedBookByUserId(@PathVariable String userId) {
+        return bookLoanService.getBorrowedBookByUserId(userId);
+    }
+
+    @GetMapping("/return/{userId}")
+    public List<BookLoan> getReturnedBookByUserId(@PathVariable String userId) {
+        return bookLoanService.getReturnedBookByUserId(userId);
+    }
+
+
     @DeleteMapping()
     public void declineBorrowRequest(@RequestBody BookLoanId loanId) {
         bookLoanService.declineBorrowRequest(loanId);
@@ -57,4 +78,5 @@ public class BookLoanController {
     public BookLoan returnBook(@RequestBody BookLoanId loanId) {
         return bookLoanService.returnBook(loanId);
     }
+
 }
