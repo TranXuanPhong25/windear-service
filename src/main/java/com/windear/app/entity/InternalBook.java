@@ -33,7 +33,12 @@ public class InternalBook extends Book {
     @Column(name = "num_pages")
     private Integer numPages;
 
-    public InternalBook() {}
+    public InternalBook() {
+    }
+
+    public InternalBook(Integer bookId, String title, String author, LocalDate releaseDate, double rating, String imageUrl) {
+        super(bookId, title, author, releaseDate, rating, imageUrl);
+    }
 
     public InternalBook(Integer id, String title, String author, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorDescription, String publisher, String format, String language, Integer pages) {
         super(id, title, author, releaseDate, rating, imageUrl);

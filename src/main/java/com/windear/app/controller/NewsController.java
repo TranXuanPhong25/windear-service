@@ -37,11 +37,10 @@ public class NewsController {
       news.setNewsId(newsId);
       return newsService.update(news);
    }
-   
+
    @DeleteMapping("news/{newsId}")
    public void deleteNews(@PathVariable int newsId) {
       newsService.deleteNews(newsId);
    }
-   
    
 }
