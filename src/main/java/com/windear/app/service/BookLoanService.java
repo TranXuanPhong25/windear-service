@@ -9,10 +9,11 @@ import java.util.List;
 public interface BookLoanService {
     BookLoan findById(BookLoanId id);
     List<BookLoan> findAll();
-    List<BookLoan> findAllByUserId(Integer UserId);
-    List<BookLoan> findAllByBookId(Integer BookId);
+    List<BookLoan> findAllByUserId(String userId);
+    List<BookLoan> findAllByBookId(Integer bookId);
+    List<BookLoan> findAllByUserIdAndBookId(String userId, Integer bookId);
     BookLoan add(BookLoan bookLoan);
-    void delete(BookLoanId bookLoanId);
-    BookLoan update(BookLoan bookLoan);
-
+    BookLoan borrowBook(BookLoan book);
+    BookLoan acceptBorrowRequest(BookLoanId bookLoanId);
+    void declineBorrowRequest(BookLoanId bookLoanId);
 }

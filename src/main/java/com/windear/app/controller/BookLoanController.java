@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/bookloan")
 public class BookLoanController {
     private final BookLoanService bookLoanService;
 
@@ -19,36 +19,39 @@ public class BookLoanController {
         this.bookLoanService = bookLoanService;
     }
 
-    @PostMapping("/bookloan")
-    public BookLoan addBookLoan(@RequestBody BookLoan bookLoan) {
-        return bookLoanService.add(bookLoan);
-    }
-
-    @GetMapping("/bookloan")
+    @GetMapping()
     public List<BookLoan> getBookLoanList() {
         return bookLoanService.findAll();
     }
 
-    @GetMapping("/bookloan/user/{userId}")
-    public List<BookLoan> findAllByUserId(@PathVariable Integer userId) {
+    @GetMapping("/user/{userId}")
+    public List<BookLoan> findAllByUserId(@PathVariable String userId) {
         return bookLoanService.findAllByUserId(userId);
     }
 
-    @GetMapping("bookloan/book/{bookId}")
+    @GetMapping("/book/{bookId}")
     public List<BookLoan> findAllByBookId(@PathVariable Integer bookId) {
         return bookLoanService.findAllByBookId(bookId);
     }
 
-    @GetMapping("/bookloan/{bookId}/{userId}")
-    public BookLoan findById(@PathVariable Integer bookId, @PathVariable String userId) {
-        BookLoanId bookLoanId = new BookLoanId(userId, bookId);
-        return bookLoanService.findById(bookLoanId);
+    @GetMapping("/{bookId}/{userId}")
+    public List<BookLoan> findByUserIdAndBookId(@PathVariable Integer bookId, @PathVariable String userId) {
+        return bookLoanService.findAllByUserIdAndBookId(userId, bookId);
     }
 
-    @DeleteMapping("/bookloan/{bookId}/{userId}")
-    public void deleteBookLoan(@PathVariable Integer bookId, @PathVariable String userId) {
-        BookLoanId bookLoanId = new BookLoanId(userId, bookId);
-        bookLoanService.delete(bookLoanId);
+    @DeleteMapping()
+    public void declineBorrowRequest(@RequestBody BookLoanId loanId) {
+        bookLoanService.declineBorrowRequest(loanId);
+    }
+
+    @PostMapping("/borrow")
+    public BookLoan sendBorrowRequest(@RequestBody BookLoan bookLoan) {
+        return bookLoanService.borrowBook(bookLoan);
+    }
+
+    @PutMapping("/borrow")
+    public BookLoan acceptBorrowRequest(@RequestBody BookLoanId loanId) {
+        return bookLoanService.acceptBorrowRequest(loanId);
     }
 
     /*

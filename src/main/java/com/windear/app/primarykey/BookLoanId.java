@@ -3,6 +3,7 @@ package com.windear.app.primarykey;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Embeddable
@@ -13,11 +14,15 @@ public class BookLoanId {
     @Column(name = "book_id")
     private Integer bookId;
 
+    @Column(name = "borrow_date")
+    private LocalDate borrowDate;
+
     public BookLoanId() {}
 
-    public BookLoanId(String userId, Integer bookId) {
+    public BookLoanId(String userId, Integer bookId, LocalDate borrowDate) {
         this.userId = userId;
         this.bookId = bookId;
+        this.borrowDate = borrowDate;
     }
 
     public String getUserId() {
@@ -34,6 +39,14 @@ public class BookLoanId {
 
     public void setBookId(Integer bookId) {
         this.bookId = bookId;
+    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(LocalDate borrowDate) {
+        this.borrowDate = borrowDate;
     }
 
     @Override
