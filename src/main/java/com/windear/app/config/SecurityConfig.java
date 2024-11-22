@@ -35,7 +35,9 @@ public class SecurityConfig {
                                 "/api/shelves/**",
                                 "/api/shelves",
                                 "/api/db/books",
-                                "/api/db/books/**"
+                                "/api/db/books/**",
+                                "/api/genres"
+
                         )
                         .permitAll()
                         .requestMatchers(
