@@ -2,6 +2,8 @@ package com.windear.app.service;
 
 import com.windear.app.entity.InternalBook;
 import com.windear.app.exception.BookNotFoundException;
+import com.windear.app.exception.IsbnExistException;
+import com.windear.app.exception.ReviewNotFoundException;
 import com.windear.app.repository.InternalBookRepository;
 import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +17,12 @@ import java.util.Optional;
 @Service
 public class InternalBookServiceImpl implements InternalBookService {
    private final InternalBookRepository internalBookRepository;
-   private final ReviewRepository reviewRepository;
+   private ExternalBookService externalBookService;
+
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository, ReviewRepository reviewRepository) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, ExternalBookService externalBookService) {
       this.internalBookRepository = bookRepository;
-       this.reviewRepository = reviewRepository;
+      this.externalBookService = externalBookService;
    }
 
    @Override
@@ -46,6 +49,11 @@ public class InternalBookServiceImpl implements InternalBookService {
    @Override
    @Transactional
    public InternalBook add(InternalBook book) {
+      System.out.println(externalBookService.isIsbnExist(book.getIsbn13()));
+      if (externalBookService.isIsbnExist(book.getIsbn13()) ||
+          internalBookRepository.existsByIsbn13(book.getIsbn13())) {
+         throw new IsbnExistException("Book with isbn: " + book.getIsbn13() + " already exists.");
+      }
       return internalBookRepository.save(book);
    }
 
@@ -71,5 +79,4 @@ public class InternalBookServiceImpl implements InternalBookService {
       LocalDate startDate = now.minusDays(30);
       return internalBookRepository.countBooksInLast30Days(startDate);
    }
-
 }

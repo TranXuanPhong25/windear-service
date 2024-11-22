@@ -1,5 +1,10 @@
 package com.windear.app.service;
 
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bson.json.JsonObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -110,9 +115,9 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     }
 
     @Override
-    public String getBookByLegacyId(int id) {
+    public String getBookByLegacyId(int legacyId) {
         String query = "{\n" +
-                "   getBookByLegacyId(legacyId: " + id + ") {\n" +
+                "   getBookByLegacyId(legacyId: " + legacyId + ") {\n" +
                 "    id\n" +
                 "    stats {\n" +
                 "      ratingsCount\n" +
@@ -354,5 +359,17 @@ public class ExternalBookServiceImpl implements ExternalBookService {
         return getQueryResultAsString(query);
     }
 
-
+    @Override
+    public Boolean isIsbnExist(String isbn) {
+        String query = "{\n" +
+                "  getSearchSuggestions(query: \"" + isbn + "\") {\n" +
+                "    totalCount\n" +
+                "  }\n" +
+                "}";
+        String result = getQueryResultAsString(query);
+        JSONObject jsonObject = new JSONObject(result);
+        int totalCount = jsonObject.getJSONObject("data").getJSONObject("getSearchSuggestions").getInt("totalCount");
+        System.out.println(isbn + " " + totalCount);
+        return totalCount != 0;
+    }
 }
