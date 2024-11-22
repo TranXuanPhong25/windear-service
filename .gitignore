@@ -9,7 +9,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 *.properties
-
+run.sh
 ### STS ###
 .apt_generated
 .classpath

@@ -27,7 +27,7 @@ public class GenreController {
         return genreService.findById(id);
     }
 
-    @GetMapping("/genre")
+    @GetMapping("/genres")
     public List<Genre> fidAll() {
         return genreService.findAll();
     }

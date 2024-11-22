@@ -5,10 +5,12 @@ import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.exception.IsbnExistException;
 import com.windear.app.exception.ReviewNotFoundException;
 import com.windear.app.repository.InternalBookRepository;
+import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +34,12 @@ public class InternalBookServiceImpl implements InternalBookService {
    public InternalBook findById(Integer id) {
       Optional<InternalBook> book = internalBookRepository.findById(id);
       if (book.isPresent()) {
+         double rating = 0;
+         Double averageRating = reviewRepository.getAverageRatingOfBookById(id);
+         if(averageRating!=null){
+            rating=averageRating;
+         }
+         book.get().setRating(rating);
          return book.get();
       } else {
          throw new BookNotFoundException("Book with id not found: " + id);
@@ -63,5 +71,12 @@ public class InternalBookServiceImpl implements InternalBookService {
    @Override
    public List<InternalBook> findTop10ByReleaseDate() {
       return internalBookRepository.findTop10ByOrderByReleaseDateDesc();
+   }
+
+   @Override
+   public long getBookInLast30Day() {
+      LocalDate now = LocalDate.now();
+      LocalDate startDate = now.minusDays(30);
+      return internalBookRepository.countBooksInLast30Days(startDate);
    }
 }

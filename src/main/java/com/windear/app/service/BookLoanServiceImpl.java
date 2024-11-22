@@ -76,6 +76,12 @@ public class BookLoanServiceImpl implements BookLoanService {
         if (bookLoan.getReturnDate() != null) {
             bookLoanFromDB.setReturnDate(bookLoan.getReturnDate());
         }
+        if (bookLoan.getTitle() != null) {
+            bookLoanFromDB.setTitle(bookLoan.getTitle());
+        }
+        if (bookLoan.getAuthorName() != null) {
+            bookLoanFromDB.setAuthorName(bookLoan.getAuthorName());
+        }
         bookLoanRepository.save(bookLoanFromDB);
         return bookLoanFromDB;
     }

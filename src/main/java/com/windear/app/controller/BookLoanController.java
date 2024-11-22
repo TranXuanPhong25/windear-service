@@ -40,13 +40,13 @@ public class BookLoanController {
     }
 
     @GetMapping("/bookloan/{bookId}/{userId}")
-    public BookLoan findById(@PathVariable Integer bookId, @PathVariable Integer userId) {
+    public BookLoan findById(@PathVariable Integer bookId, @PathVariable String userId) {
         BookLoanId bookLoanId = new BookLoanId(userId, bookId);
         return bookLoanService.findById(bookLoanId);
     }
 
     @DeleteMapping("/bookloan/{bookId}/{userId}")
-    public void deleteBookLoan(@PathVariable Integer bookId, @PathVariable Integer userId) {
+    public void deleteBookLoan(@PathVariable Integer bookId, @PathVariable String userId) {
         BookLoanId bookLoanId = new BookLoanId(userId, bookId);
         bookLoanService.delete(bookLoanId);
     }

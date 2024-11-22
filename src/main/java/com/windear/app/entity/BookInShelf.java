@@ -5,34 +5,22 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 public class BookInShelf extends Book {
-    private String imageUrl;
     private LocalDate addedDate;
     private LocalDate readDate;
     private int bookStatus;
+    private double userRating;
     //0 : want to read
 
     public BookInShelf() {
         super();
     }
 
-    public BookInShelf(Integer id, String title, String author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus) {
-        super(id, title, author,releaseDate, rating);
-        this.imageUrl = imageUrl;
+    public BookInShelf(Integer id, String title, String author, double rating, String imageUrl, LocalDate releaseDate, LocalDate addedDate, LocalDate readDate, int bookStatus, double userRating) {
+        super(id, title, author,releaseDate, rating,imageUrl);
         this.addedDate = addedDate;
         this.readDate = readDate;
         this.bookStatus = bookStatus;
-    }
-
-    public BookInShelf(Integer id, String title, String author,LocalDate releaseDate, double rating) {
-        super(id, title, author, releaseDate,rating);
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.userRating = userRating;
     }
 
     public LocalDate getAddedDate() {
@@ -57,5 +45,13 @@ public class BookInShelf extends Book {
 
     public void setReadDate(LocalDate readDate) {
         this.readDate = readDate;
+    }
+
+    public double getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(double userRating) {
+        this.userRating = userRating;
     }
 }

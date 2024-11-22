@@ -1,39 +1,37 @@
 package com.windear.app.service;
 
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.json.JsonObject;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ExternalBookServiceImpl implements ExternalBookService {
-    private WebClient webClient;
+    private final WebClient goodreadsWebClient;
 
-    @Autowired
-    public ExternalBookServiceImpl(WebClient webClient) {
-        this.webClient = webClient;
+    public ExternalBookServiceImpl(@Qualifier("goodreadsWebClient") WebClient goodreadsWebClient) {
+        this.goodreadsWebClient = goodreadsWebClient;
     }
 
     public String getQueryResultAsString(String query) {
         Map<String, String> graphqlQuery = new HashMap<>();
         graphqlQuery.put("query", query);
 
-        String response = webClient.post()
+        return goodreadsWebClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(graphqlQuery)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-        return response;
     }
 
     @Override
@@ -45,14 +43,13 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    }\n" +
                 "  }\n" +
                 "}";
-        String response = getQueryResultAsString(query);
-        return response;
+        return getQueryResultAsString(query);
     }
 
     @Override
     public String getTaggedBooks(String tagName) {
         String query = "{\n" +
-                "getTaggedBooks(tagName: " + tagName + ") {\n" +
+                "getTaggedBooks(tagName: \"" + tagName + "\") {\n" +
                 "    edges {\n" +
                 "      node {\n" +
                 "        legacyId\n" +
@@ -83,8 +80,8 @@ public class ExternalBookServiceImpl implements ExternalBookService {
     public String getReviews(String workId) {
         String query = "{\n" +
                 "getReviews(\n" +
-                "    filters: {resourceId: + " + workId + ", resourceType: WORK, sort: NEWEST}\n" +
-                "    pagination: {}\n" +
+                "    filters: {resourceId: \"" + workId + "\", resourceType: WORK, sort: DEFAULT}\n" +
+                "    pagination: {limit:8}\n" +
                 "  ) {\n" +
                 "    pageInfo {\n" +
                 "      hasNextPage\n" +
@@ -197,7 +194,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "    }\n" +
                 "    webUrl\n" +
                 "    work {\n" +
-                "       id\n"+
+                "       id\n" +
                 "      details {\n" +
                 "        booksCount\n" +
                 "        originalTitle\n" +
@@ -254,7 +251,8 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "        }\n" +
                 "      }\n" +
                 "    }\n" +
-                "  }}";
+                "  }" +
+                "}";
         return getQueryResultAsString(query);
     }
 
@@ -316,15 +314,15 @@ public class ExternalBookServiceImpl implements ExternalBookService {
                 "      node {\n" +
                 "        imageUrl\n" +
                 "        legacyId\n" +
-                "        title\n"+
-                "        primaryContributorEdge {\n"+
-                "           node {\n"+
-                "               name\n"+
-                "           }\n"+
-                "       }\n"+
-                "       stats {\n"+
-                "           averageRating\n"+
-                "       }\n"+
+                "        title\n" +
+                "        primaryContributorEdge {\n" +
+                "           node {\n" +
+                "               name\n" +
+                "           }\n" +
+                "       }\n" +
+                "       stats {\n" +
+                "           averageRating\n" +
+                "       }\n" +
                 "     }\n" +
                 "    }\n" +
                 "    pageInfo {\n" +
