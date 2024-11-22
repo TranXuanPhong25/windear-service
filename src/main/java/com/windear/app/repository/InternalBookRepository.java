@@ -13,7 +13,8 @@ import java.util.List;
 public interface InternalBookRepository extends JpaRepository<InternalBook, Integer> {
     List<InternalBook> findTop10ByOrderByReleaseDateDesc();
 
+    boolean existsByIsbn13(String isbn13);
+
     @Query("SELECT COUNT(b) FROM InternalBook b WHERE b.releaseDate >= :startDate")
     long countBooksInLast30Days(@Param("startDate") LocalDate startDate);
-
 }
