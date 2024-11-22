@@ -51,7 +51,12 @@ public class ReviewController {
 
     @PutMapping("/review/rate")
     public Review updateRate( @RequestBody Review review) {
-        return reviewService.updateRate(review.getBookId(),review.getUserId(),review.getRating(),review.getUserImageUrl(),review.getUserName());
+        return reviewService.updateRate(
+                review.getBookId(),
+                review.getUserId(),
+                review.getRating(),
+                review.getUserImageUrl(),
+                review.getUserName());
     }
 
     @DeleteMapping("/review/{reviewId}")

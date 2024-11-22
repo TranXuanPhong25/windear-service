@@ -2,8 +2,8 @@ package com.windear.app.service;
 
 import com.windear.app.entity.InternalBook;
 import com.windear.app.exception.BookNotFoundException;
-import com.windear.app.exception.ReviewNotFoundException;
 import com.windear.app.repository.InternalBookRepository;
+import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +15,11 @@ import java.util.Optional;
 @Service
 public class InternalBookServiceImpl implements InternalBookService {
    private final InternalBookRepository internalBookRepository;
-
+   private final ReviewRepository reviewRepository;
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, ReviewRepository reviewRepository) {
       this.internalBookRepository = bookRepository;
+       this.reviewRepository = reviewRepository;
    }
 
    @Override
@@ -30,6 +31,12 @@ public class InternalBookServiceImpl implements InternalBookService {
    public InternalBook findById(Integer id) {
       Optional<InternalBook> book = internalBookRepository.findById(id);
       if (book.isPresent()) {
+         double rating = 0;
+         Double averageRating = reviewRepository.getAverageRatingOfBookById(id);
+         if(averageRating!=null){
+            rating=averageRating;
+         }
+         book.get().setRating(rating);
          return book.get();
       } else {
          throw new BookNotFoundException("Book with id not found: " + id);
@@ -65,8 +72,4 @@ public class InternalBookServiceImpl implements InternalBookService {
       return internalBookRepository.countBooksInLast30Days(startDate);
    }
 
-//   public Book convertToBook(ExternalBook externalBook) {
-//      Book book = new Book();
-//
-//   }
 }
