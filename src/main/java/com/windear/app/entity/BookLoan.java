@@ -16,9 +16,6 @@ public class BookLoan {
     @Column(name = "borrow_time")
     private Integer borrowTime;
 
-    @Column(name = "borrow_date")
-    private LocalDate borrowDate;
-
     @Column(name = "return_date")
     private LocalDate returnDate;
 
@@ -28,15 +25,19 @@ public class BookLoan {
     @Column(name = "author_name")
     private String authorName;
 
+    @Column(name = "is_pending")
+    private boolean isPending;
+
     public BookLoan() {}
 
-    public BookLoan(BookLoanId bookLoanId, Integer borrowTime, LocalDate borrowDate, LocalDate returnDate, String title, String authorName) {
+    public BookLoan(BookLoanId bookLoanId, Integer borrowTime,
+                    LocalDate returnDate, String title, String authorName, boolean isPending) {
         this.bookLoanId = bookLoanId;
         this.borrowTime = borrowTime;
-        this.borrowDate = borrowDate;
         this.returnDate = returnDate;
         this.title = title;
         this.authorName = authorName;
+        this.isPending = isPending;
     }
 
     public BookLoanId getBookLoanId() {
@@ -53,14 +54,6 @@ public class BookLoan {
 
     public void setBorrowTime(Integer borrowTime) {
         this.borrowTime = borrowTime;
-    }
-
-    public LocalDate getBorrowDate() {
-        return borrowDate;
-    }
-
-    public void setBorrowDate(LocalDate borrowDate) {
-        this.borrowDate = borrowDate;
     }
 
     public LocalDate getReturnDate() {
@@ -85,5 +78,13 @@ public class BookLoan {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public boolean isPending() {
+        return isPending;
+    }
+
+    public void setPending(boolean pending) {
+        isPending = pending;
     }
 }
