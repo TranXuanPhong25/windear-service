@@ -32,6 +32,7 @@ public class InternalBookController {
     public List<InternalBook> findTop10ByReleaseDate() {
         return bookService.findTop10ByReleaseDate();
     }
+
     @PostMapping("/books")
     public InternalBook addBook(@RequestBody InternalBook book) {
         return bookService.add(book);

@@ -7,10 +7,11 @@ public interface ExternalBookService {
     String getBasicGenres();
     String getTaggedBooks(String tagName);
     String getReviews(String workId);
-    String getBookByLegacyId(int id);
+    String getBookByLegacyId(int legacyId);
     String getSearchSuggestions(String q);
     String getFeaturedBookLists();
     String getPopularBookLists();
-    String getSimilarBooks(int id);
+    String getSimilarBooks(String id);
     String getEditions(String id);
+    Boolean isIsbnExist(String isbn);
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface InternalBookRepository extends JpaRepository<InternalBook, Integer> {
     List<InternalBook> findTop10ByOrderByReleaseDateDesc();
+    boolean existsByIsbn13(String isbn13);
 }
