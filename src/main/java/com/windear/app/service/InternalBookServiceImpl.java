@@ -2,8 +2,7 @@ package com.windear.app.service;
 
 import com.windear.app.entity.InternalBook;
 import com.windear.app.exception.BookNotFoundException;
-import com.windear.app.exception.IsbnExistException;
-import com.windear.app.exception.ReviewNotFoundException;
+import com.windear.app.exception.IsbnExistsException;
 import com.windear.app.repository.InternalBookRepository;
 import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,14 @@ import java.util.Optional;
 @Service
 public class InternalBookServiceImpl implements InternalBookService {
    private final InternalBookRepository internalBookRepository;
-   private ExternalBookService externalBookService;
+   private final ReviewRepository reviewRepository;
+   private final ExternalBookService externalBookService;
 
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository, ExternalBookService externalBookService) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, ExternalBookService externalBookService, ReviewRepository reviewRepository) {
       this.internalBookRepository = bookRepository;
       this.externalBookService = externalBookService;
+      this.reviewRepository = reviewRepository;
    }
 
    @Override
@@ -52,7 +53,7 @@ public class InternalBookServiceImpl implements InternalBookService {
       System.out.println(externalBookService.isIsbnExist(book.getIsbn13()));
       if (externalBookService.isIsbnExist(book.getIsbn13()) ||
           internalBookRepository.existsByIsbn13(book.getIsbn13())) {
-         throw new IsbnExistException("Book with isbn: " + book.getIsbn13() + " already exists.");
+         throw new IsbnExistsException("Book with isbn: " + book.getIsbn13() + " already exists.");
       }
       return internalBookRepository.save(book);
    }
