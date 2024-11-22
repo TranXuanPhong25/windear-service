@@ -56,6 +56,7 @@ src/main/java/com/windear/app
 - Spring Data JPA: ORM for database interaction.
 - Spring Security: Authentication and authorization.
 - PostgreSQL and MongoDB: Database for data storage.
+- Integrate with the Auth0 provider to ensure reliability and consistency.
 
 ## Future Enhancements
 
