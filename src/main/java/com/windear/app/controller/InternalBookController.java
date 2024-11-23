@@ -5,7 +5,9 @@ import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.Book;
 import com.windear.app.entity.BookGenre;
 
+
 import com.windear.app.entity.Genre;
+import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.InternalBook;
 import com.windear.app.primarykey.BookGenreId;
 import com.windear.app.service.BookGenreService;
