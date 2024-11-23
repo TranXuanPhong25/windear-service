@@ -49,6 +49,13 @@ public class ShelvesController {
         return shelvesService.deleteShelfByName(userId, name);
     }
 
+    @PutMapping("/{userId}/shelf")
+    public Shelves updateShelfName(@PathVariable String userId,
+                                   @RequestParam String oldName,
+                                   @RequestParam String newName) {
+        return shelvesService.updateShelfName(userId, oldName, newName);
+    }
+
     @DeleteMapping("/{userId}/book")
     public Shelves deleteBookInShelf(@PathVariable String userId,
                                      @RequestBody DeleteBookRequest request) {
