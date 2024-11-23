@@ -9,6 +9,8 @@ public class AddInternalBookRequestDTO {
     private InternalBook internalBook;
     private String genres;
 
+    public AddInternalBookRequestDTO() {}
+
     public AddInternalBookRequestDTO(InternalBook internalBook, String genres) {
         this.internalBook = internalBook;
         this.genres = genres;

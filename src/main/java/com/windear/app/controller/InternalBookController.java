@@ -37,8 +37,21 @@ public class InternalBookController {
     }
 
     @GetMapping("/books/{id}")
-    public InternalBook findBookById(@PathVariable Integer id) {
-        return bookService.findById(id);
+    public AddInternalBookRequestDTO findBookById(@PathVariable Integer id) {
+        AddInternalBookRequestDTO book = new AddInternalBookRequestDTO();
+        InternalBook bookFromDb = bookService.findById(id);
+        List<BookGenre> bookGenres = bookGenreService.findAllByBookId(id);
+        String genres = "";
+        for(int i = 0; i < bookGenres.size(); i++) {
+            if(i < bookGenres.size() - 1) {
+                genres += String.valueOf(bookGenres.get(i).getBookGenreId().getGenreId()) + ',';
+            } else {
+                genres += String.valueOf(bookGenres.get(i).getBookGenreId().getGenreId());
+            }
+        }
+        book.setGenres(genres);
+        book.setInternalBook(bookFromDb);
+        return book;
     }
 
     @GetMapping("/books/new-releases")
@@ -53,14 +66,15 @@ public class InternalBookController {
 
     @PostMapping("/books")
     public InternalBook addBook(@RequestBody AddInternalBookRequestDTO request) {
-        /*String[] genreIds = request.getGenres().split(",");
+        InternalBook book = bookService.add(request.getInternalBook());
+        String[] genreIds = request.getGenres().split(",");
         for (String genreId : genreIds) {
             BookGenre bookGenre = new BookGenre();
-            BookGenreId bookGenreId = new BookGenreId(request.getInternalBook().getBookId(), Integer.parseInt(genreId.trim()));
+            BookGenreId bookGenreId = new BookGenreId(book.getBookId(), Integer.parseInt(genreId.trim()));
             bookGenre.setBookGenreId(bookGenreId);
             bookGenreService.add(bookGenre);
-        }*/
-        return bookService.add(request.getInternalBook());
+        }
+        return book;
     }
 
     @DeleteMapping("/books/{id}")
