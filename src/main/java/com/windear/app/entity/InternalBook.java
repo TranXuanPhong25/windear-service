@@ -33,6 +33,9 @@ public class InternalBook extends Book {
     @Column(name = "num_pages")
     private Integer numPages;
 
+    @Column(name="add_date")
+    private LocalDate addDate;
+
     public InternalBook() {
     }
 

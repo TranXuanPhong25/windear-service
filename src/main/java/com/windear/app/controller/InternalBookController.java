@@ -72,7 +72,7 @@ public class InternalBookController {
         String[] genreIds = request.getGenres().split(",");
         for (String genreId : genreIds) {
             BookGenre bookGenre = new BookGenre();
-            BookGenreId bookGenreId = new BookGenreId(book.getBookId(), Integer.parseInt(genreId.trim()));
+            BookGenreId bookGenreId = new BookGenreId(book.getId(), Integer.parseInt(genreId.trim()));
             bookGenre.setBookGenreId(bookGenreId);
             bookGenreService.add(bookGenre);
         }

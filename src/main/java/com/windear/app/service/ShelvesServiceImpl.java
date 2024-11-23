@@ -28,14 +28,14 @@ public class ShelvesServiceImpl implements ShelvesService {
         for (String shelfName : shelfNames) {
             if (shelfName.equals("Want to read") || shelfName.equals("Currently reading") || shelfName.equals("Read")) {
                 Shelf shelf1 = shelves.getShelfByName("Want to read");
-                shelf1.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                shelf1.getBooks().removeIf(b -> b.getId().equals(book.getId()));
                 Shelf shelf2 = shelves.getShelfByName("Currently reading");
-                shelf2.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                shelf2.getBooks().removeIf(b -> b.getId().equals(book.getId()));
                 Shelf shelf3 = shelves.getShelfByName("Read");
-                shelf3.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                shelf3.getBooks().removeIf(b -> b.getId().equals(book.getId()));
             }
             Shelf shelf = shelves.getShelfByName(shelfName);
-            if (shelf.getBooks().stream().noneMatch(b -> b.getBookId().equals(book.getBookId()))) {
+            if (shelf.getBooks().stream().noneMatch(b -> b.getId().equals(book.getId()))) {
                 shelf.addBook(book);
             }
         }
