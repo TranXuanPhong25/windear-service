@@ -55,6 +55,7 @@ public class InternalBookServiceImpl implements InternalBookService {
           internalBookRepository.existsByIsbn13(book.getIsbn13())) {
          throw new IsbnExistsException("Book with isbn: " + book.getIsbn13() + " already exists.");
       }
+      book.setAddDate(LocalDate.now());
       return internalBookRepository.save(book);
    }
 

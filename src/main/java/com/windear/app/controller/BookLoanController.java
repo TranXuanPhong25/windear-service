@@ -3,6 +3,7 @@ package com.windear.app.controller;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.service.BookLoanService;
+import com.windear.app.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +13,12 @@ import java.util.List;
 @RequestMapping("/api/bookloan")
 public class BookLoanController {
     private final BookLoanService bookLoanService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public BookLoanController(BookLoanService bookLoanService) {
+    public BookLoanController(BookLoanService bookLoanService, NotificationService notificationService) {
         this.bookLoanService = bookLoanService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping()
@@ -62,16 +65,21 @@ public class BookLoanController {
     @DeleteMapping()
     public void declineBorrowRequest(@RequestBody BookLoanId loanId) {
         bookLoanService.declineBorrowRequest(loanId);
+        notificationService.sendNotification(loanId.getUserId(), "Your borrow request has been declined.");
     }
 
     @PostMapping("/borrow")
     public BookLoan sendBorrowRequest(@RequestBody BookLoan bookLoan) {
-        return bookLoanService.borrowBook(bookLoan);
+        BookLoan borrowRequest = bookLoanService.borrowBook(bookLoan);
+        notificationService.sendNotification(bookLoan.getBookLoanId().getUserId(), "Your borrow request has been received.");
+        return borrowRequest;
     }
 
     @PutMapping("/borrow")
     public BookLoan acceptBorrowRequest(@RequestBody BookLoanId loanId) {
-        return bookLoanService.acceptBorrowRequest(loanId);
+        BookLoan borrowRequest = bookLoanService.acceptBorrowRequest(loanId);
+        notificationService.sendNotification(loanId.getUserId(), "Your borrow request has been accepted.");
+        return borrowRequest;
     }
 
     @PutMapping("/return")
