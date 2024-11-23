@@ -42,7 +42,7 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
-    public void deleteShelves(String userId) {
+    public void deleteShelvesByUserId(String userId) {
         shelvesRepository.deleteById(userId);
     }
 
@@ -85,7 +85,7 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
-    public List<Shelf> getShelves(String userId, String shelfName) {
+    public List<Shelf> getShelfByUserIdAndShelfName(String userId, String shelfName) {
         Shelves shelves = findShelvesByUserId(userId);
         if (shelfName.equals("all")) {
             return shelves.getShelves();
@@ -97,7 +97,7 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
-    public List<String> getAllShelvesNames(String userId) {
+    public List<String> getAllShelvesNamesOfUser(String userId) {
         Shelves shelves = findShelvesByUserId(userId);
         return shelves.getShelves().stream().map(Shelf::getName).collect(Collectors.toList());
     }
@@ -107,5 +107,17 @@ public class ShelvesServiceImpl implements ShelvesService {
         Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(shelfName);
         return shelvesRepository.save(shelves);
+    }
+
+    @Override
+    public List<String> getShelfNamesContainsBook(String userId, int bookId) {
+        Shelves shelves = findShelvesByUserId(userId);
+        List<String> shelfNames = new ArrayList<>();
+        for (Shelf shelf : shelves.getShelves()) {
+            if (shelf.findBookById(bookId) != null) {
+                shelfNames.add(shelf.getName());
+            }
+        }
+        return shelfNames;
     }
 }

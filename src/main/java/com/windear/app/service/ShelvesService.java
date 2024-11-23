@@ -10,12 +10,13 @@ public interface ShelvesService {
     Shelves addBookToShelf(String userId, String shelfName, BookInShelf shelf);
     Shelves findShelvesByUserId(String name);
     Shelves addShelves(Shelves shelves);
-    void deleteShelves(String userId);
+    void deleteShelvesByUserId(String userId);
     Shelves updateBookStatusInShelves(String userId, String shelfName, int bookId, int bookStatus);
     List<Shelves> getAll();
     Shelves deleteShelfByName(String userId, String shelfName);
     Shelves deleteBookInShelves(String userId, String shelfName, int bookId);
-    List<Shelf> getShelves(String userId, String shelfName);
-    List<String> getAllShelvesNames(String userId);
+    List<Shelf> getShelfByUserIdAndShelfName(String userId, String shelfName);
+    List<String> getAllShelvesNamesOfUser(String userId);
     Shelves addShelfWithName(String userId, String shelfName);
+    List<String> getShelfNamesContainsBook(String userId, int bookId);
 }
