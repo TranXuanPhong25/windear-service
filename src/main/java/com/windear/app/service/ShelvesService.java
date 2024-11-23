@@ -13,6 +13,7 @@ public interface ShelvesService {
     void deleteShelvesByUserId(String userId);
     Shelves updateBookStatusInShelves(String userId, String shelfName, int bookId, int bookStatus);
     List<Shelves> getAll();
+    Shelves updateShelfName(String userId, String oldName, String newName);
     Shelves deleteShelfByName(String userId, String shelfName);
     Shelves deleteBookInShelves(String userId, String shelfName, int bookId);
     List<Shelf> getShelfByUserIdAndShelfName(String userId, String shelfName);

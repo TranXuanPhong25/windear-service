@@ -64,6 +64,17 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
+    public Shelves updateShelfName(String userId, String oldName, String newName) {
+        Shelves shelves = findShelvesByUserId(userId);
+        Shelf shelf = shelves.getShelfByName(oldName);
+        if (getAllShelvesNamesOfUser(userId).stream().anyMatch(s -> s.equals(newName))) {
+            throw new IllegalArgumentException("Shelf with name " + newName + " already exists.");
+        }
+        shelf.setName(newName);
+        return addShelves(shelves);
+    }
+
+    @Override
     public Shelves deleteShelfByName(String userId, String shelfName) {
         Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(shelfName);
