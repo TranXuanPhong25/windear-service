@@ -7,7 +7,7 @@ import com.windear.app.entity.Shelves;
 import java.util.List;
 
 public interface ShelvesService {
-    Shelves addBookToShelf(String userId, String shelfName, BookInShelf shelf);
+    Shelves addBookToShelves(String userId, List<String> shelfNames, BookInShelf shelf);
     Shelves findShelvesByUserId(String name);
     Shelves addShelves(Shelves shelves);
     void deleteShelvesByUserId(String userId);

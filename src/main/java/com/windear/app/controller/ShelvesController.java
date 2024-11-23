@@ -29,7 +29,7 @@ public class ShelvesController {
     @PostMapping("/{userId}")
     public Shelves addBookToShelf(@RequestBody AddBookRequest request,
                                   @PathVariable String userId) {
-        return shelvesService.addBookToShelf(userId, request.getShelfName(), request.getBook());
+        return shelvesService.addBookToShelves(userId, request.getShelfNames(), request.getBook());
     }
 
     @DeleteMapping("/{userId}")
