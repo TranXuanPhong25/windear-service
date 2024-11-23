@@ -1,20 +1,26 @@
 package com.windear.app.dto;
 
+import java.util.List;
+
 public class DeleteBookRequest {
-    private String shelfName;
+    private List<String> shelfNames;
     private int bookId;
 
-    public DeleteBookRequest(String shelfName, int bookId) {
-        this.shelfName = shelfName;
+    public DeleteBookRequest() {
+
+    }
+
+    public DeleteBookRequest(List<String> shelfNames, int bookId) {
+        this.shelfNames = shelfNames;
         this.bookId = bookId;
     }
 
-    public String getShelfName() {
-        return shelfName;
+    public List<String> getShelfNames() {
+        return shelfNames;
     }
 
-    public void setShelfName(String shelfName) {
-        this.shelfName = shelfName;
+    public void setShelfNames(List<String> shelfNames) {
+        this.shelfNames = shelfNames;
     }
 
     public int getBookId() {
