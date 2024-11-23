@@ -81,7 +81,6 @@ public class ShelvesServiceImpl implements ShelvesService {
         Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(shelfName);
         shelves.getShelves().remove(shelf);
-        System.out.println(shelfName);
         return shelvesRepository.save(shelves);
     }
 
