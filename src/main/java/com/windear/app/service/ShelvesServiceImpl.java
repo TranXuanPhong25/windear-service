@@ -35,7 +35,9 @@ public class ShelvesServiceImpl implements ShelvesService {
                 shelf3.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
             }
             Shelf shelf = shelves.getShelfByName(shelfName);
-            shelf.addBook(book);
+            if (shelf.getBooks().stream().noneMatch(b -> b.getBookId().equals(book.getBookId()))) {
+                shelf.addBook(book);
+            }
         }
         return shelvesRepository.save(shelves);
     }
