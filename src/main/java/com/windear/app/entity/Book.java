@@ -29,11 +29,11 @@ public class Book {
       this.imageUrl = imageUrl;
    }
 
-   public Integer getBookId() {
+   public Integer getId() {
       return id;
    }
 
-   public void setBookId(Integer id) {
+   public void setId(Integer id) {
       this.id = id;
    }
 

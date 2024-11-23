@@ -29,7 +29,7 @@ public class ShelvesController {
     @PostMapping("/{userId}")
     public Shelves addBookToShelf(@RequestBody AddBookRequest request,
                                   @PathVariable String userId) {
-        return shelvesService.addBookToShelf(userId, request.getShelfName(), request.getBook());
+        return shelvesService.addBookToShelves(userId, request.getShelfNames(), request.getBook());
     }
 
     @DeleteMapping("/{userId}")
@@ -47,6 +47,13 @@ public class ShelvesController {
     public Shelves deleteShelfByName(@PathVariable String userId,
                                     @RequestParam String name) {
         return shelvesService.deleteShelfByName(userId, name);
+    }
+
+    @PutMapping("/{userId}/shelf")
+    public Shelves updateShelfName(@PathVariable String userId,
+                                   @RequestParam String oldName,
+                                   @RequestParam String newName) {
+        return shelvesService.updateShelfName(userId, oldName, newName);
     }
 
     @DeleteMapping("/{userId}/book")

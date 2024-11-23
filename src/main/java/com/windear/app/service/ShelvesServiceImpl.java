@@ -23,10 +23,12 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
-    public Shelves addBookToShelf(String userId, String shelfName, BookInShelf book) {
+    public Shelves addBookToShelves(String userId, List<String> shelfNames, BookInShelf book) {
         Shelves shelves = findShelvesByUserId(userId);
-        Shelf shelf = shelves.getShelfByName(shelfName);
-        shelf.addBook(book);
+        for (String shelfName : shelfNames) {
+            Shelf shelf = shelves.getShelfByName(shelfName);
+            shelf.addBook(book);
+        }
         return shelvesRepository.save(shelves);
     }
 
@@ -64,11 +66,21 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
+    public Shelves updateShelfName(String userId, String oldName, String newName) {
+        Shelves shelves = findShelvesByUserId(userId);
+        Shelf shelf = shelves.getShelfByName(oldName);
+        if (getAllShelvesNamesOfUser(userId).stream().anyMatch(s -> s.equals(newName))) {
+            throw new IllegalArgumentException("Shelf with name " + newName + " already exists.");
+        }
+        shelf.setName(newName);
+        return addShelves(shelves);
+    }
+
+    @Override
     public Shelves deleteShelfByName(String userId, String shelfName) {
         Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(shelfName);
         shelves.getShelves().remove(shelf);
-        System.out.println(shelfName);
         return shelvesRepository.save(shelves);
     }
 

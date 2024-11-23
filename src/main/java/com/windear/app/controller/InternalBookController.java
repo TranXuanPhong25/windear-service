@@ -4,6 +4,7 @@ import com.windear.app.dto.AddInternalBookRequestDTO;
 import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.Book;
 import com.windear.app.entity.BookGenre;
+
 import com.windear.app.entity.InternalBook;
 import com.windear.app.primarykey.BookGenreId;
 import com.windear.app.service.BookGenreService;
@@ -81,7 +82,6 @@ public class InternalBookController {
     public void deleteBook(@PathVariable Integer id) {
         bookService.delete(id);
     }
-
 
     private InternalBookDTO convertToDTO(InternalBook book) {
         InternalBookDTO dto = new InternalBookDTO();
