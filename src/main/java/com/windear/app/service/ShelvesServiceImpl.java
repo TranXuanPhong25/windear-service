@@ -23,10 +23,22 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
-    public Shelves addBookToShelf(String userId, String shelfName, BookInShelf book) {
+    public Shelves addBookToShelves(String userId, List<String> shelfNames, BookInShelf book) {
         Shelves shelves = findShelvesByUserId(userId);
-        Shelf shelf = shelves.getShelfByName(shelfName);
-        shelf.addBook(book);
+        for (String shelfName : shelfNames) {
+            if (shelfName.equals("Want to read") || shelfName.equals("Currently reading") || shelfName.equals("Read")) {
+                Shelf shelf1 = shelves.getShelfByName("Want to read");
+                shelf1.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                Shelf shelf2 = shelves.getShelfByName("Currently reading");
+                shelf2.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                Shelf shelf3 = shelves.getShelfByName("Read");
+                shelf3.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+            }
+            Shelf shelf = shelves.getShelfByName(shelfName);
+            if (shelf.getBooks().stream().noneMatch(b -> b.getBookId().equals(book.getBookId()))) {
+                shelf.addBook(book);
+            }
+        }
         return shelvesRepository.save(shelves);
     }
 
