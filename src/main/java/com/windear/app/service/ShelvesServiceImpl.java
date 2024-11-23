@@ -23,10 +23,12 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
-    public Shelves addBookToShelf(String userId, String shelfName, BookInShelf book) {
+    public Shelves addBookToShelves(String userId, List<String> shelfNames, BookInShelf book) {
         Shelves shelves = findShelvesByUserId(userId);
-        Shelf shelf = shelves.getShelfByName(shelfName);
-        shelf.addBook(book);
+        for (String shelfName : shelfNames) {
+            Shelf shelf = shelves.getShelfByName(shelfName);
+            shelf.addBook(book);
+        }
         return shelvesRepository.save(shelves);
     }
 
