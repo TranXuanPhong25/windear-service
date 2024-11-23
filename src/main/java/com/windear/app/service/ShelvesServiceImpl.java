@@ -67,7 +67,7 @@ public class ShelvesServiceImpl implements ShelvesService {
     public Shelves updateShelfName(String userId, String oldName, String newName) {
         Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(oldName);
-        if (getAllShelvesNames(userId).stream().anyMatch(s -> s.equals(newName))) {
+        if (getAllShelvesNamesOfUser(userId).stream().anyMatch(s -> s.equals(newName))) {
             throw new IllegalArgumentException("Shelf with name " + newName + " already exists.");
         }
         shelf.setName(newName);
