@@ -71,7 +71,7 @@ public class InternalBookController {
         String[] genreIds = request.getGenres().split(",");
         for (String genreId : genreIds) {
             BookGenre bookGenre = new BookGenre();
-            BookGenreId bookGenreId = new BookGenreId(book.getBookId(), Integer.parseInt(genreId.trim()));
+            BookGenreId bookGenreId = new BookGenreId(book.getId(), Integer.parseInt(genreId.trim()));
             bookGenre.setBookGenreId(bookGenreId);
             bookGenreService.add(bookGenre);
         }
@@ -85,7 +85,7 @@ public class InternalBookController {
 
     private InternalBookDTO convertToDTO(InternalBook book) {
         InternalBookDTO dto = new InternalBookDTO();
-        dto.setId(book.getBookId());
+        dto.setId(book.getId());
         dto.setTitle(book.getTitle());
         dto.setAuthor(book.getAuthor());
         dto.setPublisher(book.getPublisher());
