@@ -1,11 +1,12 @@
 package com.windear.app.controller;
 
-import com.windear.app.entity.Book;
+import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.InternalBook;
 import com.windear.app.service.InternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,8 +20,13 @@ public class InternalBookController {
     }
 
     @GetMapping("/books")
-    public List<InternalBook> findAll() {
-        return bookService.findAll();
+    public List<InternalBookDTO> findAll() {
+        List<InternalBook> books = bookService.findAll();
+        List<InternalBookDTO> booksDTO = new ArrayList<>();
+        for(InternalBook it : books) {
+            booksDTO.add(convertToDTO(it));
+        }
+        return booksDTO;
     }
 
     @GetMapping("/books/{id}")
@@ -46,5 +52,16 @@ public class InternalBookController {
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable Integer id) {
         bookService.delete(id);
+    }
+
+    private InternalBookDTO convertToDTO(InternalBook book) {
+        InternalBookDTO dto = new InternalBookDTO();
+        dto.setId(book.getBookId());
+        dto.setTitle(book.getTitle());
+        dto.setAuthor(book.getAuthor());
+        dto.setPublisher(book.getPublisher());
+        dto.setAddDate(book.getAddDate());
+        dto.setReleaseDate(book.getReleaseDate());
+        return dto;
     }
 }

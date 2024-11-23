@@ -33,6 +33,9 @@ public class InternalBook extends Book {
     @Column(name = "num_pages")
     private Integer numPages;
 
+    @Column(name = "addDate")
+    private LocalDate addDate;
+
     public InternalBook() {
     }
 
@@ -40,7 +43,7 @@ public class InternalBook extends Book {
         super(bookId, title, author, releaseDate, rating, imageUrl);
     }
 
-    public InternalBook(Integer id, String title, String author, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorDescription, String publisher, String format, String language, Integer pages) {
+    public InternalBook(Integer id, String title, String author, LocalDate releaseDate, double rating, String imageUrl, String description, String isbn10, String isbn13, String authorDescription, String publisher, String format, String language, Integer pages, LocalDate addDate) {
         super(id, title, author, releaseDate, rating, imageUrl);
         this.description = description;
         this.isbn10 = isbn10;
@@ -50,6 +53,7 @@ public class InternalBook extends Book {
         this.format = format;
         this.language = language;
         this.numPages = pages;
+        this.addDate = addDate;
     }
 
     public String getIsbn10() {
@@ -114,5 +118,13 @@ public class InternalBook extends Book {
 
     public void setNumPages(Integer numPages) {
         this.numPages = numPages;
+    }
+
+    public LocalDate getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(LocalDate addDate) {
+        this.addDate = addDate;
     }
 }
