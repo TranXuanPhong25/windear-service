@@ -16,23 +16,28 @@ public class BookLoan {
     @Column(name = "borrow_time")
     private Integer borrowTime;
 
-    @Column(name = "borrow_date")
-    private LocalDate borrowDate;
-
     @Column(name = "return_date")
     private LocalDate returnDate;
 
-    @Column(name = "rating")
-    private Double rating;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "author_name")
+    private String authorName;
+
+    @Column(name = "is_pending")
+    private boolean isPending;
 
     public BookLoan() {}
 
-    public BookLoan(BookLoanId bookLoanId, int borrowTime, LocalDate borrowDate, LocalDate returnDate, double rating) {
+    public BookLoan(BookLoanId bookLoanId, Integer borrowTime,
+                    LocalDate returnDate, String title, String authorName, boolean isPending) {
         this.bookLoanId = bookLoanId;
         this.borrowTime = borrowTime;
-        this.borrowDate = borrowDate;
         this.returnDate = returnDate;
-        this.rating = rating;
+        this.title = title;
+        this.authorName = authorName;
+        this.isPending = isPending;
     }
 
     public BookLoanId getBookLoanId() {
@@ -51,14 +56,6 @@ public class BookLoan {
         this.borrowTime = borrowTime;
     }
 
-    public LocalDate getBorrowDate() {
-        return borrowDate;
-    }
-
-    public void setBorrowDate(LocalDate borrowDate) {
-        this.borrowDate = borrowDate;
-    }
-
     public LocalDate getReturnDate() {
         return returnDate;
     }
@@ -67,11 +64,27 @@ public class BookLoan {
         this.returnDate = returnDate;
     }
 
-    public Double getRating() {
-        return rating;
+    public String getTitle() {
+        return title;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public boolean isPending() {
+        return isPending;
+    }
+
+    public void setPending(boolean pending) {
+        isPending = pending;
     }
 }

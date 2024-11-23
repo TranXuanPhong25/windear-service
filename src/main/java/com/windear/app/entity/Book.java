@@ -10,31 +10,31 @@ public class Book {
    @Id
    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq")
    @SequenceGenerator(name = "book_seq", sequenceName = "book_id_seq", initialValue = 1000000000, allocationSize = 1)
-   protected Integer bookId;
+   protected Integer id;
    protected String title;
-   protected String authorName;
+   protected String author;
    protected LocalDate releaseDate;
    protected double rating;
-   @Column(name = "image_url", nullable = true,columnDefinition = "TEXT")
+   @Column(name = "image_url", columnDefinition = "TEXT")
    protected String imageUrl;
 
    public Book() {}
 
-   public Book(Integer bookId, String title, String authorId, LocalDate releaseDate, double rating, String imageUrl) {
-      this.bookId = bookId;
+   public Book(Integer bookId, String title, String author, LocalDate releaseDate, double rating, String imageUrl) {
+      this.id = bookId;
       this.title = title;
-      this.authorName = authorId;
+      this.author = author;
       this.releaseDate = releaseDate;
       this.rating = rating;
       this.imageUrl = imageUrl;
    }
 
    public Integer getBookId() {
-      return bookId;
+      return id;
    }
 
-   public void setBookId(Integer bookId) {
-      this.bookId = bookId;
+   public void setBookId(Integer id) {
+      this.id = id;
    }
 
    public String getTitle() {
@@ -45,12 +45,12 @@ public class Book {
       this.title = title;
    }
 
-   public String getAuthorName() {
-      return authorName;
+   public String getAuthor() {
+      return author;
    }
 
-   public void setAuthorName(String authorName) {
-      this.authorName = authorName;
+   public void setAuthor(String authorName) {
+      this.author = authorName;
    }
 
    public LocalDate getReleaseDate() {
@@ -67,5 +67,13 @@ public class Book {
 
    public void setRating(double rating) {
       this.rating = rating;
+   }
+
+   public void setImageUrl(String imageUrl) {
+      this.imageUrl = imageUrl;
+   }
+
+   public String getImageUrl() {
+      return imageUrl;
    }
 }

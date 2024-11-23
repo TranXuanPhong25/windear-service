@@ -1,14 +1,18 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.BookLoan;
+import com.windear.app.exception.BookLoanNotFoundException;
+import com.windear.app.exception.BorrowSameBookException;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.repository.BookLoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookLoanServiceImpl implements BookLoanService {
@@ -25,13 +29,40 @@ public class BookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
-    public List<BookLoan> findAllByUserId(Integer userId) {
+    public List<BookLoan> findAllByUserId(String userId) {
         return bookLoanRepository.findAllByUserId(userId);
     }
 
     @Override
     public List<BookLoan> findAllByBookId(Integer bookId) {
         return bookLoanRepository.findAllByBookId(bookId);
+    }
+
+    @Override
+    public List<BookLoan> findAllByUserIdAndBookId(String userId, Integer bookId) {
+        return bookLoanRepository.findByUserIdAndBookID(userId, bookId);
+    }
+
+    @Override
+    public List<BookLoan> findAllBorrowRequest() {
+        return bookLoanRepository.findAll().stream()
+                .filter(BookLoan::isPending)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookLoan> getBorrowRequestByUserId(String userId) {
+        return bookLoanRepository.findBorrowRequestByUserId(userId);
+    }
+
+    @Override
+    public List<BookLoan> getBorrowedBookByUserId(String userId) {
+        return bookLoanRepository.findBorrowedBookByUserId(userId);
+    }
+
+    @Override
+    public List<BookLoan> getReturnedBookByUserId(String userId) {
+        return bookLoanRepository.findReturnedBookByUserId(userId);
     }
 
     @Override
@@ -46,13 +77,13 @@ public class BookLoanServiceImpl implements BookLoanService {
         if (bookLoan.isPresent()) {
             return bookLoan.get();
         } else {
-            throw new RuntimeException("bookloan with id not found: " + id.getBookId() + " " + id.getUserId());
+            throw new RuntimeException("Bookloan with id not found: " + id.getBookId() + " " + id.getUserId());
         }
     }
 
     @Override
     @Transactional
-    public void delete(BookLoanId id) {
+    public void declineBorrowRequest(BookLoanId id) {
         Optional<BookLoan> bookLoan = bookLoanRepository.findById(id);
         if (bookLoan.isPresent()) {
             bookLoanRepository.deleteById(id);
@@ -65,47 +96,42 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     @Transactional
-    public BookLoan update(BookLoan bookLoan) {
-        BookLoan bookLoanFromDB = findById(bookLoan.getBookLoanId());
-        if (bookLoan.getBorrowTime() != null) {
-            bookLoanFromDB.setBorrowTime(bookLoan.getBorrowTime());
+    public BookLoan returnBook(BookLoanId bookLoanId) {
+        Optional<BookLoan> bookLoan = bookLoanRepository.findById(bookLoanId);
+        if (bookLoan.isPresent()) {
+            BookLoan loan = bookLoan.get();
+            loan.setReturnDate(LocalDate.now());
+            return add(loan);
+        } else {
+            throw new BookLoanNotFoundException("Bookloan with id not found: "
+                    + "BookId: " + bookLoanId.getBookId() + " "
+                    + "UserId: " + bookLoanId.getUserId());
         }
-        if (bookLoan.getBorrowDate() != null) {
-            bookLoanFromDB.setBorrowDate(bookLoan.getBorrowDate());
-        }
-        if (bookLoan.getReturnDate() != null) {
-            bookLoanFromDB.setReturnDate(bookLoan.getReturnDate());
-        }
-        if (bookLoan.getRating() != null) {
-            bookLoanFromDB.setRating(bookLoan.getRating());
-        }
-        bookLoanRepository.save(bookLoanFromDB);
-        return bookLoanFromDB;
-    }
-    /*
-    @Override
-    @Transactional
-    public String borrowBook(int userId, String bookId) {
-        BookLoan user = findById(userId);
-        String externalBook = externalBookService.findById(bookId);
-        Book book = new Book();
-        book.setBookId(new BookId(bookId, userId));
-        book.setBorrowDate(LocalDate.now());
-        bookService.add(book);
-        return externalBook;
     }
 
     @Override
     @Transactional
-    public String returnBook(int userId, String bookId) {
-        BookLoan user = findById(userId);
-        String externalBook = externalBookService.findById(bookId);
-        for (Book book : user.getBorrowedBooks()) {
-            if (book.getId().equals(bookId)) {
-                book.setReturnDate(LocalDate.now());
-                return externalBook;
+    public BookLoan borrowBook(BookLoan bookLoan) {
+        List<BookLoan> bookLoans = bookLoanRepository.findByUserIdAndBookID(
+                bookLoan.getBookLoanId().getUserId(), bookLoan.getBookLoanId().getBookId());
+        for (BookLoan otherBookLoan : bookLoans) {
+            if (otherBookLoan.getReturnDate() == null) {
+                throw new BorrowSameBookException("User with id: "
+                        + otherBookLoan.getBookLoanId().getUserId()
+                        + " has already sent a borrow request with book id: "
+                        + otherBookLoan.getBookLoanId().getBookId());
             }
         }
-        throw new BookNotFoundException("Book with id not found: " + bookId);
-    }*/
+        bookLoan.setPending(true);
+        bookLoan.getBookLoanId().setBorrowDate(LocalDate.now());
+        return add(bookLoan);
+    }
+
+    @Override
+    @Transactional
+    public BookLoan acceptBorrowRequest(BookLoanId bookLoanId) {
+        BookLoan bookLoan = findById(bookLoanId);
+        bookLoan.setPending(false);
+        return add(bookLoan);
+    }
 }

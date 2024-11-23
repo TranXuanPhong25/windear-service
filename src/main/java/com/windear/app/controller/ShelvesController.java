@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/shelves")
 public class ShelvesController {
-    private ShelvesService shelvesService;
+    private final ShelvesService shelvesService;
 
     @Autowired
     public ShelvesController(ShelvesService shelvesService) {
@@ -33,8 +33,8 @@ public class ShelvesController {
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteShelves(@PathVariable String userId) {
-        shelvesService.deleteShelves(userId);
+    public void deleteShelvesByUserId(@PathVariable String userId) {
+        shelvesService.deleteShelvesByUserId(userId);
     }
 
     @PutMapping("/{userId}/mutate")
@@ -63,19 +63,25 @@ public class ShelvesController {
     }
 
     @GetMapping("/{userId}/shelf")
-    public List<Shelf> getShelves(@PathVariable String userId,
+    public List<Shelf> getShelfByUserIdAndShelfName(@PathVariable String userId,
                                   @RequestParam String name) {
-        return shelvesService.getShelves(userId, name);
+        return shelvesService.getShelfByUserIdAndShelfName(userId, name);
     }
 
-    @GetMapping("/{userId}/name")
+    @GetMapping("/{userId}")
     public List<String> getShelves(@PathVariable String userId) {
-        return shelvesService.getAllShelvesNames(userId);
+        return shelvesService.getAllShelvesNamesOfUser(userId);
     }
 
     @PostMapping("/{userId}/shelf")
     public Shelves addShelf(@PathVariable String userId,
                             @RequestParam String name) {
         return shelvesService.addShelfWithName(userId, name);
+    }
+
+    @GetMapping("/{userId}/{bookId}")
+    public List<String> getShelfNamesContainsBook(@PathVariable String userId,
+                                                  @PathVariable int bookId) {
+        return shelvesService.getShelfNamesContainsBook(userId, bookId);
     }
 }

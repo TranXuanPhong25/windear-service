@@ -1,6 +1,5 @@
 package com.windear.app.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.service.BookLoanService;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/bookloan")
 public class BookLoanController {
     private final BookLoanService bookLoanService;
 
@@ -19,51 +18,65 @@ public class BookLoanController {
         this.bookLoanService = bookLoanService;
     }
 
-    @PostMapping("/bookloan")
-    public BookLoan addBookLoan(@RequestBody BookLoan bookLoan) {
-        return bookLoanService.add(bookLoan);
-    }
-
-    @GetMapping("/bookloan")
+    @GetMapping()
     public List<BookLoan> getBookLoanList() {
         return bookLoanService.findAll();
     }
 
-    @GetMapping("/bookloan/user/{userId}")
-    public List<BookLoan> findAllByUserId(@PathVariable Integer userId) {
+    @GetMapping("/user/{userId}")
+    public List<BookLoan> findAllByUserId(@PathVariable String userId) {
         return bookLoanService.findAllByUserId(userId);
     }
 
-    @GetMapping("bookloan/book/{bookId}")
+    @GetMapping("/book/{bookId}")
     public List<BookLoan> findAllByBookId(@PathVariable Integer bookId) {
         return bookLoanService.findAllByBookId(bookId);
     }
 
-    @GetMapping("/bookloan/{bookId}/{userId}")
-    public BookLoan findById(@PathVariable Integer bookId, @PathVariable String userId) {
-        BookLoanId bookLoanId = new BookLoanId(userId, bookId);
-        return bookLoanService.findById(bookLoanId);
+    @GetMapping("/{bookId}/{userId}")
+    public List<BookLoan> findByUserIdAndBookId(@PathVariable Integer bookId, @PathVariable String userId) {
+        return bookLoanService.findAllByUserIdAndBookId(userId, bookId);
     }
 
-    @DeleteMapping("/bookloan/{bookId}/{userId}")
-    public void deleteBookLoan(@PathVariable Integer bookId, @PathVariable String userId) {
-        BookLoanId bookLoanId = new BookLoanId(userId, bookId);
-        bookLoanService.delete(bookLoanId);
+    @GetMapping("/request")
+    public List<BookLoan> getAllRequest() {
+        return bookLoanService.findAllBorrowRequest();
     }
 
-    /*
-    @PutMapping("/users")
-    public BookLoan updateUser(@RequestBody BookLoan user) {
-        return userService.update(user);
-    }
-    /*
-    @PostMapping("/users/{userId}/borrow/{bookId}")
-    public String borrowBook(@PathVariable int userId, @PathVariable String bookId) {
-        return userService.borrowBook(userId, bookId);
+    @GetMapping("/request/{userId}")
+    public List<BookLoan> getBorrowRequestByUserId(@PathVariable String userId) {
+        return bookLoanService.getBorrowRequestByUserId(userId);
     }
 
-    @PostMapping("users/{userId}/return/{bookId}")
-    public String returnBook(@PathVariable int userId, @PathVariable String bookId) {
-        return userService.returnBook(userId, bookId);
-    }*/
+    @GetMapping("/borrow/{userId}")
+    public List<BookLoan> getBorrowedBookByUserId(@PathVariable String userId) {
+        return bookLoanService.getBorrowedBookByUserId(userId);
+    }
+
+    @GetMapping("/return/{userId}")
+    public List<BookLoan> getReturnedBookByUserId(@PathVariable String userId) {
+        return bookLoanService.getReturnedBookByUserId(userId);
+    }
+
+
+    @DeleteMapping()
+    public void declineBorrowRequest(@RequestBody BookLoanId loanId) {
+        bookLoanService.declineBorrowRequest(loanId);
+    }
+
+    @PostMapping("/borrow")
+    public BookLoan sendBorrowRequest(@RequestBody BookLoan bookLoan) {
+        return bookLoanService.borrowBook(bookLoan);
+    }
+
+    @PutMapping("/borrow")
+    public BookLoan acceptBorrowRequest(@RequestBody BookLoanId loanId) {
+        return bookLoanService.acceptBorrowRequest(loanId);
+    }
+
+    @PutMapping("/return")
+    public BookLoan returnBook(@RequestBody BookLoanId loanId) {
+        return bookLoanService.returnBook(loanId);
+    }
+
 }

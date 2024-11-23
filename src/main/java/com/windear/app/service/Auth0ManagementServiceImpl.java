@@ -268,7 +268,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
             for (int i = lessRecentLogIndex; i >= 0; i--) {
                 auth0LogService.addLog(logs[i]);
             }
-            Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 20);
+            Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 50);
             List<Auth0LogDTO> logsDTO = logsPage.getContent().stream()
                     .map(log -> new Auth0LogDTO(
                             log.getDate(),

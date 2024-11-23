@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,13 @@ public class InternalBookServiceImpl implements InternalBookService {
    @Override
    public List<InternalBook> findTop10ByReleaseDate() {
       return internalBookRepository.findTop10ByOrderByReleaseDateDesc();
+   }
+
+   @Override
+   public long getBookInLast30Day() {
+      LocalDate now = LocalDate.now();
+      LocalDate startDate = now.minusDays(30);
+      return internalBookRepository.countBooksInLast30Days(startDate);
    }
 
 //   public Book convertToBook(ExternalBook externalBook) {
