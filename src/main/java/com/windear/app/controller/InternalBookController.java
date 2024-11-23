@@ -5,10 +5,13 @@ import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.Book;
 import com.windear.app.entity.BookGenre;
 
+
+import com.windear.app.entity.Genre;
 import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.InternalBook;
 import com.windear.app.primarykey.BookGenreId;
 import com.windear.app.service.BookGenreService;
+import com.windear.app.service.GenreService;
 import com.windear.app.service.InternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +24,13 @@ import java.util.List;
 public class InternalBookController {
     private final InternalBookService bookService;
     private final BookGenreService bookGenreService;
+    private final GenreService genreService;
 
     @Autowired
-    public InternalBookController(InternalBookService bookService, BookGenreService bookGenreService) {
+    public InternalBookController(InternalBookService bookService, BookGenreService bookGenreService, GenreService genreService) {
         this.bookService = bookService;
         this.bookGenreService = bookGenreService;
+        this.genreService = genreService;
     }
 
     @GetMapping("/books")
@@ -46,9 +51,9 @@ public class InternalBookController {
         String genres = "";
         for(int i = 0; i < bookGenres.size(); i++) {
             if(i < bookGenres.size() - 1) {
-                genres += String.valueOf(bookGenres.get(i).getBookGenreId().getGenreId()) + ',';
+                genres += genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName() + ',';
             } else {
-                genres += String.valueOf(bookGenres.get(i).getBookGenreId().getGenreId());
+                genres += genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName();
             }
         }
         book.setGenres(genres);
