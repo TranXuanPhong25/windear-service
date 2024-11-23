@@ -56,7 +56,7 @@ public class InternalBookController {
 
     private InternalBookDTO convertToDTO(InternalBook book) {
         InternalBookDTO dto = new InternalBookDTO();
-        dto.setId(book.getBookId());
+        dto.setId(book.getId());
         dto.setTitle(book.getTitle());
         dto.setAuthor(book.getAuthor());
         dto.setPublisher(book.getPublisher());
