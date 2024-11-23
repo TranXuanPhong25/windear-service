@@ -33,9 +33,6 @@ public class InternalBook extends Book {
     @Column(name = "num_pages")
     private Integer numPages;
 
-    @Column(name = "addDate")
-    private LocalDate addDate;
-
     public InternalBook() {
     }
 
@@ -53,7 +50,6 @@ public class InternalBook extends Book {
         this.format = format;
         this.language = language;
         this.numPages = pages;
-        this.addDate = addDate;
     }
 
     public String getIsbn10() {

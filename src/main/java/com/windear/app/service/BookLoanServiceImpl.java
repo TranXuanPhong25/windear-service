@@ -51,6 +51,13 @@ public class BookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
+    public List<BookLoan> findAllActiveBookLoan() {
+        return findAll().stream()
+                .filter(bookLoan -> !bookLoan.isPending() && bookLoan.getReturnDate() == null)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<BookLoan> getBorrowRequestByUserId(String userId) {
         return bookLoanRepository.findBorrowRequestByUserId(userId);
     }

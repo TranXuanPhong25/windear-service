@@ -13,6 +13,7 @@ public interface BookLoanService {
     List<BookLoan> findAllByBookId(Integer bookId);
     List<BookLoan> findAllByUserIdAndBookId(String userId, Integer bookId);
     List<BookLoan> findAllBorrowRequest();
+    List<BookLoan> findAllActiveBookLoan();
     List<BookLoan> getBorrowRequestByUserId(String userId);
     List<BookLoan> getBorrowedBookByUserId(String userId);
     List<BookLoan> getReturnedBookByUserId(String userId);
