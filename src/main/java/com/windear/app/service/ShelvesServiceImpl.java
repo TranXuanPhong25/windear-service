@@ -102,6 +102,7 @@ public class ShelvesServiceImpl implements ShelvesService {
             BookInShelf book = shelf.findBookById(bookId);
             if (book != null) {
                 shelf.getBooks().remove(book);
+                // remove shelf if it is empty and not default shelf
                 if (shelf.getBooks().isEmpty() && !shelf.isDefaultShelf()) {
                     shelves.getShelves().remove(shelf);
                 }
