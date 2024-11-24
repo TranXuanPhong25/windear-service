@@ -101,8 +101,11 @@ public class ShelvesServiceImpl implements ShelvesService {
         for (String shelfName : shelfNames) {
             Shelf shelf = shelves.getShelfByName(shelfName);
             BookInShelf book = shelf.findBookById(bookId);
-            if (shelf.getBooks() != null && shelf.getBooks().stream().anyMatch(b -> b.getBookId() == bookId)) {
+            if (book != null) {
                 shelf.getBooks().remove(book);
+                if (shelf.getBooks().isEmpty() && !shelf.isDefaultShelf()) {
+                    shelves.getShelves().remove(shelf);
+                }
             }
         }
         return shelvesRepository.save(shelves);

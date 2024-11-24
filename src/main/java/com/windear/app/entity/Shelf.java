@@ -48,4 +48,10 @@ public class Shelf {
                 .findFirst()
                 .orElse(null);
     }
+
+    public boolean isDefaultShelf() {
+        return (name.equals("Want to read")
+                || name.equals("Currently reading")
+                || name.equals("Read"));
+    }
 }
