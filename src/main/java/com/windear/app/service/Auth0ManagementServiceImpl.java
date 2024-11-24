@@ -133,14 +133,14 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
             UserProfilePayload payload = objectMapper.readValue(data, UserProfilePayload.class);
             objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
-            UserProfile userProfile;
-            if (payload.getIsSocial()) {
-                userProfile = objectMapper.readValue(payload.getPayload(), SocialUserProfile.class);
+            if (payload.getIsSocial().equals("true")) {
+                SocialUserProfile userProfile = objectMapper.readValue(payload.getPayload(), SocialUserProfile.class);
                 updateProfile(userId, userProfile);
             } else {
-                UserProfile usernameUserProfile = objectMapper.readValue(payload.getPayload(), UsernameAuth0UserProfile.class);
+                Auth0UserProfile userProfile = objectMapper.readValue(payload.getPayload(), Auth0UserProfile.class);
+                UsernameAuth0UserProfile usernameUserProfile = new UsernameAuth0UserProfile( userProfile.getUsername(), userProfile.getUser_metadata());
                 updateProfile(userId, usernameUserProfile);
-                UserProfile emailUserProfile = objectMapper.readValue(payload.getPayload(), EmailAuth0UserProfile.class);
+                EmailAuth0UserProfile emailUserProfile =  new EmailAuth0UserProfile( userProfile.getEmail(), userProfile.getUser_metadata());
                 updateProfile(userId, emailUserProfile);
 
             }
