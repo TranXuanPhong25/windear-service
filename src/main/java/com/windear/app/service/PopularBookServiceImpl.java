@@ -44,11 +44,17 @@ public class PopularBookServiceImpl implements PopularBookService{
     @Override
     @Transactional
     public PopularBook updateScore(Integer bookId, Integer score) {
-        PopularBook bookFromDB = findById(bookId);
-        if (score != null) {
-            bookFromDB.setScore(score + bookFromDB.getScore());
+        Optional<PopularBook> popularBook = bookRepository.findById(bookId);
+        if(popularBook.isPresent()) {
+            if (score != null) {
+                popularBook.get().setScore(score + popularBook.get().getScore());
+            }
+            return bookRepository.save(popularBook.get());
         }
-        return bookRepository.save(bookFromDB);
+        else {
+            PopularBook newPopularBook = new PopularBook(bookId, 1);
+            return addBook(newPopularBook);
+        }
     }
 
     @Override

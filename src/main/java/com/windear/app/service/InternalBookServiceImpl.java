@@ -1,9 +1,11 @@
 package com.windear.app.service;
 
 import com.windear.app.entity.InternalBook;
+import com.windear.app.entity.PopularBook;
 import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.exception.IsbnExistsException;
 import com.windear.app.repository.InternalBookRepository;
+import com.windear.app.repository.PopularBookRepository;
 import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,16 @@ public class InternalBookServiceImpl implements InternalBookService {
    private final InternalBookRepository internalBookRepository;
    private final ReviewRepository reviewRepository;
    private final ExternalBookService externalBookService;
+   private final PopularBookService popularBookService;
+   private final PopularBookRepository popularBookRepository;
 
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository, ExternalBookService externalBookService, ReviewRepository reviewRepository) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, ExternalBookService externalBookService, ReviewRepository reviewRepository, PopularBookService popularBookService, PopularBookRepository popularBookRepository) {
       this.internalBookRepository = bookRepository;
       this.externalBookService = externalBookService;
       this.reviewRepository = reviewRepository;
+      this.popularBookService = popularBookService;
+      this.popularBookRepository = popularBookRepository;
    }
 
    @Override
@@ -41,6 +47,7 @@ public class InternalBookServiceImpl implements InternalBookService {
             rating=averageRating;
          }
          book.get().setRating(rating);
+         popularBookService.updateScore(id, 5);
          return book.get();
       } else {
          throw new BookNotFoundException("Book with id not found: " + id);
