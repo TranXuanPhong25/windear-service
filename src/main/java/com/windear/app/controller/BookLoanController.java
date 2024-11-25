@@ -62,10 +62,11 @@ public class BookLoanController {
     }
 
 
-    @DeleteMapping()
-    public void declineBorrowRequest(@RequestBody BookLoanId loanId) {
-        bookLoanService.declineBorrowRequest(loanId);
+    @PostMapping()
+    public BookLoan declineBorrowRequest(@RequestBody BookLoanId loanId) {
+        BookLoan bookLoan = bookLoanService.declineBorrowRequest(loanId);
         notificationService.sendNotification(loanId.getUserId(), "Your borrow request has been declined.");
+        return bookLoan;
     }
 
     @PostMapping("/borrow")

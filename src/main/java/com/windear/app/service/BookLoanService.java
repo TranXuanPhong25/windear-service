@@ -20,6 +20,6 @@ public interface BookLoanService {
     BookLoan add(BookLoan bookLoan);
     BookLoan borrowBook(BookLoan book);
     BookLoan acceptBorrowRequest(BookLoanId bookLoanId);
-    void declineBorrowRequest(BookLoanId bookLoanId);
+    BookLoan declineBorrowRequest(BookLoanId bookLoanId);
     BookLoan returnBook(BookLoanId bookLoanId);
 }
