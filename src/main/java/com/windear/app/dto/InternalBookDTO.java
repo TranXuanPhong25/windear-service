@@ -9,6 +9,7 @@ public class InternalBookDTO {
     private String publisher;
     private LocalDate addDate;
     private LocalDate releaseDate;
+    private String imageUrl;
 
     public Integer getId() {
         return id;
@@ -56,5 +57,13 @@ public class InternalBookDTO {
 
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
