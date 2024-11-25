@@ -2,6 +2,7 @@ package com.windear.app.service;
 
 import com.windear.app.entity.BookLoan;
 import com.windear.app.entity.Notification;
+import com.windear.app.enums.Status;
 import com.windear.app.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -41,6 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Scheduled(cron = "0 0 12 * * ?")
+    @Override
     public void sendReturnReminder() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<BookLoan> bookLoans = bookLoanService.findAllActiveBookLoan();
@@ -48,6 +50,19 @@ public class NotificationServiceImpl implements NotificationService {
             LocalDate dueDate = bookLoan.getBorrowDate().plusDays(bookLoan.getBorrowTime());
             if (dueDate.equals(tomorrow)) {
                 sendNotification(bookLoan.getBookLoanId().getUserId(), "Reminder: Your book with title: " + bookLoan.getTitle() + " is due tomorrow.");
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 0 12 * * ?")
+    @Override
+    public void rejectBookLoanRequest() {
+        List<BookLoan> bookLoans = bookLoanService.findAllBorrowRequest();
+        for (BookLoan bookLoan : bookLoans) {
+            LocalDate requestDate = bookLoan.getBookLoanId().getRequestDate();
+            if (requestDate != null && LocalDate.now().minusDays(3).equals(requestDate)) {
+                bookLoan.setStatus(Status.DECLINE);
+                sendNotification(bookLoan.getBookLoanId().getUserId(), "Your book loan request for the book titled '" + bookLoan.getTitle() + "' has been rejected.");
             }
         }
     }
