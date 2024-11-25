@@ -38,7 +38,7 @@ public class InternalBookController {
         List<InternalBook> books = bookService.findAll();
         List<InternalBookDTO> booksDto = new ArrayList<>();
         for(InternalBook it : books) {
-            booksDto.add(convertToDTO(it));
+            booksDto.add(bookService.convertToDTO(it));
         }
         return booksDto;
     }
@@ -84,19 +84,16 @@ public class InternalBookController {
         return book;
     }
 
+    @PutMapping("/books/{id}")
+    public InternalBook update(@RequestBody AddInternalBookRequestDTO internalBook, @PathVariable Integer id) {
+        internalBook.getInternalBook().setId(id);
+
+        return bookService.update(internalBook.getInternalBook());
+    }
+
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable Integer id) {
         bookService.delete(id);
     }
 
-    private InternalBookDTO convertToDTO(InternalBook book) {
-        InternalBookDTO dto = new InternalBookDTO();
-        dto.setId(book.getId());
-        dto.setTitle(book.getTitle());
-        dto.setAuthor(book.getAuthor());
-        dto.setPublisher(book.getPublisher());
-        dto.setAddDate(book.getAddDate());
-        dto.setReleaseDate(book.getReleaseDate());
-        return dto;
-    }
 }
