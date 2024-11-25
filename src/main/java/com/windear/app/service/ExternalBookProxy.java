@@ -16,6 +16,7 @@ public class ExternalBookProxy implements ExternalBookService {
     }
 
     @Override
+    @Cacheable(value = "basicGenres")
     public String getBasicGenres() {
         return externalBookService.getBasicGenres();
     }
@@ -45,11 +46,13 @@ public class ExternalBookProxy implements ExternalBookService {
     }
 
     @Override
+    @Cacheable(value = "featuredBooks")
     public String getFeaturedBookLists() {
         return externalBookService.getFeaturedBookLists();
     }
 
     @Override
+    @Cacheable(value = "popularBooks")
     public String getPopularBookLists() {
         return externalBookService.getPopularBookLists();
     }
