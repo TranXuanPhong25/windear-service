@@ -1,8 +1,10 @@
 package com.windear.app.service;
 
+import com.windear.app.dto.SubscribeRequest;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.enums.Status;
 import com.windear.app.exception.BookLoanNotFoundException;
+import com.windear.app.exception.BookNotAvailableException;
 import com.windear.app.exception.BorrowSameBookException;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.repository.BookLoanRepository;
@@ -18,10 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class BookLoanServiceImpl implements BookLoanService {
     private final BookLoanRepository bookLoanRepository;
+    private final BookCopyService bookCopyService;
 
     @Autowired
-    public BookLoanServiceImpl(BookLoanRepository bookLoanRepository) {
+    public BookLoanServiceImpl(BookLoanRepository bookLoanRepository, BookCopyService bookCopyService) {
         this.bookLoanRepository = bookLoanRepository;
+        this.bookCopyService = bookCopyService;
     }
 
     @Override
@@ -54,8 +58,22 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Override
     public List<BookLoan> findAllActiveBookLoan() {
         return findAll().stream()
-                .filter(bookLoan -> bookLoan.getStatus() == Status.PENDING && bookLoan.getReturnDate() == null)
+                .filter(bookLoan -> bookLoan.getStatus() == Status.ACCEPT && bookLoan.getReturnDate() == null)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookLoan> getSubscribeRequestOfBook(Integer bookId) {
+        return findAll().stream()
+                .filter(bookLoan -> bookLoan.getStatus() == Status.SUBSCRIBE && bookLoan.getBookLoanId().getBookId().equals(bookId))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteSubscribeRequestOfBook(Integer bookId) {
+        List<BookLoan> subscribeRequests = getSubscribeRequestOfBook(bookId);
+        bookLoanRepository.deleteAll(subscribeRequests);
     }
 
     @Override
@@ -85,7 +103,7 @@ public class BookLoanServiceImpl implements BookLoanService {
         if (bookLoan.isPresent()) {
             return bookLoan.get();
         } else {
-            throw new BookLoanNotFoundException("Bookloan with id not found: " + id.getBookId() + " " + id.getUserId());
+            throw new BookLoanNotFoundException("Book Loan with id not found: " + id.getBookId() + " " + id.getUserId());
         }
     }
 
@@ -99,27 +117,45 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     @Transactional
-    public BookLoan returnBook(BookLoanId bookLoanId) {
-        BookLoan bookLoan = findById(bookLoanId);
-        bookLoan.setReturnDate(LocalDate.now());
+    public BookLoan subscribeToBook(SubscribeRequest request) {
+        String userId = request.getUserId();
+        Integer bookId = request.getBookId();
+        BookLoanId bookLoanId = new BookLoanId(userId, bookId);
+        BookLoan bookLoan = new BookLoan(bookLoanId, request.getTitle(), request.getAuthorName(), Status.SUBSCRIBE);
         return add(bookLoan);
     }
 
     @Override
     @Transactional
-    public BookLoan borrowBook(BookLoan bookLoan) {
-        List<BookLoan> bookLoans = bookLoanRepository.findByUserIdAndBookID(
-                bookLoan.getBookLoanId().getUserId(), bookLoan.getBookLoanId().getBookId());
+    public BookLoan returnBook(BookLoanId bookLoanId) {
+        BookLoan bookLoan = findById(bookLoanId);
+        bookLoan.setReturnDate(LocalDate.now());
+        bookCopyService.modifyQuantityOfBookCopy(bookLoanId.getBookId(), 1);
+        return add(bookLoan);
+    }
+
+    @Override
+    @Transactional
+    public BookLoan sendBorrowRequest(BookLoan bookLoan) {
+        String userId = bookLoan.getBookLoanId().getUserId();
+        Integer bookId = bookLoan.getBookLoanId().getBookId();
+        Integer quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
+        if (quantityOfCopies == 0) {
+            throw new BookNotAvailableException("The book with id " + bookId + " is not available for borrowing.");
+        }
+        List<BookLoan> bookLoans = bookLoanRepository.findByUserIdAndBookID(userId, bookId);
         for (BookLoan otherBookLoan : bookLoans) {
             if (otherBookLoan.getReturnDate() == null) {
                 throw new BorrowSameBookException("User with id: "
-                        + otherBookLoan.getBookLoanId().getUserId()
+                        + userId
                         + " has already sent a borrow request with book id: "
-                        + otherBookLoan.getBookLoanId().getBookId());
+                        + bookId);
             }
         }
         bookLoan.setStatus(Status.PENDING);
-        bookLoan.getBookLoanId().setBorrowDate(LocalDate.now());
+        bookLoan.setBorrowTime(bookLoan.getBorrowTime());
+        bookLoan.getBookLoanId().setRequestDate(LocalDate.now());
+        bookCopyService.modifyQuantityOfBookCopy(bookId, -1);
         return add(bookLoan);
     }
 
@@ -128,6 +164,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan acceptBorrowRequest(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
         bookLoan.setStatus(Status.ACCEPT);
+        bookLoan.setBorrowDate(LocalDate.now());
         return add(bookLoan);
     }
 }
