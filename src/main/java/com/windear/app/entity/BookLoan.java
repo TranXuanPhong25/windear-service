@@ -20,6 +20,9 @@ public class BookLoan {
     @Column(name = "return_date")
     private LocalDate returnDate;
 
+    @Column(name = "borrow_date")
+    private LocalDate borrowDate;
+
     @Column(name = "title")
     private String title;
 
@@ -33,13 +36,14 @@ public class BookLoan {
     public BookLoan() {}
 
     public BookLoan(BookLoanId bookLoanId, Integer borrowTime,
-                    LocalDate returnDate, String title, String authorName, Status status) {
+                    LocalDate returnDate, LocalDate borrowDate, String title, String authorName, Status status) {
         this.bookLoanId = bookLoanId;
         this.borrowTime = borrowTime;
         this.returnDate = returnDate;
         this.title = title;
         this.authorName = authorName;
         this.status = status;
+        this.borrowDate = borrowDate;
     }
 
     public BookLoanId getBookLoanId() {
@@ -88,5 +92,13 @@ public class BookLoan {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(LocalDate borrowDate) {
+        this.borrowDate = borrowDate;
     }
 }

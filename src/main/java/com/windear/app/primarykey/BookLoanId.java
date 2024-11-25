@@ -14,15 +14,15 @@ public class BookLoanId {
     @Column(name = "book_id")
     private Integer bookId;
 
-    @Column(name = "borrow_date")
-    private LocalDate borrowDate;
+    @Column(name = "request_date")
+    private LocalDate requestDate;
 
     public BookLoanId() {}
 
-    public BookLoanId(String userId, Integer bookId, LocalDate borrowDate) {
+    public BookLoanId(String userId, Integer bookId, LocalDate requestDate) {
         this.userId = userId;
         this.bookId = bookId;
-        this.borrowDate = borrowDate;
+        this.requestDate = requestDate;
     }
 
     public String getUserId() {
@@ -41,12 +41,12 @@ public class BookLoanId {
         this.bookId = bookId;
     }
 
-    public LocalDate getBorrowDate() {
-        return borrowDate;
+    public LocalDate getRequestDate() {
+        return requestDate;
     }
 
-    public void setBorrowDate(LocalDate borrowDate) {
-        this.borrowDate = borrowDate;
+    public void setRequestDate(LocalDate request_date) {
+        this.requestDate = request_date;
     }
 
     @Override

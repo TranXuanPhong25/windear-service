@@ -61,7 +61,6 @@ public class BookLoanController {
         return bookLoanService.getReturnedBookByUserId(userId);
     }
 
-
     @PostMapping()
     public BookLoan declineBorrowRequest(@RequestBody BookLoanId loanId) {
         BookLoan bookLoan = bookLoanService.declineBorrowRequest(loanId);
@@ -71,7 +70,7 @@ public class BookLoanController {
 
     @PostMapping("/borrow")
     public BookLoan sendBorrowRequest(@RequestBody BookLoan bookLoan) {
-        BookLoan borrowRequest = bookLoanService.borrowBook(bookLoan);
+        BookLoan borrowRequest = bookLoanService.sendBorrowRequest(bookLoan);
         notificationService.sendNotification(bookLoan.getBookLoanId().getUserId(), "Your borrow request has been received.");
         return borrowRequest;
     }

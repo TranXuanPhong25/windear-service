@@ -45,7 +45,7 @@ public class NotificationServiceImpl implements NotificationService {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<BookLoan> bookLoans = bookLoanService.findAllActiveBookLoan();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate dueDate = bookLoan.getBookLoanId().getBorrowDate().plusDays(bookLoan.getBorrowTime());
+            LocalDate dueDate = bookLoan.getBorrowDate().plusDays(bookLoan.getBorrowTime());
             if (dueDate.equals(tomorrow)) {
                 sendNotification(bookLoan.getBookLoanId().getUserId(), "Reminder: Your book with title: " + bookLoan.getTitle() + " is due tomorrow.");
             }

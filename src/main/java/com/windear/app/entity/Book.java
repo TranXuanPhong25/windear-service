@@ -11,10 +11,15 @@ public class Book {
    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq")
    @SequenceGenerator(name = "book_seq", sequenceName = "book_id_seq", initialValue = 1000000000, allocationSize = 1)
    protected Integer id;
+
    protected String title;
+
    protected String author;
+
    protected LocalDate releaseDate;
+
    protected double rating;
+
    @Column(name = "image_url", columnDefinition = "TEXT")
    protected String imageUrl;
 
