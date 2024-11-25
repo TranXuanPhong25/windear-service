@@ -7,7 +7,7 @@ public class UsernameAuth0UserProfile extends UserProfile{
         // Default constructor
     }
 
-    public UsernameAuth0UserProfile(String username, String email, UserMetadata user_metadata) {
+    public UsernameAuth0UserProfile(String username, UserMetadata user_metadata) {
         super(user_metadata);
         this.username = username;
     }

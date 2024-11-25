@@ -2,9 +2,9 @@ name: Java CI with Maven template
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" , "staging/deployment" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" , "staging/deployment" ]
 
 jobs:
   build:
@@ -40,6 +40,10 @@ jobs:
         echo "MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }}" >> $GITHUB_ENV
         echo "MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}" >> $GITHUB_ENV
         echo "MONGODB_DB_NAME=${{ secrets.MONGODB_DB_NAME }}" >> $GITHUB_ENV
+        echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> $GITHUB_ENV
+        echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> $GITHUB_ENV
+        echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> $GITHUB_ENV
+        
     - name: Generate .env file
       run: |
         echo "DB_URL=${{ secrets.DB_URL }}" > .env
@@ -60,6 +64,9 @@ jobs:
         echo "MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }}" >> .env
         echo "MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}" >> .env
         echo "MONGODB_DB_NAME=${{ secrets.MONGODB_DB_NAME }}" >> .env
+        echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+        echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+        echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
     - name: Build with Maven
       env:
         DB_URL: ${{ secrets.DB_URL }}
@@ -80,4 +87,8 @@ jobs:
         MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
         MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
         MONGODB_DB_NAME: ${{ secrets.MONGODB_DB_NAME }}
+        REDIS_HOST: ${{ secrets.REDIS_HOST }}
+        REDIS_PORT: ${{ secrets.REDIS_PORT }}
+        REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+        
       run: mvn -B package --file pom.xml

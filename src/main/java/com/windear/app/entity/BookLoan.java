@@ -1,5 +1,6 @@
 package com.windear.app.entity;
 
+import com.windear.app.enums.Status;
 import com.windear.app.primarykey.BookLoanId;
 import jakarta.persistence.*;
 
@@ -25,19 +26,20 @@ public class BookLoan {
     @Column(name = "author_name")
     private String authorName;
 
-    @Column(name = "is_pending")
-    private boolean isPending;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public BookLoan() {}
 
     public BookLoan(BookLoanId bookLoanId, Integer borrowTime,
-                    LocalDate returnDate, String title, String authorName, boolean isPending) {
+                    LocalDate returnDate, String title, String authorName, Status status) {
         this.bookLoanId = bookLoanId;
         this.borrowTime = borrowTime;
         this.returnDate = returnDate;
         this.title = title;
         this.authorName = authorName;
-        this.isPending = isPending;
+        this.status = status;
     }
 
     public BookLoanId getBookLoanId() {
@@ -80,11 +82,11 @@ public class BookLoan {
         this.authorName = authorName;
     }
 
-    public boolean isPending() {
-        return isPending;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setPending(boolean pending) {
-        isPending = pending;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
