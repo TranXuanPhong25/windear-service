@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -20,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class Auth0ManagementServiceImpl implements Auth0ManagementService {
     @Value("${app.client.id}")
     private String auth0ClientId;
@@ -240,8 +243,8 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
         return mid;
     }
 
-    @Override
-    public ResponseEntity<?> getLogs() {
+    @Scheduled(cron = "0 0 12 * * ?")
+    public void getAuth0Logs() {
         try {
             Auth0Log[] logs = auth0WebClient.get()
                     .uri(uriBuilder -> uriBuilder
@@ -261,36 +264,37 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
                     .bodyToMono(Auth0Log[].class)
                     .block();
             if (logs == null || logs.length == 0) {
-                return ResponseEntity.noContent().build();
+                return;
             }
             Auth0Log latestLog = auth0LogService.getLatestLog();
             int lessRecentLogIndex = findLessRecentLog(logs, latestLog);
             for (int i = lessRecentLogIndex; i >= 0; i--) {
                 auth0LogService.addLog(logs[i]);
             }
-            Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 50);
-            List<Auth0LogDTO> logsDTO = logsPage.getContent().stream()
-                    .map(log -> new Auth0LogDTO(
-                            log.getDate(),
-                            log.getIp(),
-                            log.getUser_agent(),
-                            log.getUser_id(),
-                            log.getUser_name(),
-                            log.isMobile(),
-                            log.getType()))
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(logsDTO);
-
         } catch (WebClientResponseException e) {
             // Handle specific HTTP error responses here
-            return ResponseEntity.status(e.getStatusCode())
-                    .body("Failed to get active user: " + e.getResponseBodyAsString());
+            throw new RuntimeException("Failed to get logs: " + e.getResponseBodyAsString());
         } catch (Exception e) {
             // Handle any other exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Unexpected error: " + e.getMessage());
+            throw new RuntimeException("Unexpected error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public ResponseEntity<?> getLogs() {
+        Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 50);
+        List<Auth0LogDTO> logsDTO = logsPage.getContent().stream()
+                .map(log -> new Auth0LogDTO(
+                        log.getDate(),
+                        log.getIp(),
+                        log.getUser_agent(),
+                        log.getUser_id(),
+                        log.getUser_name(),
+                        log.isMobile(),
+                        log.getType()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(logsDTO);
+
     }
 
 }
