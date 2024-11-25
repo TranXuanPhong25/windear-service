@@ -25,7 +25,7 @@ public class InternalBookServiceImpl implements InternalBookService {
    private final PopularBookRepository popularBookRepository;
 
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository, @Qualifier("externalBookProxy") ExternalBookService externalBookService, ReviewRepository reviewRepository) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, @Qualifier("externalBookProxy") ExternalBookService externalBookService, ReviewRepository reviewRepository, PopularBookService popularBookService, PopularBookRepository popularBookRepository) {
       this.internalBookRepository = bookRepository;
       this.externalBookService = externalBookService;
       this.reviewRepository = reviewRepository;
