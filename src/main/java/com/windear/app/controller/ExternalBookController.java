@@ -2,6 +2,7 @@ package com.windear.app.controller;
 
 import com.windear.app.service.ExternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -12,7 +13,7 @@ public class ExternalBookController {
     private ExternalBookService externalBookService;
 
     @Autowired
-    public ExternalBookController(ExternalBookService externalBookService) {
+    public ExternalBookController(@Qualifier("externalBookProxy") ExternalBookService externalBookService) {
         this.externalBookService = externalBookService;
     }
 

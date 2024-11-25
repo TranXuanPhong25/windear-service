@@ -6,6 +6,7 @@ import com.windear.app.exception.IsbnExistsException;
 import com.windear.app.repository.InternalBookRepository;
 import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,7 @@ public class InternalBookServiceImpl implements InternalBookService {
    private final ExternalBookService externalBookService;
 
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository, ExternalBookService externalBookService, ReviewRepository reviewRepository) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, @Qualifier("externalBookProxy") ExternalBookService externalBookService, ReviewRepository reviewRepository) {
       this.internalBookRepository = bookRepository;
       this.externalBookService = externalBookService;
       this.reviewRepository = reviewRepository;
