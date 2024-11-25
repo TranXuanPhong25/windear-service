@@ -95,14 +95,19 @@ public class ShelvesServiceImpl implements ShelvesService {
     }
 
     @Override
-    public Shelves deleteBookInShelves(String userId, String shelfName, int bookId) {
+    public Shelves deleteBookInShelves(String userId, List<String> shelfNames, int bookId) {
         Shelves shelves = findShelvesByUserId(userId);
-        Shelf shelf = shelves.getShelfByName(shelfName);
-        BookInShelf book = shelf.findBookById(bookId);
-        if (book == null) {
-            throw new BookNotFoundException("Cannot found book with id: " + bookId + " in " + shelfName + " shelf belonging to user with userId: " + userId);
+        for (String shelfName : shelfNames) {
+            Shelf shelf = shelves.getShelfByName(shelfName);
+            BookInShelf book = shelf.findBookById(bookId);
+            if (book != null) {
+                shelf.getBooks().remove(book);
+                // remove shelf if it is empty and not default shelf
+                if (shelf.getBooks().isEmpty() && !shelf.isDefaultShelf()) {
+                    shelves.getShelves().remove(shelf);
+                }
+            }
         }
-        shelf.getBooks().remove(book);
         return shelvesRepository.save(shelves);
     }
 

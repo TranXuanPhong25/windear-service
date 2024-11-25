@@ -2,13 +2,11 @@ package com.windear.app.controller;
 
 import com.windear.app.dto.AddInternalBookRequestDTO;
 import com.windear.app.dto.InternalBookDTO;
-import com.windear.app.entity.Book;
 import com.windear.app.entity.BookGenre;
-
-import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.InternalBook;
 import com.windear.app.primarykey.BookGenreId;
 import com.windear.app.service.BookGenreService;
+import com.windear.app.service.GenreService;
 import com.windear.app.service.InternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +19,13 @@ import java.util.List;
 public class InternalBookController {
     private final InternalBookService bookService;
     private final BookGenreService bookGenreService;
+    private final GenreService genreService;
 
     @Autowired
-    public InternalBookController(InternalBookService bookService, BookGenreService bookGenreService) {
+    public InternalBookController(InternalBookService bookService, BookGenreService bookGenreService, GenreService genreService) {
         this.bookService = bookService;
         this.bookGenreService = bookGenreService;
+        this.genreService = genreService;
     }
 
     @GetMapping("/books")
@@ -43,15 +43,15 @@ public class InternalBookController {
         AddInternalBookRequestDTO book = new AddInternalBookRequestDTO();
         InternalBook bookFromDb = bookService.findById(id);
         List<BookGenre> bookGenres = bookGenreService.findAllByBookId(id);
-        String genres = "";
+        StringBuilder genres = new StringBuilder();
         for(int i = 0; i < bookGenres.size(); i++) {
             if(i < bookGenres.size() - 1) {
-                genres += String.valueOf(bookGenres.get(i).getBookGenreId().getGenreId()) + ',';
+                genres.append(genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName()).append(',');
             } else {
-                genres += String.valueOf(bookGenres.get(i).getBookGenreId().getGenreId());
+                genres.append(genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName());
             }
         }
-        book.setGenres(genres);
+        book.setGenres(genres.toString());
         book.setInternalBook(bookFromDb);
         return book;
     }
@@ -69,6 +69,9 @@ public class InternalBookController {
     @PostMapping("/books")
     public InternalBook addBook(@RequestBody AddInternalBookRequestDTO request) {
         InternalBook book = bookService.add(request.getInternalBook());
+        if(request.getGenres().isEmpty()) {
+            return book;
+        }
         String[] genreIds = request.getGenres().split(",");
         for (String genreId : genreIds) {
             BookGenre bookGenre = new BookGenre();
@@ -92,6 +95,7 @@ public class InternalBookController {
         dto.setPublisher(book.getPublisher());
         dto.setAddDate(book.getAddDate());
         dto.setReleaseDate(book.getReleaseDate());
+        dto.setImageUrl(book.getImageUrl());
         return dto;
     }
 }
