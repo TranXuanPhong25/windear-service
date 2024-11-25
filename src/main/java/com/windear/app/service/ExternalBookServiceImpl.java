@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Qualifier("externalBookReal")
 public class ExternalBookServiceImpl implements ExternalBookService {
     private final WebClient goodreadsWebClient;
 

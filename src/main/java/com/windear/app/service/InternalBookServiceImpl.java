@@ -8,6 +8,7 @@ import com.windear.app.repository.InternalBookRepository;
 import com.windear.app.repository.PopularBookRepository;
 import com.windear.app.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ public class InternalBookServiceImpl implements InternalBookService {
    private final PopularBookRepository popularBookRepository;
 
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository, ExternalBookService externalBookService, ReviewRepository reviewRepository, PopularBookService popularBookService, PopularBookRepository popularBookRepository) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, @Qualifier("externalBookProxy") ExternalBookService externalBookService, ReviewRepository reviewRepository, PopularBookService popularBookService, PopularBookRepository popularBookRepository) {
       this.internalBookRepository = bookRepository;
       this.externalBookService = externalBookService;
       this.reviewRepository = reviewRepository;
