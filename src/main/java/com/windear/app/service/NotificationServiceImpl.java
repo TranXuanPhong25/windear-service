@@ -74,8 +74,6 @@ public class NotificationServiceImpl implements NotificationService {
         for (BookLoan bookLoan : bookLoans) {
             String userId = bookLoan.getBookLoanId().getUserId();
             sendNotification(userId, "The book with title '" + bookLoan.getTitle() + "' is now available for borrowing.");
-            System.out.println("Send notification for bookId: " + bookId);
         }
-        System.out.println("Send notification!");
     }
 }
