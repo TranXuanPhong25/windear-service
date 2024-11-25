@@ -36,7 +36,7 @@ public class SecurityConfig {
                                 "/api/shelves",
                                 "/api/db/books",
                                 "/api/db/books/**",
-                                "/api/genres,",
+                                "/api/genres",
                                 "/api/review",
                                 "/api/review/**"
 

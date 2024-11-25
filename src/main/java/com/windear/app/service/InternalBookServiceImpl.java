@@ -57,7 +57,6 @@ public class InternalBookServiceImpl implements InternalBookService {
    @Override
    @Transactional
    public InternalBook add(InternalBook book) {
-      System.out.println(externalBookService.isIsbnExist(book.getIsbn13()));
       if (externalBookService.isIsbnExist(book.getIsbn13()) ||
           internalBookRepository.existsByIsbn13(book.getIsbn13())) {
          throw new IsbnExistsException("Book with isbn: " + book.getIsbn13() + " already exists.");
