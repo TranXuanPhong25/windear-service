@@ -46,6 +46,13 @@ public class BookLoan {
         this.borrowDate = borrowDate;
     }
 
+    public BookLoan(BookLoanId bookLoanId, String title, String authorName, Status status) {
+        this.bookLoanId = bookLoanId;
+        this.title = title;
+        this.authorName = authorName;
+        this.status = status;
+    }
+
     public BookLoanId getBookLoanId() {
         return bookLoanId;
     }

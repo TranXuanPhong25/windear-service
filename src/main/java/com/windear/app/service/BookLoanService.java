@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.windear.app.dto.SubscribeRequest;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.primarykey.BookLoanId;
 
@@ -16,9 +17,12 @@ public interface BookLoanService {
     List<BookLoan> getBorrowRequestByUserId(String userId);
     List<BookLoan> getBorrowedBookByUserId(String userId);
     List<BookLoan> getReturnedBookByUserId(String userId);
+    List<BookLoan> getSubscribeRequestOfBook(Integer bookId);
+    void deleteSubscribeRequestOfBook(Integer bookId);
     BookLoan add(BookLoan bookLoan);
-    BookLoan sendBorrowRequest(BookLoan book);
+    BookLoan sendBorrowRequest(BookLoan bookLoan);
     BookLoan acceptBorrowRequest(BookLoanId bookLoanId);
     BookLoan declineBorrowRequest(BookLoanId bookLoanId);
+    BookLoan subscribeToBook(SubscribeRequest request);
     BookLoan returnBook(BookLoanId bookLoanId);
 }

@@ -10,4 +10,5 @@ public interface NotificationService {
     void sendNotification(String userId, String title);
     void sendReturnReminder();
     void rejectBookLoanRequest();
+    void sendNotificationForSubscribeRequest(Integer bookId);
 }

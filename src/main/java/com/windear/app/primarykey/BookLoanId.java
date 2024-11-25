@@ -25,6 +25,12 @@ public class BookLoanId {
         this.requestDate = requestDate;
     }
 
+    public BookLoanId(String userId, Integer bookId) {
+        this.userId = userId;
+        this.bookId = bookId;
+        this.requestDate = LocalDate.now();
+    }
+
     public String getUserId() {
         return userId;
     }

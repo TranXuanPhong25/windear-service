@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.windear.app.dto.SubscribeRequest;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.enums.Status;
 import com.windear.app.exception.BookLoanNotFoundException;
@@ -57,8 +58,22 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Override
     public List<BookLoan> findAllActiveBookLoan() {
         return findAll().stream()
-                .filter(bookLoan -> bookLoan.getStatus() == Status.PENDING && bookLoan.getReturnDate() == null)
+                .filter(bookLoan -> bookLoan.getStatus() == Status.ACCEPT && bookLoan.getReturnDate() == null)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookLoan> getSubscribeRequestOfBook(Integer bookId) {
+        return findAll().stream()
+                .filter(bookLoan -> bookLoan.getStatus() == Status.SUBSCRIBE && bookLoan.getBookLoanId().getBookId().equals(bookId))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deleteSubscribeRequestOfBook(Integer bookId) {
+        List<BookLoan> subscribeRequests = getSubscribeRequestOfBook(bookId);
+        bookLoanRepository.deleteAll(subscribeRequests);
     }
 
     @Override
@@ -88,7 +103,7 @@ public class BookLoanServiceImpl implements BookLoanService {
         if (bookLoan.isPresent()) {
             return bookLoan.get();
         } else {
-            throw new BookLoanNotFoundException("Bookloan with id not found: " + id.getBookId() + " " + id.getUserId());
+            throw new BookLoanNotFoundException("Book Loan with id not found: " + id.getBookId() + " " + id.getUserId());
         }
     }
 
@@ -98,6 +113,16 @@ public class BookLoanServiceImpl implements BookLoanService {
         BookLoan bookLoan = findById(id);
         bookLoan.setStatus(Status.DECLINE);
         return bookLoan;
+    }
+
+    @Override
+    @Transactional
+    public BookLoan subscribeToBook(SubscribeRequest request) {
+        String userId = request.getUserId();
+        Integer bookId = request.getBookId();
+        BookLoanId bookLoanId = new BookLoanId(userId, bookId);
+        BookLoan bookLoan = new BookLoan(bookLoanId, request.getTitle(), request.getAuthorName(), Status.SUBSCRIBE);
+        return add(bookLoan);
     }
 
     @Override

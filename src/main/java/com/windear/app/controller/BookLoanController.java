@@ -1,5 +1,6 @@
 package com.windear.app.controller;
 
+import com.windear.app.dto.SubscribeRequest;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.service.BookLoanService;
@@ -61,6 +62,11 @@ public class BookLoanController {
         return bookLoanService.getReturnedBookByUserId(userId);
     }
 
+    @PostMapping("/subscribe")
+    public BookLoan sendSubscribeRequest(@RequestBody SubscribeRequest request) {
+        return bookLoanService.subscribeToBook(request);
+    }
+
     @PostMapping()
     public BookLoan declineBorrowRequest(@RequestBody BookLoanId loanId) {
         BookLoan bookLoan = bookLoanService.declineBorrowRequest(loanId);
@@ -84,7 +90,10 @@ public class BookLoanController {
 
     @PutMapping("/return")
     public BookLoan returnBook(@RequestBody BookLoanId loanId) {
-        return bookLoanService.returnBook(loanId);
+        BookLoan bookLoan = bookLoanService.returnBook(loanId);
+        notificationService.sendNotificationForSubscribeRequest(loanId.getBookId());
+        bookLoanService.deleteSubscribeRequestOfBook(loanId.getBookId());
+        return bookLoan;
     }
 
 }

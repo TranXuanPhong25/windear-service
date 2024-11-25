@@ -61,9 +61,21 @@ public class NotificationServiceImpl implements NotificationService {
         for (BookLoan bookLoan : bookLoans) {
             LocalDate requestDate = bookLoan.getBookLoanId().getRequestDate();
             if (requestDate != null && LocalDate.now().minusDays(3).equals(requestDate)) {
+                String userId = bookLoan.getBookLoanId().getUserId();
                 bookLoan.setStatus(Status.DECLINE);
-                sendNotification(bookLoan.getBookLoanId().getUserId(), "Your book loan request for the book titled '" + bookLoan.getTitle() + "' has been rejected.");
+                sendNotification(userId, "Your book loan request for the book titled '" + bookLoan.getTitle() + "' has been rejected.");
             }
         }
+    }
+
+    @Override
+    public void sendNotificationForSubscribeRequest(Integer bookId) {
+        List<BookLoan> bookLoans = bookLoanService.getSubscribeRequestOfBook(bookId);
+        for (BookLoan bookLoan : bookLoans) {
+            String userId = bookLoan.getBookLoanId().getUserId();
+            sendNotification(userId, "The book with title '" + bookLoan.getTitle() + "' is now available for borrowing.");
+            System.out.println("Send notification for bookId: " + bookId);
+        }
+        System.out.println("Send notification!");
     }
 }
