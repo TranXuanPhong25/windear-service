@@ -28,14 +28,14 @@ public class ShelvesServiceImpl implements ShelvesService {
         for (String shelfName : shelfNames) {
             if (shelfName.equals("Want to read") || shelfName.equals("Currently reading") || shelfName.equals("Read")) {
                 Shelf shelf1 = shelves.getShelfByName("Want to read");
-                shelf1.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                shelf1.getBooks().removeIf(b -> b.getId().equals(book.getId()));
                 Shelf shelf2 = shelves.getShelfByName("Currently reading");
-                shelf2.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                shelf2.getBooks().removeIf(b -> b.getId().equals(book.getId()));
                 Shelf shelf3 = shelves.getShelfByName("Read");
-                shelf3.getBooks().removeIf(b -> b.getBookId().equals(book.getBookId()));
+                shelf3.getBooks().removeIf(b -> b.getId().equals(book.getId()));
             }
             Shelf shelf = shelves.getShelfByName(shelfName);
-            if (shelf.getBooks().stream().noneMatch(b -> b.getBookId().equals(book.getBookId()))) {
+            if (shelf.getBooks().stream().noneMatch(b -> b.getId().equals(book.getId()))) {
                 shelf.addBook(book);
             }
         }
@@ -91,19 +91,23 @@ public class ShelvesServiceImpl implements ShelvesService {
         Shelves shelves = findShelvesByUserId(userId);
         Shelf shelf = shelves.getShelfByName(shelfName);
         shelves.getShelves().remove(shelf);
-        System.out.println(shelfName);
         return shelvesRepository.save(shelves);
     }
 
     @Override
-    public Shelves deleteBookInShelves(String userId, String shelfName, int bookId) {
+    public Shelves deleteBookInShelves(String userId, List<String> shelfNames, int bookId) {
         Shelves shelves = findShelvesByUserId(userId);
-        Shelf shelf = shelves.getShelfByName(shelfName);
-        BookInShelf book = shelf.findBookById(bookId);
-        if (book == null) {
-            throw new BookNotFoundException("Cannot found book with id: " + bookId + " in " + shelfName + " shelf belonging to user with userId: " + userId);
+        for (String shelfName : shelfNames) {
+            Shelf shelf = shelves.getShelfByName(shelfName);
+            BookInShelf book = shelf.findBookById(bookId);
+            if (book != null) {
+                shelf.getBooks().remove(book);
+                // remove shelf if it is empty and not default shelf
+                if (shelf.getBooks().isEmpty() && !shelf.isDefaultShelf()) {
+                    shelves.getShelves().remove(shelf);
+                }
+            }
         }
-        shelf.getBooks().remove(book);
         return shelvesRepository.save(shelves);
     }
 

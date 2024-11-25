@@ -1,25 +1,24 @@
 package com.windear.app.model;
 
 public class EmailAuth0UserProfile extends UserProfile{
-    private String username;
+    private String email;
 
     public EmailAuth0UserProfile() {
         // Default constructor
+        super();
     }
 
-    public EmailAuth0UserProfile(String username, String email, UserMetadata user_metadata) {
+    public EmailAuth0UserProfile(String email, UserMetadata user_metadata) {
         super(user_metadata);
-        this.username = username;
+        this.email = email;
     }
 
-    // Getter for username
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    // Setter for username
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }

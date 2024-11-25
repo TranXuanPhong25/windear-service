@@ -33,4 +33,6 @@ public class Auth0UserProfile extends UserProfile {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 }

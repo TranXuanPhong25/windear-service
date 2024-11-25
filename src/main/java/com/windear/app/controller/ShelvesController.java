@@ -59,7 +59,7 @@ public class ShelvesController {
     @DeleteMapping("/{userId}/book")
     public Shelves deleteBookInShelf(@PathVariable String userId,
                                      @RequestBody DeleteBookRequest request) {
-        return shelvesService.deleteBookInShelves(userId, request.getShelfName(), request.getBookId());
+        return shelvesService.deleteBookInShelves(userId, request.getShelfNames(), request.getBookId());
     }
 
     @GetMapping("/{userId}/shelf")
@@ -69,7 +69,12 @@ public class ShelvesController {
     }
 
     @GetMapping("/{userId}")
-    public List<String> getShelves(@PathVariable String userId) {
+    public Shelves getShelvesOfUser(@PathVariable String userId) {
+        return shelvesService.findShelvesByUserId(userId);
+    }
+
+    @GetMapping("/shelfName/{userId}")
+    public List<String> getShelvesNameOfUser(@PathVariable String userId) {
         return shelvesService.getAllShelvesNamesOfUser(userId);
     }
 

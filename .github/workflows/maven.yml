@@ -2,9 +2,9 @@ name: Java CI with Maven template
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" , "staging/deployment" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" , "staging/deployment" ]
 
 jobs:
   build:
