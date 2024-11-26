@@ -17,20 +17,10 @@ import java.util.List;
 @RequestMapping(path = "api", produces = MediaType.APPLICATION_JSON_VALUE)
 // For simplicity of this sample, allow all origins. Real applications should configure CORS for their use case.
 public class APIController {
-   @Autowired
-   private InternalBookRepository internalBookRepository;
-
 
    @GetMapping(value = "/public")
-   public List<AnalyticStat> publicEndpoint() {
-      List<Object[]> rawStats = internalBookRepository.getStatsInLast30Days();
-      List<AnalyticStat> stats = new ArrayList<>();
-      for (Object[] row : rawStats) {
-         LocalDate time = ((java.sql.Date) row[0]).toLocalDate();
-         String value = String.valueOf(row[1]);
-         stats.add(new AnalyticStat(value, time));
-      }
-      return stats;
+   public Message publicEndpoint() {
+      return new Message("All good. You DO NOT need to be authenticated to call /api/public.");
    }
    
    @GetMapping(value = "/private")

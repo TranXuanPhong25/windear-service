@@ -40,7 +40,8 @@ public class SecurityConfig {
                                 "/api/genres",
                                 "/api/review",
                                 "/api/review/**",
-                                "/api/popular-book/top10"
+                                "/api/popular-book/top10",
+                                "/api/analytic/**"
                         )
                         .permitAll()
                         .requestMatchers(
