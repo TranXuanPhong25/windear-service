@@ -72,6 +72,10 @@ public class InternalBookServiceImpl implements InternalBookService {
    public void delete(Integer id) {
       if (findById(id) != null) {
          internalBookRepository.deleteById(id);
+         Optional<PopularBook> popularBook = popularBookRepository.findById(id);
+         if(popularBook.isPresent()) {
+            popularBookRepository.deleteById(id);
+         }
       }
       else {
          throw new BookNotFoundException("Book with title not found: " + id);
