@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.InternalBook;
 import com.windear.app.entity.PopularBook;
 import com.windear.app.exception.BookNotFoundException;
@@ -71,6 +72,10 @@ public class InternalBookServiceImpl implements InternalBookService {
    public void delete(Integer id) {
       if (findById(id) != null) {
          internalBookRepository.deleteById(id);
+         Optional<PopularBook> popularBook = popularBookRepository.findById(id);
+         if(popularBook.isPresent()) {
+            popularBookRepository.deleteById(id);
+         }
       }
       else {
          throw new BookNotFoundException("Book with title not found: " + id);
@@ -87,5 +92,63 @@ public class InternalBookServiceImpl implements InternalBookService {
       LocalDate now = LocalDate.now();
       LocalDate startDate = now.minusDays(30);
       return internalBookRepository.countBooksInLast30Days(startDate);
+   }
+
+   @Override
+   public InternalBook update(InternalBook updatedBook) {
+      InternalBook bookFromDB = findById(updatedBook.getId());
+      if (updatedBook.getTitle() != null) {
+         bookFromDB.setTitle(updatedBook.getTitle());
+      }
+      if (updatedBook.getAuthor() != null) {
+         bookFromDB.setAuthor(updatedBook.getAuthor());
+      }
+      if (updatedBook.getReleaseDate() != null) {
+         bookFromDB.setReleaseDate(updatedBook.getReleaseDate());
+      }
+      if (updatedBook.getRating() > 0) {
+         bookFromDB.setRating(updatedBook.getRating());
+      }
+      if (updatedBook.getDescription() != null) {
+         bookFromDB.setDescription(updatedBook.getDescription());
+      }
+      if (updatedBook.getIsbn10() != null) {
+         bookFromDB.setIsbn10(updatedBook.getIsbn10());
+      }
+      if (updatedBook.getIsbn13() != null) {
+         bookFromDB.setIsbn13(updatedBook.getIsbn13());
+      }
+      if (updatedBook.getImageUrl() != null) {
+         bookFromDB.setImageUrl(updatedBook.getImageUrl());
+      }
+      if (updatedBook.getAuthorDescription() != null) {
+         bookFromDB.setAuthorDescription(updatedBook.getAuthorDescription());
+      }
+      if (updatedBook.getPublisher() != null) {
+         bookFromDB.setPublisher(updatedBook.getPublisher());
+      }
+      if (updatedBook.getFormat() != null) {
+         bookFromDB.setFormat(updatedBook.getFormat());
+      }
+      if (updatedBook.getLanguage() != null) {
+         bookFromDB.setLanguage(updatedBook.getLanguage());
+      }
+      if (updatedBook.getNumPages() != null) {
+         bookFromDB.setNumPages(updatedBook.getNumPages());
+      }
+
+      return internalBookRepository.save(bookFromDB);
+   }
+
+   @Override
+   public InternalBookDTO convertToDTO(InternalBook book) {
+      InternalBookDTO dto = new InternalBookDTO();
+      dto.setId(book.getId());
+      dto.setTitle(book.getTitle());
+      dto.setAuthor(book.getAuthor());
+      dto.setPublisher(book.getPublisher());
+      dto.setAddDate(book.getAddDate());
+      dto.setReleaseDate(book.getReleaseDate());
+      return dto;
    }
 }

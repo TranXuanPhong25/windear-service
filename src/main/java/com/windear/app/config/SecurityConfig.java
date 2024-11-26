@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 "/api/db/books/**",
                                 "/api/genres",
                                 "/api/review",
-                                "/api/review/**"
+                                "/api/review/**",
+                                "/api/popular-book/top10"
 
                         )
                         .permitAll()

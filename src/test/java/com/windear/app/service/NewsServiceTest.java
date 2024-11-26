@@ -166,7 +166,6 @@ public class NewsServiceTest {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> {
             newsService.update(newsRequest);
         });
-
         Assertions.assertEquals("News with ID not found: 1", exception.getMessage());
     }
 
@@ -188,7 +187,6 @@ public class NewsServiceTest {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> {
             newsService.deleteNews(1);
         });
-
         Assertions.assertEquals("News with ID not found: 1", exception.getMessage());
     }
 

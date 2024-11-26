@@ -16,6 +16,7 @@ public class ExternalBookProxy implements ExternalBookService {
     }
 
     @Override
+    @Cacheable(value = "basicGenres")
     public String getBasicGenres() {
         return externalBookService.getBasicGenres();
     }
@@ -45,29 +46,31 @@ public class ExternalBookProxy implements ExternalBookService {
     }
 
     @Override
+    @Cacheable(value = "featuredBooks")
     public String getFeaturedBookLists() {
         return externalBookService.getFeaturedBookLists();
     }
 
     @Override
+    @Cacheable(value = "popularBooks")
     public String getPopularBookLists() {
         return externalBookService.getPopularBookLists();
     }
 
     @Override
-    @Cacheable(key = "similarBooks", value = "#id")
+    @Cacheable(value = "similarBooks", key = "#id")
     public String getSimilarBooks(String id) {
         return externalBookService.getSimilarBooks(id);
     }
 
     @Override
-    @Cacheable(key = "editions", value = "#id")
+    @Cacheable(value = "editions", key = "#id")
     public String getEditions(String id) {
         return externalBookService.getEditions(id);
     }
 
     @Override
-    @Cacheable(key = "isbnExist", value = "#isbn")
+    @Cacheable(value = "isbnExist", key = "#isbn")
     public Boolean isIsbnExist(String isbn) {
         return externalBookService.isIsbnExist(isbn);
     }

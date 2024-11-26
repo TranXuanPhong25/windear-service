@@ -11,8 +11,7 @@ import com.windear.app.service.InternalBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/db")
@@ -33,7 +32,7 @@ public class InternalBookController {
         List<InternalBook> books = bookService.findAll();
         List<InternalBookDTO> booksDto = new ArrayList<>();
         for(InternalBook it : books) {
-            booksDto.add(convertToDTO(it));
+            booksDto.add(bookService.convertToDTO(it));
         }
         return booksDto;
     }
@@ -82,20 +81,28 @@ public class InternalBookController {
         return book;
     }
 
+    @PutMapping("/books/{id}")
+    public InternalBook update(@RequestBody AddInternalBookRequestDTO internalBook, @PathVariable Integer id) {
+        internalBook.getInternalBook().setId(id);
+        String genres = internalBook.getGenres();
+        if(!genres.isEmpty()) {
+            String[] updateGenreIds = genres.split(",");
+            List<BookGenre> bookGenresFromDb = bookGenreService.findAllByBookId(internalBook.getInternalBook().getId());
+            for(BookGenre it : bookGenresFromDb) {
+                bookGenreService.delete(it.getBookGenreId());
+            }
+
+            for(String it : updateGenreIds) {
+                BookGenre newBookGenre = new BookGenre(new BookGenreId(internalBook.getInternalBook().getId(), Integer.parseInt(it)));
+                bookGenreService.add(newBookGenre);
+            }
+        }
+        return bookService.update(internalBook.getInternalBook());
+    }
+
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable Integer id) {
         bookService.delete(id);
     }
 
-    private InternalBookDTO convertToDTO(InternalBook book) {
-        InternalBookDTO dto = new InternalBookDTO();
-        dto.setId(book.getId());
-        dto.setTitle(book.getTitle());
-        dto.setAuthor(book.getAuthor());
-        dto.setPublisher(book.getPublisher());
-        dto.setAddDate(book.getAddDate());
-        dto.setReleaseDate(book.getReleaseDate());
-        dto.setImageUrl(book.getImageUrl());
-        return dto;
-    }
 }
