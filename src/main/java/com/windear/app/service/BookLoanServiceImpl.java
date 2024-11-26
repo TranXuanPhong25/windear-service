@@ -135,6 +135,11 @@ public class BookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
+    public Integer receiveAvailableCopy(Integer bookId) {
+        return bookCopyService.getQuantityOfBookCopy(bookId);
+    }
+
+    @Override
     @Transactional
     public BookLoan sendBorrowRequest(BookLoan bookLoan) {
         String userId = bookLoan.getBookLoanId().getUserId();

@@ -37,6 +37,11 @@ public class BookLoanController {
         return bookLoanService.findAllByBookId(bookId);
     }
 
+    @GetMapping("/book/{bookId}/available")
+    public Integer receiveAvailableCopy(@PathVariable Integer bookId) {
+        return bookLoanService.receiveAvailableCopy(bookId);
+    }
+
     @GetMapping("/{bookId}/{userId}")
     public List<BookLoan> findByUserIdAndBookId(@PathVariable Integer bookId, @PathVariable String userId) {
         return bookLoanService.findAllByUserIdAndBookId(userId, bookId);
