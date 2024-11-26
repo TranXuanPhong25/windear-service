@@ -1,5 +1,6 @@
 package com.windear.app.controller;
 
+import com.windear.app.entity.InternalBook;
 import com.windear.app.entity.PopularBook;
 import com.windear.app.service.PopularBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class PopularBookController {
     }
 
     @GetMapping("/popular-book/top10")
-    public List<PopularBook> findTop10ByScore() {
+    public List<InternalBook> findTop10ByScore() {
         return bookService.findTop10ByScore();
     }
 
