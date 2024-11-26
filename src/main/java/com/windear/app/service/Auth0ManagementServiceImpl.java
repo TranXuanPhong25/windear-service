@@ -243,7 +243,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
         return mid;
     }
 
-    @Scheduled(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 30 * * * ?")
     public void getAuth0Logs() {
         try {
             Auth0Log[] logs = auth0WebClient.get()

@@ -10,7 +10,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/external")
 public class ExternalBookController {
-    private ExternalBookService externalBookService;
+    private final ExternalBookService externalBookService;
 
     @Autowired
     public ExternalBookController(@Qualifier("externalBookProxy") ExternalBookService externalBookService) {
