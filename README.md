@@ -65,3 +65,4 @@ src/main/java/com/windear/app
 - Mobile App Integration: Develop a companion mobile app for users to access library services on the go.
 - Multilingual Support: Localize the frontend and backend for multiple languages to cater to diverse users.
 - Email and SMS Notifications: Send automatic reminders for due dates, overdue books, or upcoming library events.
+- Notification: Soft delete and undo deletion notification.

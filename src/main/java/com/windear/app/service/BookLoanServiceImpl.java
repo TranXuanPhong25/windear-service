@@ -129,9 +129,36 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Transactional
     public BookLoan returnBook(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
+        if(!bookLoan.getStatus().equals(Status.ACCEPT)) {
+            return bookLoan;
+        }
         bookLoan.setReturnDate(LocalDate.now());
         bookCopyService.modifyQuantityOfBookCopy(bookLoanId.getBookId(), 1);
         return add(bookLoan);
+    }
+
+    @Override
+    public Integer getAvailableCopiesOfBook(Integer bookId) {
+        return bookCopyService.getQuantityOfBookCopy(bookId);
+    }
+
+    @Override
+    public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
+        //status == PENDING
+        List<BookLoan> requests = getBorrowRequestByUserId(userId);
+        for(BookLoan request : requests) {
+            if (request.getBookLoanId().getBookId().equals(bookId)) {
+                return request;
+            }
+        }
+        //status == ACCEPT and returnDate == null
+        requests=getBorrowedBookByUserId(userId);
+        for(BookLoan request : requests) {
+            if (request.getBookLoanId().getBookId().equals(bookId)) {
+                return request;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -139,7 +166,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan sendBorrowRequest(BookLoan bookLoan) {
         String userId = bookLoan.getBookLoanId().getUserId();
         Integer bookId = bookLoan.getBookLoanId().getBookId();
-        Integer quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
+        int quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
         if (quantityOfCopies == 0) {
             throw new BookNotAvailableException("The book with id " + bookId + " is not available for borrowing.");
         }

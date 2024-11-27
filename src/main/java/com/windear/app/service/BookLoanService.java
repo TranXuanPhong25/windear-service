@@ -18,6 +18,15 @@ public interface BookLoanService {
     List<BookLoan> getBorrowedBookByUserId(String userId);
     List<BookLoan> getReturnedBookByUserId(String userId);
     List<BookLoan> getSubscribeRequestOfBook(Integer bookId);
+
+    /**
+     * Retrieves a borrow request by user ID and book ID.
+     *
+     * @param userId the ID of the user
+     * @param bookId the ID of the book
+     * @return the BookLoan object if found, otherwise null
+     */
+    BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId);
     void deleteSubscribeRequestOfBook(Integer bookId);
     BookLoan add(BookLoan bookLoan);
     BookLoan sendBorrowRequest(BookLoan bookLoan);
@@ -25,4 +34,5 @@ public interface BookLoanService {
     BookLoan declineBorrowRequest(BookLoanId bookLoanId);
     BookLoan subscribeToBook(SubscribeRequest request);
     BookLoan returnBook(BookLoanId bookLoanId);
+    Integer getAvailableCopiesOfBook(Integer bookId);
 }

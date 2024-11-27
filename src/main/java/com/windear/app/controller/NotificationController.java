@@ -4,10 +4,7 @@ import com.windear.app.entity.Notification;
 import com.windear.app.service.NotificationService;
 import com.windear.app.service.NotificationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,8 +23,28 @@ public class NotificationController {
         return notificationService.getAllNotifications();
     }
 
+    @GetMapping("/unread/{userId}")
+    public int countUnreadNotificationOfUser(@PathVariable String userId) {
+        return notificationService.countUnreadNotificationOfUser(userId);
+    }
+
     @GetMapping("/{userId}")
     public List<Notification> getAllNotificationsOfUser(@PathVariable String userId) {
         return notificationService.getAllNotificationsOfUser(userId);
+    }
+
+    @DeleteMapping("/{notificationId}")
+    public void deleteNotification(@PathVariable Integer notificationId) {
+        notificationService.deleteNotification(notificationId);
+    }
+
+    @PutMapping("/mark-read/{notificationId}")
+    public Notification markNotificationAsRead(@PathVariable Integer notificationId) {
+        return notificationService.markNotificationAsRead(notificationId);
+    }
+
+    @PutMapping("/mark-not-read/{notificationId}")
+    public Notification markNotificationAsNotRead(@PathVariable Integer notificationId) {
+        return notificationService.markNotificationAsNotRead(notificationId);
     }
 }
