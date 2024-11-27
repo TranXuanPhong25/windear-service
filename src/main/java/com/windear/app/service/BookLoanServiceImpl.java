@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -129,10 +130,11 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Transactional
     public BookLoan returnBook(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
+        bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
         if(!bookLoan.getStatus().equals(Status.ACCEPT)) {
             return bookLoan;
         }
-        bookLoan.setReturnDate(LocalDate.now());
+        bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
         bookCopyService.modifyQuantityOfBookCopy(bookLoanId.getBookId(), 1);
         return add(bookLoan);
     }
@@ -181,7 +183,7 @@ public class BookLoanServiceImpl implements BookLoanService {
         }
         bookLoan.setStatus(Status.PENDING);
         bookLoan.setBorrowTime(bookLoan.getBorrowTime());
-        bookLoan.getBookLoanId().setRequestDate(LocalDate.now());
+        bookLoan.getBookLoanId().setRequestDate(new Timestamp(System.currentTimeMillis()).getTime());
         bookCopyService.modifyQuantityOfBookCopy(bookId, -1);
         return add(bookLoan);
     }
@@ -191,7 +193,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan acceptBorrowRequest(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
         bookLoan.setStatus(Status.ACCEPT);
-        bookLoan.setBorrowDate(LocalDate.now());
+        bookLoan.setBorrowDate(new Timestamp(System.currentTimeMillis()).getTime());
         return add(bookLoan);
     }
 }

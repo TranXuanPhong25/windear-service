@@ -100,5 +100,4 @@ public class BookLoanController {
         bookLoanService.deleteSubscribeRequestOfBook(loanId.getBookId());
         return bookLoan;
     }
-
 }
