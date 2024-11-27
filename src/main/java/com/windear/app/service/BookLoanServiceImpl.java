@@ -147,7 +147,6 @@ public class BookLoanServiceImpl implements BookLoanService {
         //status == PENDING
         List<BookLoan> requests = getBorrowRequestByUserId(userId);
         for(BookLoan request : requests) {
-            System.out.println(request.getBookLoanId().getBookId());
             if (request.getBookLoanId().getBookId().equals(bookId)) {
                 return request;
             }
