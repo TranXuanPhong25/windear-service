@@ -75,21 +75,21 @@ public class BookLoanController {
     @PostMapping()
     public BookLoan declineBorrowRequest(@RequestBody BookLoanId loanId) {
         BookLoan bookLoan = bookLoanService.declineBorrowRequest(loanId);
-        notificationService.sendNotification(loanId.getUserId(), "Your borrow request has been declined.");
+        notificationService.sendNotification(loanId.getUserId(), "Your borrow request for "+bookLoan.getTitle()+" has been declined.");
         return bookLoan;
     }
 
     @PostMapping("/borrow")
     public BookLoan sendBorrowRequest(@RequestBody BookLoan bookLoan) {
         BookLoan borrowRequest = bookLoanService.sendBorrowRequest(bookLoan);
-        notificationService.sendNotification(bookLoan.getBookLoanId().getUserId(), "Your borrow request has been received.");
+        notificationService.sendNotification(bookLoan.getBookLoanId().getUserId(), "Your borrow request for "+borrowRequest.getTitle()+" has been received.");
         return borrowRequest;
     }
 
     @PutMapping("/borrow")
     public BookLoan acceptBorrowRequest(@RequestBody BookLoanId loanId) {
         BookLoan borrowRequest = bookLoanService.acceptBorrowRequest(loanId);
-        notificationService.sendNotification(loanId.getUserId(), "Your borrow request has been accepted.");
+        notificationService.sendNotification(loanId.getUserId(), "Your borrow request for "+ borrowRequest.getTitle()+" has been accepted.");
         return borrowRequest;
     }
 
