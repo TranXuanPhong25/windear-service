@@ -62,11 +62,6 @@ public class BookLoanController {
         return bookLoanService.getBorrowRequestByUserId(userId);
     }
 
-    @GetMapping("/borrow/{userId}")
-    public List<BookLoan> getBorrowedBookByUserId(@PathVariable String userId) {
-        return bookLoanService.getBorrowedBookByUserId(userId);
-    }
-
     @GetMapping("/return/{userId}")
     public List<BookLoan> getReturnedBookByUserId(@PathVariable String userId) {
         return bookLoanService.getReturnedBookByUserId(userId);
