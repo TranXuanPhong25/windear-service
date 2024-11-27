@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -129,14 +130,37 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Transactional
     public BookLoan returnBook(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
-        bookLoan.setReturnDate(LocalDate.now());
+        bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
+        if(!bookLoan.getStatus().equals(Status.ACCEPT)) {
+            return bookLoan;
+        }
+        bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
         bookCopyService.modifyQuantityOfBookCopy(bookLoanId.getBookId(), 1);
         return add(bookLoan);
     }
 
     @Override
-    public Integer receiveAvailableCopy(Integer bookId) {
+    public Integer getAvailableCopiesOfBook(Integer bookId) {
         return bookCopyService.getQuantityOfBookCopy(bookId);
+    }
+
+    @Override
+    public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
+        //status == PENDING
+        List<BookLoan> requests = getBorrowRequestByUserId(userId);
+        for(BookLoan request : requests) {
+            if (request.getBookLoanId().getBookId().equals(bookId)) {
+                return request;
+            }
+        }
+        //status == ACCEPT and returnDate == null
+        requests=getBorrowedBookByUserId(userId);
+        for(BookLoan request : requests) {
+            if (request.getBookLoanId().getBookId().equals(bookId)) {
+                return request;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -144,7 +168,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan sendBorrowRequest(BookLoan bookLoan) {
         String userId = bookLoan.getBookLoanId().getUserId();
         Integer bookId = bookLoan.getBookLoanId().getBookId();
-        Integer quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
+        int quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
         if (quantityOfCopies == 0) {
             throw new BookNotAvailableException("The book with id " + bookId + " is not available for borrowing.");
         }
@@ -159,7 +183,7 @@ public class BookLoanServiceImpl implements BookLoanService {
         }
         bookLoan.setStatus(Status.PENDING);
         bookLoan.setBorrowTime(bookLoan.getBorrowTime());
-        bookLoan.getBookLoanId().setRequestDate(LocalDate.now());
+        bookLoan.getBookLoanId().setRequestDate(new Timestamp(System.currentTimeMillis()).getTime());
         bookCopyService.modifyQuantityOfBookCopy(bookId, -1);
         return add(bookLoan);
     }
@@ -169,7 +193,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan acceptBorrowRequest(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
         bookLoan.setStatus(Status.ACCEPT);
-        bookLoan.setBorrowDate(LocalDate.now());
+        bookLoan.setBorrowDate(new Timestamp(System.currentTimeMillis()).getTime());
         return add(bookLoan);
     }
 }

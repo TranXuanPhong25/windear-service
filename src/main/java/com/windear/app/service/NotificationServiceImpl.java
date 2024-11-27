@@ -1,9 +1,12 @@
 package com.windear.app.service;
 
+import com.okta.commons.lang.Collections;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.entity.Notification;
 import com.windear.app.enums.Status;
+import com.windear.app.exception.NotificationNotFoundException;
 import com.windear.app.repository.NotificationRepository;
+import kotlin.OptIn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -37,6 +42,22 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public Notification getNotificationById(Integer notificationId) {
+        Optional<Notification> notification = notificationRepository.findById(notificationId);
+        if (notification.isPresent()) {
+            return notification.get();
+        } else {
+            throw new NotificationNotFoundException("Notification with id: " + notificationId + " not found.");
+        }
+    }
+
+    @Override
+    public int countUnreadNotificationOfUser(String userId) {
+        List<Notification> notifications = getAllNotificationsOfUser(userId);
+        return notifications.stream().filter(notification -> !notification.isRead()).toList().size();
+    }
+
+    @Override
     public void sendNotification(String userId, String title) {
         notificationRepository.save(new Notification(userId, title, new Timestamp(System.currentTimeMillis()), false));
     }
@@ -44,10 +65,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Scheduled(cron = "0 0 12 * * ?")
     @Override
     public void sendReturnReminder() {
+        System.out.println("reminder");
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<BookLoan> bookLoans = bookLoanService.findAllActiveBookLoan();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate dueDate = bookLoan.getBorrowDate().plusDays(bookLoan.getBorrowTime());
+            LocalDate dueDate = new Timestamp(bookLoan.getBorrowDate()).toLocalDateTime().toLocalDate().plusDays(bookLoan.getBorrowTime());
             if (dueDate.equals(tomorrow)) {
                 sendNotification(bookLoan.getBookLoanId().getUserId(), "Reminder: Your book with title: " + bookLoan.getTitle() + " is due tomorrow.");
             }
@@ -59,7 +81,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void rejectBookLoanRequest() {
         List<BookLoan> bookLoans = bookLoanService.findAllBorrowRequest();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate requestDate = bookLoan.getBookLoanId().getRequestDate();
+            LocalDate requestDate = new Timestamp(bookLoan.getBorrowDate()).toLocalDateTime().toLocalDate();
             if (requestDate != null && LocalDate.now().minusDays(3).equals(requestDate)) {
                 String userId = bookLoan.getBookLoanId().getUserId();
                 bookLoan.setStatus(Status.DECLINE);
@@ -75,5 +97,24 @@ public class NotificationServiceImpl implements NotificationService {
             String userId = bookLoan.getBookLoanId().getUserId();
             sendNotification(userId, "The book with title '" + bookLoan.getTitle() + "' is now available for borrowing.");
         }
+    }
+
+    @Override
+    public void deleteNotification(Integer notificationId) {
+        notificationRepository.deleteById(notificationId);
+    }
+
+    @Override
+    public Notification markNotificationAsRead(Integer notificationId) {
+        Notification notification = getNotificationById(notificationId);
+        notification.setRead(true);
+        return notificationRepository.save(notification);
+    }
+
+    @Override
+    public Notification markNotificationAsNotRead(Integer notificationId) {
+        Notification notification = getNotificationById(notificationId);
+        notification.setRead(false);
+        return notificationRepository.save(notification);
     }
 }

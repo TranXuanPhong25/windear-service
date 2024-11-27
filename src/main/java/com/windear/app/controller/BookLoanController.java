@@ -38,13 +38,18 @@ public class BookLoanController {
     }
 
     @GetMapping("/book/{bookId}/available")
-    public Integer receiveAvailableCopy(@PathVariable Integer bookId) {
-        return bookLoanService.receiveAvailableCopy(bookId);
+    public Integer getAvailableCopiesOfBook(@PathVariable Integer bookId) {
+        return bookLoanService.getAvailableCopiesOfBook(bookId);
     }
 
     @GetMapping("/{bookId}/{userId}")
     public List<BookLoan> findByUserIdAndBookId(@PathVariable Integer bookId, @PathVariable String userId) {
         return bookLoanService.findAllByUserIdAndBookId(userId, bookId);
+    }
+
+    @GetMapping("/request/{bookId}/{userId}")
+    public BookLoan getBorrowRequestByUserIdAndBookId(@PathVariable Integer bookId, @PathVariable String userId) {
+        return bookLoanService.getBorrowRequestByUserIdAndBookId(userId, bookId);
     }
 
     @GetMapping("/request")
@@ -55,11 +60,6 @@ public class BookLoanController {
     @GetMapping("/request/{userId}")
     public List<BookLoan> getBorrowRequestByUserId(@PathVariable String userId) {
         return bookLoanService.getBorrowRequestByUserId(userId);
-    }
-
-    @GetMapping("/borrow/{userId}")
-    public List<BookLoan> getBorrowedBookByUserId(@PathVariable String userId) {
-        return bookLoanService.getBorrowedBookByUserId(userId);
     }
 
     @GetMapping("/return/{userId}")
@@ -75,21 +75,21 @@ public class BookLoanController {
     @PostMapping()
     public BookLoan declineBorrowRequest(@RequestBody BookLoanId loanId) {
         BookLoan bookLoan = bookLoanService.declineBorrowRequest(loanId);
-        notificationService.sendNotification(loanId.getUserId(), "Your borrow request has been declined.");
+        notificationService.sendNotification(loanId.getUserId(), "Your borrow request for "+bookLoan.getTitle()+" has been declined.");
         return bookLoan;
     }
 
     @PostMapping("/borrow")
     public BookLoan sendBorrowRequest(@RequestBody BookLoan bookLoan) {
         BookLoan borrowRequest = bookLoanService.sendBorrowRequest(bookLoan);
-        notificationService.sendNotification(bookLoan.getBookLoanId().getUserId(), "Your borrow request has been received.");
+        notificationService.sendNotification(bookLoan.getBookLoanId().getUserId(), "Your borrow request for "+borrowRequest.getTitle()+" has been received.");
         return borrowRequest;
     }
 
     @PutMapping("/borrow")
     public BookLoan acceptBorrowRequest(@RequestBody BookLoanId loanId) {
         BookLoan borrowRequest = bookLoanService.acceptBorrowRequest(loanId);
-        notificationService.sendNotification(loanId.getUserId(), "Your borrow request has been accepted.");
+        notificationService.sendNotification(loanId.getUserId(), "Your borrow request for "+ borrowRequest.getTitle()+" has been accepted.");
         return borrowRequest;
     }
 
@@ -100,5 +100,4 @@ public class BookLoanController {
         bookLoanService.deleteSubscribeRequestOfBook(loanId.getBookId());
         return bookLoan;
     }
-
 }
