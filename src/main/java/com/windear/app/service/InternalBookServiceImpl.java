@@ -1,10 +1,12 @@
 package com.windear.app.service;
 
 import com.windear.app.dto.InternalBookDTO;
+import com.windear.app.entity.BookCopy;
 import com.windear.app.entity.InternalBook;
 import com.windear.app.entity.PopularBook;
 import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.exception.IsbnExistsException;
+import com.windear.app.repository.BookCopyRepository;
 import com.windear.app.repository.InternalBookRepository;
 import com.windear.app.repository.PopularBookRepository;
 import com.windear.app.repository.ReviewRepository;
@@ -24,14 +26,16 @@ public class InternalBookServiceImpl implements InternalBookService {
    private final ExternalBookService externalBookService;
    private final PopularBookService popularBookService;
    private final PopularBookRepository popularBookRepository;
+   private final BookCopyRepository bookCopyRepository;
 
    @Autowired
-   public InternalBookServiceImpl(InternalBookRepository bookRepository, @Qualifier("externalBookProxy") ExternalBookService externalBookService, ReviewRepository reviewRepository, PopularBookService popularBookService, PopularBookRepository popularBookRepository) {
+   public InternalBookServiceImpl(InternalBookRepository bookRepository, @Qualifier("externalBookProxy") ExternalBookService externalBookService, ReviewRepository reviewRepository, PopularBookService popularBookService, PopularBookRepository popularBookRepository, BookCopyRepository bookCopyRepository) {
       this.internalBookRepository = bookRepository;
       this.externalBookService = externalBookService;
       this.reviewRepository = reviewRepository;
       this.popularBookService = popularBookService;
       this.popularBookRepository = popularBookRepository;
+      this.bookCopyRepository = bookCopyRepository;
    }
 
    @Override
@@ -76,6 +80,7 @@ public class InternalBookServiceImpl implements InternalBookService {
          if(popularBook.isPresent()) {
             popularBookRepository.deleteById(id);
          }
+         bookCopyRepository.deleteById(id);
       }
       else {
          throw new BookNotFoundException("Book with title not found: " + id);

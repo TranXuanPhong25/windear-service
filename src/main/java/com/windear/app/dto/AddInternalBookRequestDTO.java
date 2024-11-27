@@ -8,12 +8,14 @@ import java.time.LocalDate;
 public class AddInternalBookRequestDTO {
     private InternalBook internalBook;
     private String genres;
+    private Integer quantityAvailable;
 
     public AddInternalBookRequestDTO() {}
 
-    public AddInternalBookRequestDTO(InternalBook internalBook, String genres) {
+    public AddInternalBookRequestDTO(InternalBook internalBook, String genres, Integer quantityAvailable) {
         this.internalBook = internalBook;
         this.genres = genres;
+        this.quantityAvailable = quantityAvailable;
     }
 
     public InternalBook getInternalBook() {
@@ -30,5 +32,13 @@ public class AddInternalBookRequestDTO {
 
     public void setGenres(String genres) {
         this.genres = genres;
+    }
+
+    public Integer getQuantityAvailable() {
+        return quantityAvailable;
+    }
+
+    public void setQuantityAvailable(Integer quantityAvailable) {
+        this.quantityAvailable = quantityAvailable;
     }
 }

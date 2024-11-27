@@ -2,9 +2,11 @@ package com.windear.app.controller;
 
 import com.windear.app.dto.AddInternalBookRequestDTO;
 import com.windear.app.dto.InternalBookDTO;
+import com.windear.app.entity.BookCopy;
 import com.windear.app.entity.BookGenre;
 import com.windear.app.entity.InternalBook;
 import com.windear.app.primarykey.BookGenreId;
+import com.windear.app.service.BookCopyService;
 import com.windear.app.service.BookGenreService;
 import com.windear.app.service.GenreService;
 import com.windear.app.service.InternalBookService;
@@ -19,12 +21,15 @@ public class InternalBookController {
     private final InternalBookService bookService;
     private final BookGenreService bookGenreService;
     private final GenreService genreService;
+    private final BookCopyService bookCopyService;
+    private final Integer DEFAULT_AVAILABLE_QUANTITY = 12;
 
     @Autowired
-    public InternalBookController(InternalBookService bookService, BookGenreService bookGenreService, GenreService genreService) {
+    public InternalBookController(InternalBookService bookService, BookGenreService bookGenreService, GenreService genreService, BookCopyService bookCopyService) {
         this.bookService = bookService;
         this.bookGenreService = bookGenreService;
         this.genreService = genreService;
+        this.bookCopyService = bookCopyService;
     }
 
     @GetMapping("/books")
@@ -52,6 +57,7 @@ public class InternalBookController {
         }
         book.setGenres(genres.toString());
         book.setInternalBook(bookFromDb);
+        book.setQuantityAvailable(bookCopyService.getQuantityOfBookCopy(id));
         return book;
     }
 
@@ -78,6 +84,12 @@ public class InternalBookController {
             bookGenre.setBookGenreId(bookGenreId);
             bookGenreService.add(bookGenre);
         }
+        if(request.getQuantityAvailable() != null)
+        {
+            bookCopyService.addBookCopy(book.getId(), request.getQuantityAvailable());
+        } else {
+            bookCopyService.addBookCopy(book.getId(), DEFAULT_AVAILABLE_QUANTITY);
+        }
         return book;
     }
 
@@ -96,6 +108,10 @@ public class InternalBookController {
                 BookGenre newBookGenre = new BookGenre(new BookGenreId(internalBook.getInternalBook().getId(), Integer.parseInt(it)));
                 bookGenreService.add(newBookGenre);
             }
+        }
+        Integer quantityUpdate = internalBook.getQuantityAvailable();
+        if(quantityUpdate != null) {
+            bookCopyService.getBookCopyById(id).setQuantity(quantityUpdate);
         }
         return bookService.update(internalBook.getInternalBook());
     }
