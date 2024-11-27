@@ -4,6 +4,8 @@ import com.windear.app.enums.Status;
 import com.windear.app.primarykey.BookLoanId;
 import jakarta.persistence.*;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +19,11 @@ public class BookLoan {
     @Column(name = "borrow_time")
     private Integer borrowTime;
 
-    @Column(name = "return_date")
-    private LocalDate returnDate;
+    @Column(name = "return_date", columnDefinition = "bigint")
+    private Long returnDate;
 
-    @Column(name = "borrow_date")
-    private LocalDate borrowDate;
+    @Column(name = "borrow_date", columnDefinition = "bigint")
+    private Long borrowDate;
 
     @Column(name = "title")
     private String title;
@@ -36,7 +38,7 @@ public class BookLoan {
     public BookLoan() {}
 
     public BookLoan(BookLoanId bookLoanId, Integer borrowTime,
-                    LocalDate returnDate, LocalDate borrowDate, String title, String authorName, Status status) {
+                    Long returnDate, Long borrowDate, String title, String authorName, Status status) {
         this.bookLoanId = bookLoanId;
         this.borrowTime = borrowTime;
         this.returnDate = returnDate;
@@ -69,11 +71,11 @@ public class BookLoan {
         this.borrowTime = borrowTime;
     }
 
-    public LocalDate getReturnDate() {
+    public Long getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(Long returnDate) {
         this.returnDate = returnDate;
     }
 
@@ -101,11 +103,11 @@ public class BookLoan {
         this.status = status;
     }
 
-    public LocalDate getBorrowDate() {
+    public Long getBorrowDate() {
         return borrowDate;
     }
 
-    public void setBorrowDate(LocalDate borrowDate) {
+    public void setBorrowDate(Long borrowDate) {
         this.borrowDate = borrowDate;
     }
 }
