@@ -38,13 +38,18 @@ public class BookLoanController {
     }
 
     @GetMapping("/book/{bookId}/available")
-    public Integer receiveAvailableCopy(@PathVariable Integer bookId) {
-        return bookLoanService.receiveAvailableCopy(bookId);
+    public Integer getAvailableCopiesOfBook(@PathVariable Integer bookId) {
+        return bookLoanService.getAvailableCopiesOfBook(bookId);
     }
 
     @GetMapping("/{bookId}/{userId}")
     public List<BookLoan> findByUserIdAndBookId(@PathVariable Integer bookId, @PathVariable String userId) {
         return bookLoanService.findAllByUserIdAndBookId(userId, bookId);
+    }
+
+    @GetMapping("/request/{bookId}/{userId}")
+    public BookLoan getBorrowRequestByUserIdAndBookId(@PathVariable Integer bookId, @PathVariable String userId) {
+        return bookLoanService.getBorrowRequestByUserIdAndBookId(userId, bookId);
     }
 
     @GetMapping("/request")
