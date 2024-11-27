@@ -30,7 +30,7 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     public List<BookLoan> findAll() {
-        return bookLoanRepository.findAll();
+            return bookLoanRepository.findAll();
     }
 
     @Override
@@ -135,8 +135,16 @@ public class BookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
-    public Integer receiveAvailableCopy(Integer bookId) {
+    public Integer getAvailableCopiesOfBook(Integer bookId) {
         return bookCopyService.getQuantityOfBookCopy(bookId);
+    }
+
+    @Override
+    public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
+        List<BookLoan> requests = getBorrowRequestByUserId(userId);
+        return requests.stream().filter(request -> request.getBookLoanId().getBookId().equals(bookId)
+                        || (request.getStatus() == Status.ACCEPT && request.getReturnDate() == null))
+                .findFirst().orElse(null);
     }
 
     @Override

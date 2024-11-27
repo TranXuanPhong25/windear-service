@@ -50,7 +50,9 @@ public class SecurityConfig {
                                 "/api/auth0/user/**",
                                 "/api/review",
                                 "/api/review/**",
-                                "/api/popular-book/**       "
+                                "/api/popular-book/**",
+                                "/api/notification/**",
+                                "/api/notification"
 
                         )
                         .authenticated()
