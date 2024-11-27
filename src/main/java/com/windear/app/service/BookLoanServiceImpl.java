@@ -141,13 +141,15 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
+        //status == PENDING
         List<BookLoan> requests = getBorrowRequestByUserId(userId);
         for(BookLoan request : requests) {
             System.out.println(request.getBookLoanId().getBookId());
-            if (request.getBookLoanId().getBookId().equals(bookId)||(request.getStatus() == Status.ACCEPT && request.getReturnDate() == null)) {
+            if (request.getBookLoanId().getBookId().equals(bookId)) {
                 return request;
             }
         }
+        //status == ACCEPT and returnDate == null
         requests=getBorrowedBookByUserId(userId);
         for(BookLoan request : requests) {
             if (request.getBookLoanId().getBookId().equals(bookId)) {
@@ -162,7 +164,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan sendBorrowRequest(BookLoan bookLoan) {
         String userId = bookLoan.getBookLoanId().getUserId();
         Integer bookId = bookLoan.getBookLoanId().getBookId();
-        Integer quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
+        int quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
         if (quantityOfCopies == 0) {
             throw new BookNotAvailableException("The book with id " + bookId + " is not available for borrowing.");
         }
