@@ -37,4 +37,14 @@ public class NotificationController {
     public void deleteNotification(@PathVariable Integer notificationId) {
         notificationService.deleteNotification(notificationId);
     }
+
+    @PutMapping("/mark-read/{notificationId}")
+    public Notification markNotificationAsRead(@PathVariable Integer notificationId) {
+        return notificationService.markNotificationAsRead(notificationId);
+    }
+
+    @PutMapping("/mark-not-read/{notificationId}")
+    public Notification markNotificationAsNotRead(@PathVariable Integer notificationId) {
+        return notificationService.markNotificationAsNotRead(notificationId);
+    }
 }
