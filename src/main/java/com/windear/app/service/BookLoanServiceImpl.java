@@ -135,8 +135,14 @@ public class BookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
-    public Integer receiveAvailableCopy(Integer bookId) {
+    public Integer getAvailableCopiesOfBook(Integer bookId) {
         return bookCopyService.getQuantityOfBookCopy(bookId);
+    }
+
+    @Override
+    public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
+        List<BookLoan> requests = getBorrowRequestByUserId(userId);
+        return requests.stream().filter(request -> request.getBookLoanId().getBookId().equals(bookId)).findFirst().orElse(null);
     }
 
     @Override
