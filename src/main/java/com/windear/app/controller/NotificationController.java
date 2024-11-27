@@ -26,6 +26,11 @@ public class NotificationController {
         return notificationService.getAllNotifications();
     }
 
+    @GetMapping("/unread/{userId}")
+    public int countUnreadNotificationOfUser(@PathVariable String userId) {
+        return notificationService.countUnreadNotificationOfUser(userId);
+    }
+
     @GetMapping("/{userId}")
     public List<Notification> getAllNotificationsOfUser(@PathVariable String userId) {
         return notificationService.getAllNotificationsOfUser(userId);

@@ -1,5 +1,6 @@
 package com.windear.app.service;
 
+import com.okta.commons.lang.Collections;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.entity.Notification;
 import com.windear.app.enums.Status;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -34,6 +36,12 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<Notification> getAllNotificationsOfUser(String userId) {
         return notificationRepository.findAllByUserId(userId);
+    }
+
+    @Override
+    public int countUnreadNotificationOfUser(String userId) {
+        List<Notification> notifications = getAllNotificationsOfUser(userId);
+        return notifications.stream().map(notification -> !notification.isRead()).toList().size();
     }
 
     @Override
