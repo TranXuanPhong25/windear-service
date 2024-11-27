@@ -30,7 +30,7 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     public List<BookLoan> findAll() {
-        return bookLoanRepository.findAll();
+            return bookLoanRepository.findAll();
     }
 
     @Override
