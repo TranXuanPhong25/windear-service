@@ -65,10 +65,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Scheduled(cron = "0 0 12 * * ?")
     @Override
     public void sendReturnReminder() {
+        System.out.println("reminder");
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<BookLoan> bookLoans = bookLoanService.findAllActiveBookLoan();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate dueDate = bookLoan.getBorrowDate().plusDays(bookLoan.getBorrowTime());
+            LocalDate dueDate = new Timestamp(bookLoan.getBorrowDate()).toLocalDateTime().toLocalDate().plusDays(bookLoan.getBorrowTime());
             if (dueDate.equals(tomorrow)) {
                 sendNotification(bookLoan.getBookLoanId().getUserId(), "Reminder: Your book with title: " + bookLoan.getTitle() + " is due tomorrow.");
             }
@@ -80,7 +81,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void rejectBookLoanRequest() {
         List<BookLoan> bookLoans = bookLoanService.findAllBorrowRequest();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate requestDate = bookLoan.getBookLoanId().getRequestDate();
+            LocalDate requestDate = new Timestamp(bookLoan.getBorrowDate()).toLocalDateTime().toLocalDate();
             if (requestDate != null && LocalDate.now().minusDays(3).equals(requestDate)) {
                 String userId = bookLoan.getBookLoanId().getUserId();
                 bookLoan.setStatus(Status.DECLINE);
