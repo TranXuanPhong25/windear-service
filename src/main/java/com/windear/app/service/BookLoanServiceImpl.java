@@ -129,6 +129,9 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Transactional
     public BookLoan returnBook(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
+        if(!bookLoan.getStatus().equals(Status.ACCEPT)) {
+            return bookLoan;
+        }
         bookLoan.setReturnDate(LocalDate.now());
         bookCopyService.modifyQuantityOfBookCopy(bookLoanId.getBookId(), 1);
         return add(bookLoan);
