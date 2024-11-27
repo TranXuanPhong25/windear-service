@@ -107,13 +107,13 @@ public class NotificationServiceImpl implements NotificationService {
     public Notification markNotificationAsRead(Integer notificationId) {
         Notification notification = getNotificationById(notificationId);
         notification.setRead(true);
-        return notification;
+        return notificationRepository.save(notification);
     }
 
     @Override
     public Notification markNotificationAsNotRead(Integer notificationId) {
         Notification notification = getNotificationById(notificationId);
         notification.setRead(false);
-        return notification;
+        return notificationRepository.save(notification);
     }
 }
