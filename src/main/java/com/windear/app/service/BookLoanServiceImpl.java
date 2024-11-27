@@ -31,7 +31,7 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     public List<BookLoan> findAll() {
-            return bookLoanRepository.findAll();
+        return bookLoanRepository.findAll();
     }
 
     @Override
@@ -131,6 +131,10 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan returnBook(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
         bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
+        if(!bookLoan.getStatus().equals(Status.ACCEPT)) {
+            return bookLoan;
+        }
+        bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
         bookCopyService.modifyQuantityOfBookCopy(bookLoanId.getBookId(), 1);
         return add(bookLoan);
     }
@@ -142,10 +146,21 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
+        //status == PENDING
         List<BookLoan> requests = getBorrowRequestByUserId(userId);
-        return requests.stream().filter(request -> request.getBookLoanId().getBookId().equals(bookId)
-                        || (request.getStatus() == Status.ACCEPT && request.getReturnDate() == null))
-                .findFirst().orElse(null);
+        for(BookLoan request : requests) {
+            if (request.getBookLoanId().getBookId().equals(bookId)) {
+                return request;
+            }
+        }
+        //status == ACCEPT and returnDate == null
+        requests=getBorrowedBookByUserId(userId);
+        for(BookLoan request : requests) {
+            if (request.getBookLoanId().getBookId().equals(bookId)) {
+                return request;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -153,7 +168,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan sendBorrowRequest(BookLoan bookLoan) {
         String userId = bookLoan.getBookLoanId().getUserId();
         Integer bookId = bookLoan.getBookLoanId().getBookId();
-        Integer quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
+        int quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
         if (quantityOfCopies == 0) {
             throw new BookNotAvailableException("The book with id " + bookId + " is not available for borrowing.");
         }
