@@ -12,4 +12,5 @@ public interface NotificationService {
     void sendReturnReminder();
     void rejectBookLoanRequest();
     void sendNotificationForSubscribeRequest(Integer bookId);
+    void deleteNotification(Integer notificationId);
 }

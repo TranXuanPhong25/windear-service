@@ -4,10 +4,7 @@ import com.windear.app.entity.Notification;
 import com.windear.app.service.NotificationService;
 import com.windear.app.service.NotificationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +31,10 @@ public class NotificationController {
     @GetMapping("/{userId}")
     public List<Notification> getAllNotificationsOfUser(@PathVariable String userId) {
         return notificationService.getAllNotificationsOfUser(userId);
+    }
+
+    @DeleteMapping("/{notificationId}")
+    public void deleteNotification(@PathVariable Integer notificationId) {
+        notificationService.deleteNotification(notificationId);
     }
 }

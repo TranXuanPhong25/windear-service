@@ -41,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public int countUnreadNotificationOfUser(String userId) {
         List<Notification> notifications = getAllNotificationsOfUser(userId);
-        return notifications.stream().map(notification -> !notification.isRead()).toList().size();
+        return notifications.stream().filter(notification -> !notification.isRead()).toList().size();
     }
 
     @Override
@@ -83,5 +83,10 @@ public class NotificationServiceImpl implements NotificationService {
             String userId = bookLoan.getBookLoanId().getUserId();
             sendNotification(userId, "The book with title '" + bookLoan.getTitle() + "' is now available for borrowing.");
         }
+    }
+
+    @Override
+    public void deleteNotification(Integer notificationId) {
+        notificationRepository.deleteById(notificationId);
     }
 }
