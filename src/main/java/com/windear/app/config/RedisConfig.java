@@ -1,18 +1,26 @@
 package com.windear.app.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.convert.KeyspaceConfiguration;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.Jedis;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableCaching
@@ -50,9 +58,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisCacheConfiguration cacheConfiguration() {
-        return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(60))
-                .disableCachingNullValues();
+    public RedisCacheManager redisCacheManager(JedisConnectionFactory jedisConnectionFactory) {
+        Map<String, RedisCacheConfiguration> cacheNamesConfigurationMap = new HashMap<>();
+
+        cacheNamesConfigurationMap.put("basicGenres",
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(1)));
+
+        cacheNamesConfigurationMap.put("featuredBooks",
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(1)));
+
+        cacheNamesConfigurationMap.put("popularBooks",
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(1)));
+
+        return new RedisCacheManager(RedisCacheWriter.lockingRedisCacheWriter(jedisConnectionFactory),
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(60)),
+                cacheNamesConfigurationMap);
     }
 }
