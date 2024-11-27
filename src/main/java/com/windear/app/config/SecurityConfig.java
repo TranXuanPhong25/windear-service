@@ -41,7 +41,7 @@ public class SecurityConfig {
                                 "/api/review",
                                 "/api/review/**",
                                 "/api/popular-book/top10",
-                                "/api/analytic/**"
+                                "/api/analytic/**",
                                 "/api/notification",
                                 "/api/notification/**"
                         )
