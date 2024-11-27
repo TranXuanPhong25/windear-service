@@ -142,7 +142,9 @@ public class BookLoanServiceImpl implements BookLoanService {
     @Override
     public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
         List<BookLoan> requests = getBorrowRequestByUserId(userId);
-        return requests.stream().filter(request -> request.getBookLoanId().getBookId().equals(bookId)).findFirst().orElse(null);
+        return requests.stream().filter(request -> request.getBookLoanId().getBookId().equals(bookId)
+                        || (request.getStatus() == Status.ACCEPT && request.getReturnDate() == null))
+                .findFirst().orElse(null);
     }
 
     @Override
