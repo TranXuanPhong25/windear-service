@@ -25,4 +25,5 @@ public interface BookLoanService {
     BookLoan declineBorrowRequest(BookLoanId bookLoanId);
     BookLoan subscribeToBook(SubscribeRequest request);
     BookLoan returnBook(BookLoanId bookLoanId);
+    Integer receiveAvailableCopy(Integer bookId);
 }

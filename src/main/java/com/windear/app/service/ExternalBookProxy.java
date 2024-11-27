@@ -3,12 +3,14 @@ package com.windear.app.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.stereotype.Service;
 
 @Service
 @Qualifier("externalBookProxy")
 public class ExternalBookProxy implements ExternalBookService {
-    private ExternalBookService externalBookService;
+    private final ExternalBookService externalBookService;
 
     @Autowired
     public ExternalBookProxy(@Qualifier("externalBookReal") ExternalBookService externalBookService) {
