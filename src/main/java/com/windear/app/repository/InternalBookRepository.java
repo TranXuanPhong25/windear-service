@@ -27,4 +27,8 @@ public interface InternalBookRepository extends JpaRepository<InternalBook, Inte
             nativeQuery = true
     )
     List<Object[]> getStatsInLast30Days();
+
+    @Query("SELECT b FROM InternalBook b ORDER BY b.addDate DESC")
+    List<InternalBook> findAllBooksSortedByAddDate();
+
 }
