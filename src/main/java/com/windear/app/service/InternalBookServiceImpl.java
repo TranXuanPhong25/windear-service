@@ -1,10 +1,11 @@
 package com.windear.app.service;
 
+import com.windear.app.dto.AddInternalBookRequestDTO;
 import com.windear.app.dto.InternalBookDTO;
-import com.windear.app.entity.InternalBook;
-import com.windear.app.entity.PopularBook;
+import com.windear.app.entity.*;
 import com.windear.app.exception.BookNotFoundException;
 import com.windear.app.exception.IsbnExistsException;
+import com.windear.app.primarykey.BookGenreId;
 import com.windear.app.repository.InternalBookRepository;
 import com.windear.app.repository.PopularBookRepository;
 import com.windear.app.repository.ReviewRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,26 +26,36 @@ public class InternalBookServiceImpl implements InternalBookService {
     private final ExternalBookService externalBookService;
     private final PopularBookService popularBookService;
     private final PopularBookRepository popularBookRepository;
+    private final BookGenreService bookGenreService;
+    private final GenreService genreService;
 
     @Autowired
     public InternalBookServiceImpl(InternalBookRepository bookRepository,
                                    @Qualifier("externalBookProxy") ExternalBookService externalBookService,
                                    ReviewRepository reviewRepository, PopularBookService popularBookService,
-                                   PopularBookRepository popularBookRepository) {
+                                   PopularBookRepository popularBookRepository, BookGenreService bookGenreService,
+                                   GenreService genreService) {
         this.internalBookRepository = bookRepository;
         this.externalBookService = externalBookService;
         this.reviewRepository = reviewRepository;
         this.popularBookService = popularBookService;
         this.popularBookRepository = popularBookRepository;
+        this.bookGenreService = bookGenreService;
+        this.genreService = genreService;
     }
 
     @Override
-    public List<InternalBook> findAll() {
-        return internalBookRepository.findAll();
+    public List<InternalBookDTO> findAll() {
+        List<InternalBook> books = internalBookRepository.findAll();
+        List<InternalBookDTO> booksDto = new ArrayList<>();
+        for(InternalBook it : books) {
+            booksDto.add(convertToDTO(it));
+        }
+        return booksDto;
     }
 
     @Override
-    public InternalBook findById(Integer id) {
+    public AddInternalBookRequestDTO findById(Integer id) {
         Optional<InternalBook> book = internalBookRepository.findById(id);
         if (book.isPresent()) {
             double rating = 0;
@@ -53,7 +65,19 @@ public class InternalBookServiceImpl implements InternalBookService {
             }
             book.get().setRating(rating);
             popularBookService.updateScore(id, 5);
-            return book.get();
+            AddInternalBookRequestDTO bookDto = new AddInternalBookRequestDTO();
+            List<BookGenre> bookGenres = bookGenreService.findAllByBookId(id);
+            StringBuilder genres = new StringBuilder();
+            for(int i = 0; i < bookGenres.size(); i++) {
+                if(i < bookGenres.size() - 1) {
+                    genres.append(genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName()).append(',');
+                } else {
+                    genres.append(genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName());
+                }
+            }
+            bookDto.setGenres(genres.toString());
+            bookDto.setInternalBook(book.get());
+            return bookDto;
         } else {
             throw new BookNotFoundException("Book with id not found: " + id);
         }
@@ -61,14 +85,25 @@ public class InternalBookServiceImpl implements InternalBookService {
 
     @Override
     @Transactional
-    public InternalBook add(InternalBook book) {
-        if (externalBookService.isIsbnExist(book.getIsbn13()) ||
-                internalBookRepository.existsByIsbn13(book.getIsbn13())) {
+    public InternalBook add(AddInternalBookRequestDTO book) {
+        if (externalBookService.isIsbnExist(book.getInternalBook().getIsbn13()) ||
+                internalBookRepository.existsByIsbn13(book.getInternalBook().getIsbn13())) {
             throw new IsbnExistsException("Book with isbn: "
-                    + book.getIsbn13() + " already exists.");
+                    + book.getInternalBook().getIsbn13() + " already exists.");
         }
-        book.setAddDate(LocalDate.now());
-        return internalBookRepository.save(book);
+        book.getInternalBook().setAddDate(LocalDate.now());
+        InternalBook bookFromDb = internalBookRepository.save(book.getInternalBook());
+        if(book.getGenres().isEmpty()) {
+            return bookFromDb;
+        }
+        String[] genreIds = book.getGenres().split(",");
+        for (String genreId : genreIds) {
+            BookGenre bookGenre = new BookGenre();
+            BookGenreId bookGenreId = new BookGenreId(bookFromDb.getId(), Integer.parseInt(genreId.trim()));
+            bookGenre.setBookGenreId(bookGenreId);
+            bookGenreService.add(bookGenre);
+        }
+        return bookFromDb;
     }
 
     @Override
@@ -98,8 +133,9 @@ public class InternalBookServiceImpl implements InternalBookService {
     }
 
     @Override
-    public InternalBook update(InternalBook updatedBook) {
-        InternalBook bookFromDB = findById(updatedBook.getId());
+    public InternalBook update(AddInternalBookRequestDTO requestDTO) {
+        InternalBook bookFromDB = findById(requestDTO.getInternalBook().getId()).getInternalBook();
+        InternalBook updatedBook = requestDTO.getInternalBook();
         if (updatedBook.getTitle() != null) {
             bookFromDB.setTitle(updatedBook.getTitle());
         }
@@ -140,6 +176,19 @@ public class InternalBookServiceImpl implements InternalBookService {
             bookFromDB.setNumPages(updatedBook.getNumPages());
         }
 
+        String genres = requestDTO.getGenres();
+        List<BookGenre> bookGenresFromDb = bookGenreService.findAllByBookId(requestDTO.getInternalBook().getId());
+        for (BookGenre it : bookGenresFromDb) {
+            bookGenreService.delete(it.getBookGenreId());
+        }
+        if (!genres.isEmpty()) {
+
+            String[] updateGenreIds = genres.split(",");
+            for (String it : updateGenreIds) {
+                BookGenre newBookGenre = new BookGenre(new BookGenreId(requestDTO.getInternalBook().getId(), Integer.parseInt(it)));
+                bookGenreService.add(newBookGenre);
+            }
+        }
         return internalBookRepository.save(bookFromDB);
     }
 
