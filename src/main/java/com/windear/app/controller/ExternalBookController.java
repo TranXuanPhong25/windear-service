@@ -37,11 +37,6 @@ public class ExternalBookController {
         return externalBookService.getBookByLegacyId(id);
     }
 
-    @GetMapping("/list/featured")
-    public String getFeaturedBookLists() {
-        return externalBookService.getFeaturedBookLists();
-    }
-
     @GetMapping("/list/popular")
     public String getPopularBookLists() {
         return externalBookService.getPopularBookLists();

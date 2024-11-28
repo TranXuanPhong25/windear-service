@@ -9,7 +9,7 @@ import java.util.List;
 public interface PopularBookService {
     PopularBook findById(Integer bookId);
     List<InternalBook> findTop10ByScore();
-    PopularBook addBook(PopularBook book);
-    PopularBook updateScore(Integer bookId, Integer score);
+    void addBook(PopularBook book);
+    void updateScore(Integer bookId, Integer score);
     void delete(Integer bookId);
 }

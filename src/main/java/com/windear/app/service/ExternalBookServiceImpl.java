@@ -254,30 +254,7 @@ public class ExternalBookServiceImpl implements ExternalBookService {
         return getQueryResultAsString(query);
     }
 
-    @Override
-    public String getFeaturedBookLists() {
-        String query = """
-                {\
-                getFeaturedBookLists {
-                    edges {
-                      node {
-                        title
-                        books {
-                          edges {
-                            node {
-                              imageUrl
-                              legacyId
-                              title
-                            }
-                          }
-                        }
-                        description
-                      }
-                    }
-                  }\
-                }""";
-        return getQueryResultAsString(query);
-    }
+
 
     @Override
     public String getPopularBookLists() {

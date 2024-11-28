@@ -1,8 +1,6 @@
 package com.windear.app.service;
 
-import com.windear.app.entity.Book;
 import com.windear.app.entity.BookGenre;
-import com.windear.app.entity.BookLoan;
 import com.windear.app.primarykey.BookGenreId;
 import com.windear.app.repository.BookGenreRepository;
 import jakarta.transaction.Transactional;
@@ -37,11 +35,6 @@ public class BookGenreServiceImpl implements BookGenreService {
                     + "BookId: " + bookGenreId.getBookId() + " "
                     + "GenreId: " + bookGenreId.getGenreId());
         }
-    }
-
-    @Override
-    public List<BookGenre> findAllByGenreId(Integer id) {
-        return bookGenreRepository.findAllByGenreId(id);
     }
 
     @Override
