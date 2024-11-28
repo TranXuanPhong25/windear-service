@@ -3,8 +3,6 @@ package com.windear.app.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,12 +43,6 @@ public class ExternalBookProxy implements ExternalBookService {
     @Cacheable(value = "searchSuggestions", key = "#q")
     public String getSearchSuggestions(String q) {
         return externalBookService.getSearchSuggestions(q);
-    }
-
-    @Override
-    @Cacheable(value = "featuredBooks")
-    public String getFeaturedBookLists() {
-        return externalBookService.getFeaturedBookLists();
     }
 
     @Override

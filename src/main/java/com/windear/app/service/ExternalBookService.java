@@ -9,7 +9,6 @@ public interface ExternalBookService {
     String getReviews(String workId);
     String getBookByLegacyId(int legacyId);
     String getSearchSuggestions(String q);
-    String getFeaturedBookLists();
     String getPopularBookLists();
     String getSimilarBooks(String id);
     String getEditions(String id);

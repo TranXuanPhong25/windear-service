@@ -27,8 +27,8 @@ public class PopularBookServiceImpl implements PopularBookService {
 
     @Override
     @Transactional
-    public PopularBook addBook(PopularBook book) {
-        return bookRepository.save(book);
+    public void addBook(PopularBook book) {
+        bookRepository.save(book);
     }
 
     @Override
@@ -59,16 +59,16 @@ public class PopularBookServiceImpl implements PopularBookService {
 
     @Override
     @Transactional
-    public PopularBook updateScore(Integer bookId, Integer score) {
+    public void updateScore(Integer bookId, Integer score) {
         Optional<PopularBook> popularBook = bookRepository.findById(bookId);
         if (popularBook.isPresent()) {
             if (score != null) {
                 popularBook.get().setScore(score + popularBook.get().getScore());
             }
-            return bookRepository.save(popularBook.get());
+            bookRepository.save(popularBook.get());
         } else {
             PopularBook newPopularBook = new PopularBook(bookId, 1);
-            return addBook(newPopularBook);
+            addBook(newPopularBook);
         }
     }
 

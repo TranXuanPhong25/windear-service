@@ -25,43 +25,37 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
-                                "/api/public",
                                 "/api/search",
                                 "/api/external/**",
-                                "/api/news/**",
                                 "/api/books/**",
                                 "/api/review/book/**",
-                                "/api/bookloan",
-                                "/api/bookloan/**",
-                                "/api/shelves/**",
-                                "/api/shelves",
                                 "/api/db/books",
                                 "/api/db/books/**",
                                 "/api/genres",
                                 "/api/review",
-                                "/api/review/**",
                                 "/api/popular-book/top10",
-                                "/api/analytic/**",
-                                "/api/notification",
-                                "/api/notification/**"
+                                "/api/review",
+                                "/api/review/**"
                         )
                         .permitAll()
                         .requestMatchers(
-                                "/api/private",
                                 "/api/auth0/user/**",
-                                "/api/review",
-                                "/api/review/**",
                                 "/api/popular-book/**",
+                                "/api/notification",
                                 "/api/notification/**",
-                                "/api/notification"
-
+                                "/api/review/**",
+                                "/api/shelves/**",
+                                "/api/shelves",
+                                "/api/bookloan",
+                                "/api/bookloan/**"
                         )
                         .authenticated()
                         .requestMatchers(
-                                "/api/admin",
                                 "/api/auth0/users",
                                 "/api/auth0/stats/**",
-                                "/api/auth0/logs"
+                                "/api/auth0/logs",
+                                "/api/analytic/**"
+
                         )
                         .hasAuthority("ROLE_admin")
 
