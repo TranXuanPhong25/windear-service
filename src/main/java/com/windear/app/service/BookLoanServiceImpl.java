@@ -3,6 +3,7 @@ package com.windear.app.service;
 import com.windear.app.dto.SubscribeRequest;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.enums.Status;
+import com.windear.app.exception.BookLoanDeleteException;
 import com.windear.app.exception.BookLoanNotFoundException;
 import com.windear.app.exception.BookNotAvailableException;
 import com.windear.app.exception.BorrowSameBookException;
@@ -146,6 +147,13 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     public void deleteBookLoan(BookLoanId bookLoanId) {
+        BookLoan bookLoan = findById(bookLoanId);
+        if (bookLoan.getStatus() == Status.ACCEPT && bookLoan.getReturnDate() == null) {
+            throw new BookLoanDeleteException("Cannot delete an active book loan that has not been returned.");
+        }
+        if (bookLoan.getStatus() == Status.PENDING) {
+            bookCopyService.modifyQuantityOfBookCopy(bookLoanId.getBookId(), 1);
+        }
         bookLoanRepository.deleteById(bookLoanId);
     }
 
