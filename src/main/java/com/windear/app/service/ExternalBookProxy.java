@@ -24,7 +24,7 @@ public class ExternalBookProxy implements ExternalBookService {
     }
 
     @Override
-    @Cacheable(value =  "taggedBooks", key = "#tagName")
+    @Cacheable(value = "taggedBooks", key = "#tagName")
     public String getTaggedBooks(String tagName) {
         return externalBookService.getTaggedBooks(tagName);
     }
