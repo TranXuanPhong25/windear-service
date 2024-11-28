@@ -53,7 +53,7 @@ public class BookLoanController {
     }
 
     @GetMapping("/request")
-    public List<BookLoan> getAllRequest() {
+    public List<BookLoan> getAllBorrowRequest() {
         return bookLoanService.findAllBorrowRequest();
     }
 
