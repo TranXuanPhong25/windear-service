@@ -15,6 +15,20 @@ public interface InternalBookRepository extends JpaRepository<InternalBook, Inte
 
     boolean existsByIsbn13(String isbn13);
 
-    @Query("SELECT COUNT(b) FROM InternalBook b WHERE b.releaseDate >= :startDate")
+    @Query("SELECT COUNT(b) FROM InternalBook b WHERE b.addDate >= :startDate")
     long countBooksInLast30Days(@Param("startDate") LocalDate startDate);
+
+    @Query(
+            value = "SELECT DATE(DATE_TRUNC('day', add_date)) AS time, COUNT(id) AS value " +
+                    "FROM internal_book " +
+                    "WHERE add_date >= (NOW() - INTERVAL '30 days') " +
+                    "GROUP BY time " +
+                    "ORDER BY time",
+            nativeQuery = true
+    )
+    List<Object[]> getStatsInLast30Days();
+
+    @Query("SELECT b FROM InternalBook b ORDER BY b.addDate DESC")
+    List<InternalBook> findAllBooksSortedByAddDate();
+
 }

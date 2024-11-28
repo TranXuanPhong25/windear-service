@@ -36,7 +36,7 @@ public class InternalBookServiceImpl implements InternalBookService {
 
    @Override
    public List<InternalBook> findAll() {
-      return internalBookRepository.findAll();
+      return internalBookRepository.findAllBooksSortedByAddDate();
    }
 
    @Override
