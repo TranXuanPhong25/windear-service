@@ -22,4 +22,5 @@ public interface AnalyticStatService {
      * @return list of return request statistics
      */
     List<AnalyticStat> getStatsOfReturnRequestIn30Days();
+    List<AnalyticStat> getStatsOfLoginIn30Days();
 }

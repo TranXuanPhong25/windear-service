@@ -26,11 +26,7 @@ public class BookCopyServiceImpl implements BookCopyService {
     @Override
     public BookCopy getBookCopyById(Integer id) {
         Optional<BookCopy> book = bookCopyRepository.findById(id);
-        if (book.isPresent()) {
-            return book.get();
-        } else {
-            return addBookCopy(id, 12);
-        }
+        return book.orElseGet(() -> addBookCopy(id, 12));
     }
 
     @Override
