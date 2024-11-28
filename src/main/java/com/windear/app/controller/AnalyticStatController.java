@@ -33,4 +33,9 @@ public class AnalyticStatController {
     public List<AnalyticStat> getReturnBookStatsIn30Days() {
         return analyticStatService.getStatsOfReturnRequestIn30Days();
     }
+
+    @GetMapping("/auth0/login-stats")
+    public List<AnalyticStat> getLoginStatsIn30Days() {
+        return analyticStatService.getStatsOfLoginIn30Days();
+    }
 }
