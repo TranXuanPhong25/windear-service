@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -245,6 +248,11 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     @Scheduled(cron = "0 30 * * * ?")
     public void getAuth0Logs() {
+        Instant now = Instant.now();
+        String formattedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                .withZone(ZoneId.systemDefault())
+                .format(now);
+        System.out.println(formattedDate+ " SCHEDULED --- [Auth0ManagementService.Impl]: Get logs from Auth0.com .");
         try {
             Auth0Log[] logs = auth0WebClient.get()
                     .uri(uriBuilder -> uriBuilder
@@ -282,7 +290,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     @Override
     public ResponseEntity<?> getLogs() {
-        Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 50);
+        Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 200);
         List<Auth0LogDTO> logsDTO = logsPage.getContent().stream()
                 .map(log -> new Auth0LogDTO(
                         log.getDate(),

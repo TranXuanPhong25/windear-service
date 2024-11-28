@@ -1,22 +1,22 @@
 package com.windear.app.service;
 
-import com.okta.commons.lang.Collections;
 import com.windear.app.entity.BookLoan;
 import com.windear.app.entity.Notification;
 import com.windear.app.enums.Status;
 import com.windear.app.exception.NotificationNotFoundException;
 import com.windear.app.repository.NotificationRepository;
-import kotlin.OptIn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -65,7 +65,13 @@ public class NotificationServiceImpl implements NotificationService {
     @Scheduled(cron = "0 0 12 * * ?")
     @Override
     public void sendReturnReminder() {
-        System.out.println("reminder");
+        //logger
+        Instant now = Instant.now();
+        String formattedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                .withZone(ZoneId.systemDefault())
+                .format(now);
+        System.out.println(formattedDate+ " SCHEDULED --- [NotificationService.Impl]: Send return reminder to users.");
+
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<BookLoan> bookLoans = bookLoanService.findAllActiveBookLoan();
         for (BookLoan bookLoan : bookLoans) {
