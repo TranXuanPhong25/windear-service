@@ -145,6 +145,11 @@ public class BookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
+    public void deleteBookLoan(BookLoanId bookLoanId) {
+        bookLoanRepository.deleteById(bookLoanId);
+    }
+
+    @Override
     public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
         //status == PENDING
         List<BookLoan> requests = getBorrowRequestByUserId(userId);
