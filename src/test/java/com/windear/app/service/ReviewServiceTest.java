@@ -1,6 +1,6 @@
 package com.windear.app.service;
 
-import com.windear.app.entity.News;
+
 import com.windear.app.entity.Review;
 import com.windear.app.repository.ReviewRepository;
 import org.junit.jupiter.api.Assertions;
