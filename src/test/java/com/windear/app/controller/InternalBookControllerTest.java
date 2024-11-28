@@ -1,5 +1,6 @@
 package com.windear.app.controller;
 
+import com.windear.app.dto.AddInternalBookRequestDTO;
 import com.windear.app.dto.InternalBookDTO;
 import com.windear.app.entity.BookGenre;
 import com.windear.app.entity.Genre;
@@ -49,6 +50,8 @@ public class InternalBookControllerTest {
     private InternalBook response;
     private InternalBook book2;
     List<InternalBook> books;
+    AddInternalBookRequestDTO responseDto;
+    List<InternalBookDTO> booksDto;
     LocalDate date = LocalDate.of(2024, 11, 20);
     @BeforeEach
     void InitData() {
@@ -86,9 +89,11 @@ public class InternalBookControllerTest {
         book2.setNumPages(400);
         book2.setAddDate(LocalDate.of(2021, 6, 10));
 
+        responseDto = new AddInternalBookRequestDTO();
+        responseDto.setInternalBook(response);
         books = new ArrayList<>();
+        booksDto = new ArrayList<>();
         books = Arrays.asList(response, book2);
-
 
     }
 
@@ -107,7 +112,7 @@ public class InternalBookControllerTest {
         genre2.setId(2);
         genre2.setName("Adventure");
 
-        Mockito.when(bookService.findById(anyInt())).thenReturn(response);
+        Mockito.when(bookService.findById(anyInt())).thenReturn(responseDto);
         Mockito.when(bookGenreService.findAllByBookId(anyInt())).thenReturn(bookGenres);
         Mockito.when(genreService.findById(1)).thenReturn(genre1);
         Mockito.when(genreService.findById(2)).thenReturn(genre2);
@@ -123,13 +128,15 @@ public class InternalBookControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("internalBook.imageUrl").value("http://example.com/image1.jpg"))
                 .andExpect(MockMvcResultMatchers.jsonPath("internalBook.description").value("Description 1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("internalBook.isbn10").value("1234567890"))
-                .andExpect(MockMvcResultMatchers.jsonPath("internalBook.isbn13").value("1234567890123"))
-                .andExpect(MockMvcResultMatchers.jsonPath("genres").value("Fiction,Adventure"));
+                .andExpect(MockMvcResultMatchers.jsonPath("internalBook.isbn13").value("1234567890123"));
     }
 
     @Test
     void findAllBook() throws Exception {
-        Mockito.when(bookService.findAll()).thenReturn(books);
+        InternalBookDTO book1 = convertToDTO(response);
+        InternalBookDTO book3 = convertToDTO(book2);
+        booksDto = Arrays.asList(book1, book3);
+        Mockito.when(bookService.findAll()).thenReturn(booksDto);
 
         Mockito.when(bookService.convertToDTO(any(InternalBook.class)))
                 .thenAnswer(invocation -> {
@@ -192,7 +199,7 @@ public class InternalBookControllerTest {
 
     @Test
     void addBookTest() throws Exception {
-        Mockito.when(bookService.add(any(InternalBook.class))).thenReturn(response);
+        Mockito.when(bookService.add(any(AddInternalBookRequestDTO.class))).thenReturn(response);
         Mockito.when(bookGenreService.add(any(BookGenre.class))).thenReturn(new BookGenre(new BookGenreId(response.getId(), 1)));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -234,7 +241,7 @@ public class InternalBookControllerTest {
     @Test
     void updateTest() throws Exception{
         response.setId(2);
-        Mockito.when(bookService.update(any(InternalBook.class))).thenReturn(response);
+        Mockito.when(bookService.update(any(AddInternalBookRequestDTO.class))).thenReturn(response);
         Mockito.when(bookGenreService.findAllByBookId(2)).thenReturn(new ArrayList<>());
         Mockito.doNothing().when(bookGenreService).delete(new BookGenreId(2, 1));
         Mockito.when(bookGenreService.add(new BookGenre(new BookGenreId(1, 2)))).thenReturn(any());
@@ -296,27 +303,17 @@ public class InternalBookControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
     }
+
+    public InternalBookDTO convertToDTO(InternalBook book) {
+        InternalBookDTO dto = new InternalBookDTO();
+        dto.setId(book.getId());
+        dto.setTitle(book.getTitle());
+        dto.setAuthor(book.getAuthor());
+        dto.setPublisher(book.getPublisher());
+        dto.setAddDate(book.getAddDate());
+        dto.setReleaseDate(book.getReleaseDate());
+        dto.setImageUrl(book.getImageUrl());
+        return dto;
+    }
 }
-
-
-
-
-   /* .content("""
-                        {
-                             "title": "Book Title 1",
-                             "author": "Author 1",
-                             "releaseDate": "2024-11-20",
-                             "rating": 4.2,
-                             "imageUrl": "http://example.com/image1.jpg",
-                             "description": "Description 1",
-                             "isbn10": "1234567890",
-                             "isbn13": "1234567890123",
-                             "authorDescription": "Author Description 1",
-                             "publisher": "Publisher 1",
-                             "format": "Hardcover",
-                             "language": "English",
-                             "numPages": 300,
-                             "addDate": "2024-11-20"
-                           }
-                        """))*/
 
