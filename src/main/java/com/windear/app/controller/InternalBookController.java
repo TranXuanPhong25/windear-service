@@ -31,7 +31,7 @@ public class InternalBookController {
     public List<InternalBookDTO> findAll() {
         List<InternalBook> books = bookService.findAll();
         List<InternalBookDTO> booksDto = new ArrayList<>();
-        for(InternalBook it : books) {
+        for (InternalBook it : books) {
             booksDto.add(bookService.convertToDTO(it));
         }
         return booksDto;
@@ -43,8 +43,8 @@ public class InternalBookController {
         InternalBook bookFromDb = bookService.findById(id);
         List<BookGenre> bookGenres = bookGenreService.findAllByBookId(id);
         StringBuilder genres = new StringBuilder();
-        for(int i = 0; i < bookGenres.size(); i++) {
-            if(i < bookGenres.size() - 1) {
+        for (int i = 0; i < bookGenres.size(); i++) {
+            if (i < bookGenres.size() - 1) {
                 genres.append(genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName()).append(',');
             } else {
                 genres.append(genreService.findById(bookGenres.get(i).getBookGenreId().getGenreId()).getName());
@@ -68,7 +68,7 @@ public class InternalBookController {
     @PostMapping("/books")
     public InternalBook addBook(@RequestBody AddInternalBookRequestDTO request) {
         InternalBook book = bookService.add(request.getInternalBook());
-        if(request.getGenres().isEmpty()) {
+        if (request.getGenres().isEmpty()) {
             return book;
         }
         String[] genreIds = request.getGenres().split(",");
@@ -85,14 +85,14 @@ public class InternalBookController {
     public InternalBook update(@RequestBody AddInternalBookRequestDTO internalBook, @PathVariable Integer id) {
         internalBook.getInternalBook().setId(id);
         String genres = internalBook.getGenres();
-        if(!genres.isEmpty()) {
-            String[] updateGenreIds = genres.split(",");
-            List<BookGenre> bookGenresFromDb = bookGenreService.findAllByBookId(internalBook.getInternalBook().getId());
-            for(BookGenre it : bookGenresFromDb) {
-                bookGenreService.delete(it.getBookGenreId());
-            }
+        List<BookGenre> bookGenresFromDb = bookGenreService.findAllByBookId(internalBook.getInternalBook().getId());
+        for (BookGenre it : bookGenresFromDb) {
+            bookGenreService.delete(it.getBookGenreId());
+        }
+        if (!genres.isEmpty()) {
 
-            for(String it : updateGenreIds) {
+            String[] updateGenreIds = genres.split(",");
+            for (String it : updateGenreIds) {
                 BookGenre newBookGenre = new BookGenre(new BookGenreId(internalBook.getInternalBook().getId(), Integer.parseInt(it)));
                 bookGenreService.add(newBookGenre);
             }
