@@ -50,7 +50,8 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, BookLoanId> 
             value = "SELECT DATE(TO_TIMESTAMP(return_date / 1000) AT TIME ZONE 'UTC' AT TIME ZONE 'GMT+7') AS time, \n" +
                     "COUNT(book_id) AS value\n" +
                     "FROM book_loan\n" +
-                    "WHERE DATE(TO_TIMESTAMP(return_date / 1000) AT TIME ZONE 'UTC' AT TIME ZONE 'GMT+7') >= (NOW() - INTERVAL '30 days')\n" +
+                    "WHERE return_date IS NOT NULL\n" +
+                    "AND DATE(TO_TIMESTAMP(return_date / 1000) AT TIME ZONE 'UTC' AT TIME ZONE 'GMT+7') >= (NOW() - INTERVAL '30 days')\n" +
                     "GROUP BY time\n" +
                     "ORDER BY time",
             nativeQuery = true
