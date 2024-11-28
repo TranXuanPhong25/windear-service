@@ -40,9 +40,9 @@ public class BookCopyServiceImpl implements BookCopyService {
     }
 
     @Override
-    public BookCopy modifyQuantityOfBookCopy(Integer id, Integer value) {
+    public void modifyQuantityOfBookCopy(Integer id, Integer value) {
         BookCopy bookCopy = getBookCopyById(id);
         bookCopy.setQuantity(bookCopy.getQuantity() + value);
-        return bookCopyRepository.save(bookCopy);
+        bookCopyRepository.save(bookCopy);
     }
 }
