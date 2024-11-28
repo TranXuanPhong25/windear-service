@@ -25,7 +25,8 @@ public class BookLoanServiceImpl implements BookLoanService {
     private final BookCopyService bookCopyService;
 
     @Autowired
-    public BookLoanServiceImpl(BookLoanRepository bookLoanRepository, BookCopyService bookCopyService) {
+    public BookLoanServiceImpl(BookLoanRepository bookLoanRepository,
+                               BookCopyService bookCopyService) {
         this.bookLoanRepository = bookLoanRepository;
         this.bookCopyService = bookCopyService;
     }
@@ -123,7 +124,8 @@ public class BookLoanServiceImpl implements BookLoanService {
         String userId = request.getUserId();
         Integer bookId = request.getBookId();
         BookLoanId bookLoanId = new BookLoanId(userId, bookId);
-        BookLoan bookLoan = new BookLoan(bookLoanId, request.getTitle(), request.getAuthorName(), Status.SUBSCRIBE);
+        BookLoan bookLoan = new BookLoan(bookLoanId, request.getTitle(),
+                request.getAuthorName(), Status.SUBSCRIBE);
         return add(bookLoan);
     }
 
@@ -132,7 +134,7 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan returnBook(BookLoanId bookLoanId) {
         BookLoan bookLoan = findById(bookLoanId);
         bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
-        if(!bookLoan.getStatus().equals(Status.ACCEPT)) {
+        if (!bookLoan.getStatus().equals(Status.ACCEPT)) {
             return bookLoan;
         }
         bookLoan.setReturnDate(new Timestamp(System.currentTimeMillis()).getTime());
@@ -161,14 +163,14 @@ public class BookLoanServiceImpl implements BookLoanService {
     public BookLoan getBorrowRequestByUserIdAndBookId(String userId, Integer bookId) {
         //status == PENDING
         List<BookLoan> requests = getBorrowRequestByUserId(userId);
-        for(BookLoan request : requests) {
+        for (BookLoan request : requests) {
             if (request.getBookLoanId().getBookId().equals(bookId)) {
                 return request;
             }
         }
         //status == ACCEPT and returnDate == null
-        requests=getBorrowedBookByUserId(userId);
-        for(BookLoan request : requests) {
+        requests = getBorrowedBookByUserId(userId);
+        for (BookLoan request : requests) {
             if (request.getBookLoanId().getBookId().equals(bookId)) {
                 return request;
             }
@@ -183,7 +185,8 @@ public class BookLoanServiceImpl implements BookLoanService {
         Integer bookId = bookLoan.getBookLoanId().getBookId();
         int quantityOfCopies = bookCopyService.getQuantityOfBookCopy(bookId);
         if (quantityOfCopies == 0) {
-            throw new BookNotAvailableException("The book with id " + bookId + " is not available for borrowing.");
+            throw new BookNotAvailableException("The book with id " + bookId
+                    + " is not available for borrowing.");
         }
         List<BookLoan> bookLoans = bookLoanRepository.findByUserIdAndBookID(userId, bookId);
         for (BookLoan otherBookLoan : bookLoans) {

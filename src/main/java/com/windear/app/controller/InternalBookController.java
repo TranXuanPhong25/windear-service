@@ -104,5 +104,4 @@ public class InternalBookController {
     public void deleteBook(@PathVariable Integer id) {
         bookService.delete(id);
     }
-
 }

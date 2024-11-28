@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NewsServiceImpl implements NewsService{
+public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
 
     @Autowired
@@ -46,13 +46,13 @@ public class NewsServiceImpl implements NewsService{
     @Transactional
     public News update(News news) {
         News newsFromDB = findNewsById(news.getNewsId());
-        if(news.getDescription() != null) {
+        if (news.getDescription() != null) {
             newsFromDB.setDescription(news.getDescription());
         }
-        if(news.getTitle() != null) {
+        if (news.getTitle() != null) {
             newsFromDB.setTitle(news.getTitle());
         }
-        if(news.getImageUrl() != null) {
+        if (news.getImageUrl() != null) {
             newsFromDB.setImageUrl(news.getImageUrl());
         }
         return newsRepository.save(newsFromDB);
@@ -61,7 +61,7 @@ public class NewsServiceImpl implements NewsService{
     @Override
     @Transactional
     public void deleteNews(int newsId) {
-        if(findNewsById(newsId) != null) {
+        if (findNewsById(newsId) != null) {
             newsRepository.deleteById(newsId);
         }
     }

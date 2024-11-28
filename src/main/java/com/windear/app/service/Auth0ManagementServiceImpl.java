@@ -35,7 +35,9 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     private final Auth0LogService auth0LogService;
 
-    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient, Auth0AccessTokenService auth0AccessTokenService, Auth0LogService auth0LogService) {
+    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient,
+                                      Auth0AccessTokenService auth0AccessTokenService,
+                                      Auth0LogService auth0LogService) {
         this.auth0WebClient = auth0WebClient;
         this.auth0AccessTokenService = auth0AccessTokenService;
         this.auth0LogService = auth0LogService;
@@ -45,7 +47,8 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
     public String getUsers() {
         return auth0WebClient.get()
                 .uri("/api/v2/users?include_totals=true")
-                .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
+                .header("authorization",
+                        "Bearer " + auth0AccessTokenService.getAccessToken())
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -141,9 +144,9 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
                 updateProfile(userId, userProfile);
             } else {
                 Auth0UserProfile userProfile = objectMapper.readValue(payload.getPayload(), Auth0UserProfile.class);
-                UsernameAuth0UserProfile usernameUserProfile = new UsernameAuth0UserProfile( userProfile.getUsername(), userProfile.getUser_metadata());
+                UsernameAuth0UserProfile usernameUserProfile = new UsernameAuth0UserProfile(userProfile.getUsername(), userProfile.getUser_metadata());
                 updateProfile(userId, usernameUserProfile);
-                EmailAuth0UserProfile emailUserProfile =  new EmailAuth0UserProfile( userProfile.getEmail(), userProfile.getUser_metadata());
+                EmailAuth0UserProfile emailUserProfile = new EmailAuth0UserProfile(userProfile.getEmail(), userProfile.getUser_metadata());
                 updateProfile(userId, emailUserProfile);
 
             }
