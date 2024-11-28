@@ -19,7 +19,6 @@ public class AnalyticStatServiceImpl implements AnalyticStatService {
 
     @Autowired
     public AnalyticStatServiceImpl(InternalBookRepository internalBookRepository,
-                                   BookLoanRepository bookLoanRepository) {
                                    BookLoanRepository bookLoanRepository,
                                    Auth0LogRepository auth0LogRepository) {
         this.internalBookRepository = internalBookRepository;
