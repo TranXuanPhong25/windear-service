@@ -29,12 +29,16 @@ public class InternalBookController {
 
     @GetMapping("/books")
     public List<InternalBookDTO> findAll() {
+
         return bookService.findAll();
+
     }
 
     @GetMapping("/books/{id}")
     public AddInternalBookRequestDTO findBookById(@PathVariable Integer id) {
+
         return bookService.findById(id);
+
     }
 
     @GetMapping("/books/new-releases")

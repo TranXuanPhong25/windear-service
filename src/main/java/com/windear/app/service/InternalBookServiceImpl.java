@@ -44,7 +44,6 @@ public class InternalBookServiceImpl implements InternalBookService {
         this.genreService = genreService;
     }
 
-    @Override
     public List<InternalBookDTO> findAll() {
         List<InternalBook> books = internalBookRepository.findAll();
         List<InternalBookDTO> booksDto = new ArrayList<>();
@@ -53,6 +52,7 @@ public class InternalBookServiceImpl implements InternalBookService {
         }
         return booksDto;
     }
+
 
     @Override
     public AddInternalBookRequestDTO findById(Integer id) {
