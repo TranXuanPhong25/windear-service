@@ -54,12 +54,18 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public int countUnreadNotificationOfUser(String userId) {
         List<Notification> notifications = getAllNotificationsOfUser(userId);
-        return notifications.stream().filter(notification -> !notification.isRead()).toList().size();
+        return notifications.stream()
+                .filter(notification -> !notification.isRead())
+                .toList()
+                .size();
     }
 
     @Override
     public void sendNotification(String userId, String title) {
-        notificationRepository.save(new Notification(userId, title, new Timestamp(System.currentTimeMillis()), false));
+        notificationRepository.save(new Notification(userId
+                , title
+                , new Timestamp(System.currentTimeMillis())
+                , false));
     }
 
     @Scheduled(cron = "0 0 12 * * ?")
@@ -75,9 +81,14 @@ public class NotificationServiceImpl implements NotificationService {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<BookLoan> bookLoans = bookLoanService.findAllActiveBookLoan();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate dueDate = new Timestamp(bookLoan.getBorrowDate()).toLocalDateTime().toLocalDate().plusDays(bookLoan.getBorrowTime());
+            LocalDate dueDate = new Timestamp(bookLoan.getBorrowDate())
+                    .toLocalDateTime().toLocalDate()
+                    .plusDays(bookLoan.getBorrowTime());
             if (dueDate.equals(tomorrow)) {
-                sendNotification(bookLoan.getBookLoanId().getUserId(), "Reminder: Your book with title: " + bookLoan.getTitle() + " is due tomorrow.");
+                sendNotification(bookLoan.getBookLoanId().getUserId(),
+                        "Reminder: Your book with title: "
+                                + bookLoan.getTitle()
+                                + " is due tomorrow.");
             }
         }
     }
@@ -87,11 +98,15 @@ public class NotificationServiceImpl implements NotificationService {
     public void rejectBookLoanRequest() {
         List<BookLoan> bookLoans = bookLoanService.findAllBorrowRequest();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate requestDate = new Timestamp(bookLoan.getBorrowDate()).toLocalDateTime().toLocalDate();
-            if (requestDate != null && LocalDate.now().minusDays(3).equals(requestDate)) {
+            LocalDate requestDate = new Timestamp(bookLoan.getBorrowDate())
+                    .toLocalDateTime().toLocalDate();
+            if (requestDate != null && LocalDate.now()
+                    .minusDays(3)
+                    .equals(requestDate)) {
                 String userId = bookLoan.getBookLoanId().getUserId();
                 bookLoan.setStatus(Status.DECLINE);
-                sendNotification(userId, "Your book loan request for the book titled '" + bookLoan.getTitle() + "' has been rejected.");
+                sendNotification(userId, "Your book loan request for the book titled '"
+                        + bookLoan.getTitle() + "' has been rejected.");
             }
         }
     }
@@ -101,7 +116,9 @@ public class NotificationServiceImpl implements NotificationService {
         List<BookLoan> bookLoans = bookLoanService.getSubscribeRequestOfBook(bookId);
         for (BookLoan bookLoan : bookLoans) {
             String userId = bookLoan.getBookLoanId().getUserId();
-            sendNotification(userId, "The book with title '" + bookLoan.getTitle() + "' is now available for borrowing.");
+            sendNotification(userId, "The book with title '"
+                    + bookLoan.getTitle()
+                    + "' is now available for borrowing.");
         }
     }
 
