@@ -12,12 +12,17 @@ import java.util.List;
 @Repository
 public interface Auth0LogRepository extends JpaRepository<Auth0Log, String> {
     Auth0Log findFirstByOrderByDateDesc();
+
     Page<Auth0Log> findAllByOrderByDateDesc(Pageable pageable);
 
-    @Query("SELECT DATE(u.date) AS time, COUNT(u) AS value " +
-            "FROM Auth0Log u WHERE u.type = 's' " +
-            "GROUP BY time " +
-            "ORDER BY time DESC " +
-            "LIMIT 30")
+    @Query(
+            value = "SELECT DATE(date) AS time, COUNT(_id) AS value\n" +
+                    "FROM auth0_log\n" +
+                    "WHERE type = 's' AND\n" +
+                    "DATE(date) >= (NOW() - INTERVAL '30 days')\n" +
+                    "GROUP BY time\n" +
+                    "ORDER BY time",
+            nativeQuery = true
+    )
     List<Object[]> getLoginStatsIn30Days();
 }
