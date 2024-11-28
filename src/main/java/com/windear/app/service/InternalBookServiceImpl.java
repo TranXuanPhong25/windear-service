@@ -149,6 +149,7 @@ public class InternalBookServiceImpl implements InternalBookService {
       dto.setPublisher(book.getPublisher());
       dto.setAddDate(book.getAddDate());
       dto.setReleaseDate(book.getReleaseDate());
+      dto.setImageUrl(book.getImageUrl());
       return dto;
    }
 }

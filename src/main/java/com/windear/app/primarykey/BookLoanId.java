@@ -3,6 +3,7 @@ package com.windear.app.primarykey;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -14,15 +15,21 @@ public class BookLoanId {
     @Column(name = "book_id")
     private Integer bookId;
 
-    @Column(name = "borrow_date")
-    private LocalDate borrowDate;
+    @Column(name = "request_date", columnDefinition = "bigint")
+    private Long requestDate;
 
     public BookLoanId() {}
 
-    public BookLoanId(String userId, Integer bookId, LocalDate borrowDate) {
+    public BookLoanId(String userId, Integer bookId, Long requestDate) {
         this.userId = userId;
         this.bookId = bookId;
-        this.borrowDate = borrowDate;
+        this.requestDate = requestDate;
+    }
+
+    public BookLoanId(String userId, Integer bookId) {
+        this.userId = userId;
+        this.bookId = bookId;
+        this.requestDate = new Timestamp(System.currentTimeMillis()).getTime();
     }
 
     public String getUserId() {
@@ -41,12 +48,12 @@ public class BookLoanId {
         this.bookId = bookId;
     }
 
-    public LocalDate getBorrowDate() {
-        return borrowDate;
+    public Long getRequestDate() {
+        return requestDate;
     }
 
-    public void setBorrowDate(LocalDate borrowDate) {
-        this.borrowDate = borrowDate;
+    public void setRequestDate(Long requestDate) {
+        this.requestDate = requestDate;
     }
 
     @Override

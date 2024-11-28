@@ -22,25 +22,25 @@ public class Notification {
     private String title;
 
     @Column(name = "is_read")
-    private boolean isRead;
+    private boolean read;
 
     public Notification() {
 
     }
 
-    public Notification(Integer id, String userId, Timestamp timestamp, String title, boolean isRead) {
+    public Notification(Integer id, String userId, Timestamp timestamp, String title, boolean read) {
         this.id = id;
         this.userId = userId;
         this.timestamp = timestamp;
         this.title = title;
-        this.isRead = isRead;
+        this.read = read;
     }
 
-    public Notification(String userId, String title, Timestamp timestamp, boolean isRead) {
+    public Notification(String userId, String title, Timestamp timestamp, boolean read) {
         this.userId = userId;
         this.title = title;
         this.timestamp = timestamp;
-        this.isRead = isRead;
+        this.read = read;
     }
 
     public Integer getId() {
@@ -76,10 +76,10 @@ public class Notification {
     }
 
     public boolean isRead() {
-        return isRead;
+        return read;
     }
 
     public void setRead(boolean read) {
-        isRead = read;
+        this.read = read;
     }
 }

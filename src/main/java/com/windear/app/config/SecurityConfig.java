@@ -31,6 +31,7 @@ public class SecurityConfig {
                                 "/api/news/**",
                                 "/api/books/**",
                                 "/api/review/book/**",
+                                "/api/bookloan",
                                 "/api/bookloan/**",
                                 "/api/shelves/**",
                                 "/api/shelves",
@@ -39,15 +40,21 @@ public class SecurityConfig {
                                 "/api/genres",
                                 "/api/review",
                                 "/api/review/**",
-                                "/api/popular-book/top10"
-
+                                "/api/popular-book/top10",
+                                "/api/analytic/**",
+                                "/api/notification",
+                                "/api/notification/**"
                         )
                         .permitAll()
                         .requestMatchers(
                                 "/api/private",
                                 "/api/auth0/user/**",
                                 "/api/review",
-                                "/api/review/**"
+                                "/api/review/**",
+                                "/api/popular-book/**",
+                                "/api/notification/**",
+                                "/api/notification"
+
                         )
                         .authenticated()
                         .requestMatchers(
