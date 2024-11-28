@@ -100,4 +100,9 @@ public class BookLoanController {
         bookLoanService.deleteSubscribeRequestOfBook(loanId.getBookId());
         return bookLoan;
     }
+
+    @DeleteMapping()
+    public void deleteBookLoan(@RequestBody BookLoanId loanId) {
+        bookLoanService.deleteBookLoan(loanId);
+    }
 }

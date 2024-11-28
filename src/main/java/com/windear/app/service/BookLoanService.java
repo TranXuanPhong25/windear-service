@@ -35,4 +35,5 @@ public interface BookLoanService {
     BookLoan subscribeToBook(SubscribeRequest request);
     BookLoan returnBook(BookLoanId bookLoanId);
     Integer getAvailableCopiesOfBook(Integer bookId);
+    void deleteBookLoan(BookLoanId bookLoanId);
 }
