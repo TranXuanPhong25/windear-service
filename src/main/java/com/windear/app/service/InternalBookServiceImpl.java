@@ -45,7 +45,7 @@ public class InternalBookServiceImpl implements InternalBookService {
     }
 
     public List<InternalBookDTO> findAll() {
-        List<InternalBook> books = internalBookRepository.findAll();
+        List<InternalBook> books = internalBookRepository.findAllBooksSortedByAddDate();
         List<InternalBookDTO> booksDto = new ArrayList<>();
         for(InternalBook it : books) {
             booksDto.add(convertToDTO(it));
