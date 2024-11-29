@@ -115,6 +115,10 @@ public class InternalBookServiceImpl implements InternalBookService {
             if (popularBook.isPresent()) {
                 popularBookRepository.deleteById(id);
             }
+            List<BookGenre> bookGenres = bookGenreService.findAllByBookId(id);
+            for(BookGenre it : bookGenres) {
+                bookGenreService.delete(it.getBookGenreId());
+            }
         } else {
             throw new BookNotFoundException("Book with title not found: " + id);
         }
