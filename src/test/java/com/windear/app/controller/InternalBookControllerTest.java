@@ -17,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -98,6 +100,7 @@ public class InternalBookControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void findBookByIdTest() throws Exception {
         BookGenre bookGenre1 = new BookGenre(new BookGenreId(1, 1));
         BookGenre bookGenre2 = new BookGenre(new BookGenreId(1, 2));
@@ -132,6 +135,7 @@ public class InternalBookControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void findAllBook() throws Exception {
         InternalBookDTO book1 = convertToDTO(response);
         InternalBookDTO book3 = convertToDTO(book2);
@@ -168,6 +172,7 @@ public class InternalBookControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void findTop10ByReleaseDateTest() throws Exception {
         Mockito.when(bookService.findTop10ByReleaseDate()).thenReturn(books);
         mockMvc.perform(MockMvcRequestBuilders
@@ -188,6 +193,7 @@ public class InternalBookControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void getBookInLast30DayTest() throws Exception {
         Mockito.when(bookService.getBookInLast30Day()).thenReturn(Long.valueOf(123));
         mockMvc.perform(MockMvcRequestBuilders
@@ -198,6 +204,7 @@ public class InternalBookControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"admin"})
     void addBookTest() throws Exception {
         Mockito.when(bookService.add(any(AddInternalBookRequestDTO.class))).thenReturn(response);
         Mockito.when(bookGenreService.add(any(BookGenre.class))).thenReturn(new BookGenre(new BookGenreId(response.getId(), 1)));
@@ -239,6 +246,7 @@ public class InternalBookControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "admin")
     void updateTest() throws Exception{
         response.setId(2);
         Mockito.when(bookService.update(any(AddInternalBookRequestDTO.class))).thenReturn(response);
@@ -285,6 +293,7 @@ public class InternalBookControllerTest {
 
 
     @Test
+    @WithMockUser(username = "admin", roles = {"admin"})
     void deleteTest() throws Exception {
         Mockito.doNothing().when(bookService).delete(anyInt());
 
@@ -295,6 +304,7 @@ public class InternalBookControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"admin"})
     void deleteTest_NotFound() throws Exception {
         Mockito.doThrow(new RuntimeException()).when(bookService).delete(anyInt());
 
