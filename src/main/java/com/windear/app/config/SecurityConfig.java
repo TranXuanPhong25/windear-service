@@ -38,9 +38,10 @@ public class SecurityConfig {
                                 "/api/review",
                                 "/api/review/**",
                                 "/api/bookloan/book/**"
-
-                        )
-                        .permitAll()
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/external/**"
+                        ).permitAll()
                         .requestMatchers(
                                 "/api/auth0/user/**",
                                 "/api/notification",
