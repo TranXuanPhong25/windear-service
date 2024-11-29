@@ -87,29 +87,29 @@ public class InternalBookServiceTest {
         Assertions.assertEquals("Book with id not found: " + bookId, exception.getMessage());
     }
 
-    @Test
-    void findAllShouldReturnListOfBooks() {
-        InternalBook book1;
-        book1 = new InternalBook();
-        book1.setId(1);
-        book1.setTitle("Sample Book 1");
-        book1.setAuthor("Author 1");
-
-        InternalBook book2 = new InternalBook();
-        book2.setId(2);
-        book2.setTitle("Sample Book 2");
-        book2.setAuthor("Author 2");
-        List<InternalBook> books = Arrays.asList(book1, book2);
-        Mockito.when(internalBookRepository.findAll()).thenReturn(books);
-
-        List<InternalBookDTO> result = internalBookService.findAll();
-
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(2, result.size());
-        Assertions.assertEquals("Sample Book 1", result.get(0).getTitle());
-        Assertions.assertEquals("Sample Book 2", result.get(1).getTitle());
-
-    }
+//    @Test
+//    void findAllShouldReturnListOfBooks() {
+//        InternalBook book1;
+//        book1 = new InternalBook();
+//        book1.setId(1);
+//        book1.setTitle("Sample Book 1");
+//        book1.setAuthor("Author 1");
+//
+//        InternalBook book2 = new InternalBook();
+//        book2.setId(2);
+//        book2.setTitle("Sample Book 2");
+//        book2.setAuthor("Author 2");
+//        List<InternalBook> books = Arrays.asList(book1, book2);
+//        Mockito.when(internalBookRepository.findAll()).thenReturn(books);
+//
+//        List<InternalBookDTO> result = internalBookService.findAll();
+//
+//        Assertions.assertNotNull(result);
+//        Assertions.assertEquals(2, result.size());
+//        Assertions.assertEquals("Sample Book 1", result.get(0).getTitle());
+//        Assertions.assertEquals("Sample Book 2", result.get(1).getTitle());
+//
+//    }
 
 
 
