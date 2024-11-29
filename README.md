@@ -66,3 +66,4 @@ src/main/java/com/windear/app
 - Multilingual Support: Localize the frontend and backend for multiple languages to cater to diverse users.
 - Email and SMS Notifications: Send automatic reminders for due dates, overdue books, or upcoming library events.
 - Notification: Soft delete and undo deletion notification.
+- More analytic service for providing more intuitive insight.
