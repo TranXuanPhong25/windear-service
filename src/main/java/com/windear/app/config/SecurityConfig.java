@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,44 +25,38 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(
-                                "/api/public",
+                        .requestMatchers(HttpMethod.GET,
                                 "/api/search",
                                 "/api/external/**",
-                                "/api/news/**",
                                 "/api/books/**",
                                 "/api/review/book/**",
-                                "/api/bookloan",
-                                "/api/bookloan/**",
-                                "/api/shelves/**",
-                                "/api/shelves",
                                 "/api/db/books",
                                 "/api/db/books/**",
                                 "/api/genres",
-                                "/api/review",
-                                "/api/review/**",
-                                "/api/popular-book/top10",
-                                "/api/analytic/**",
-                                "/api/notification",
-                                "/api/notification/**"
+                                "/api/popular-book/top10"
                         )
                         .permitAll()
                         .requestMatchers(
-                                "/api/private",
                                 "/api/auth0/user/**",
-                                "/api/review",
-                                "/api/review/**",
-                                "/api/popular-book/**",
+                                "/api/notification",
                                 "/api/notification/**",
-                                "/api/notification"
-
+                                "/api/reivew",
+                                "/api/review/**",
+                                "/api/shelves/**",
+                                "/api/shelves",
+                                "/api/bookloan",
+                                "/api/bookloan/**"
                         )
                         .authenticated()
                         .requestMatchers(
-                                "/api/admin",
                                 "/api/auth0/users",
                                 "/api/auth0/stats/**",
-                                "/api/auth0/logs"
+                                "/api/auth0/logs",
+                                "/api/analytic/**",
+                                "/api/db/books",
+                                "/api/db/books/**",
+                                "/api/popular-book/**"
+
                         )
                         .hasAuthority("ROLE_admin")
 

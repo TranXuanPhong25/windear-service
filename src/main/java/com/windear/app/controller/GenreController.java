@@ -22,11 +22,6 @@ public class GenreController {
         return genreService.add(genre);
     }
 
-    @GetMapping("/genre/{id}")
-    public Genre findById(@PathVariable Integer id) {
-        return genreService.findById(id);
-    }
-
     @GetMapping("/genres")
     public List<Genre> fidAll() {
         return genreService.findAll();

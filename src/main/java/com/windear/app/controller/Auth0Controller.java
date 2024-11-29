@@ -41,7 +41,7 @@ public class Auth0Controller {
     }
 
     @PostMapping("/user/resend-verification-email")
-    public ResponseEntity<String> resendVerificationEmail(@RequestBody Map<String,String> data) {
+    public ResponseEntity<String> resendVerificationEmail(@RequestBody Map<String, String> data) {
         return auth0ManagementService.resendVerificationEmail(data.get("data"));
     }
 
@@ -51,5 +51,7 @@ public class Auth0Controller {
     }
 
     @GetMapping("/logs")
-    public ResponseEntity<?> getLogs() {return auth0ManagementService.getLogs();}
+    public ResponseEntity<?> getLogs() {
+        return auth0ManagementService.getLogs();
+    }
 }

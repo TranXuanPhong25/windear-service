@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,7 +38,9 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     private final Auth0LogService auth0LogService;
 
-    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient, Auth0AccessTokenService auth0AccessTokenService, Auth0LogService auth0LogService) {
+    public Auth0ManagementServiceImpl(@Qualifier("auth0WebClient") WebClient auth0WebClient,
+                                      Auth0AccessTokenService auth0AccessTokenService,
+                                      Auth0LogService auth0LogService) {
         this.auth0WebClient = auth0WebClient;
         this.auth0AccessTokenService = auth0AccessTokenService;
         this.auth0LogService = auth0LogService;
@@ -45,7 +50,8 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
     public String getUsers() {
         return auth0WebClient.get()
                 .uri("/api/v2/users?include_totals=true")
-                .header("authorization", "Bearer " + auth0AccessTokenService.getAccessToken())
+                .header("authorization",
+                        "Bearer " + auth0AccessTokenService.getAccessToken())
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -141,9 +147,9 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
                 updateProfile(userId, userProfile);
             } else {
                 Auth0UserProfile userProfile = objectMapper.readValue(payload.getPayload(), Auth0UserProfile.class);
-                UsernameAuth0UserProfile usernameUserProfile = new UsernameAuth0UserProfile( userProfile.getUsername(), userProfile.getUser_metadata());
+                UsernameAuth0UserProfile usernameUserProfile = new UsernameAuth0UserProfile(userProfile.getUsername(), userProfile.getUser_metadata());
                 updateProfile(userId, usernameUserProfile);
-                EmailAuth0UserProfile emailUserProfile =  new EmailAuth0UserProfile( userProfile.getEmail(), userProfile.getUser_metadata());
+                EmailAuth0UserProfile emailUserProfile = new EmailAuth0UserProfile(userProfile.getEmail(), userProfile.getUser_metadata());
                 updateProfile(userId, emailUserProfile);
 
             }
@@ -245,6 +251,11 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     @Scheduled(cron = "0 30 * * * ?")
     public void getAuth0Logs() {
+        Instant now = Instant.now();
+        String formattedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                .withZone(ZoneId.systemDefault())
+                .format(now);
+        System.out.println(formattedDate+ " SCHEDULED --- [Auth0ManagementService.Impl]: Get logs from Auth0.com .");
         try {
             Auth0Log[] logs = auth0WebClient.get()
                     .uri(uriBuilder -> uriBuilder
@@ -282,7 +293,7 @@ public class Auth0ManagementServiceImpl implements Auth0ManagementService {
 
     @Override
     public ResponseEntity<?> getLogs() {
-        Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 50);
+        Page<Auth0Log> logsPage = auth0LogService.getLogsPage(0, 200);
         List<Auth0LogDTO> logsDTO = logsPage.getContent().stream()
                 .map(log -> new Auth0LogDTO(
                         log.getDate(),

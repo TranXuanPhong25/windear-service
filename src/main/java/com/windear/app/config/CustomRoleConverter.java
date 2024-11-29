@@ -22,12 +22,12 @@ public class CustomRoleConverter implements Converter<Jwt, Collection<GrantedAut
 
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
-        List<String> roles = jwt.getClaimAsStringList(roleNamespace); // Extracting roles from the "roles" claim
+        List<String> roles = jwt.getClaimAsStringList(roleNamespace);
         if (roles == null) {
             return Collections.emptyList();
         }
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Prefix with "ROLE_"
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
     }
 }

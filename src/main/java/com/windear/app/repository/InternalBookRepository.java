@@ -1,7 +1,6 @@
 package com.windear.app.repository;
 
 import com.windear.app.entity.InternalBook;
-import com.windear.app.model.AnalyticStat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +15,7 @@ public interface InternalBookRepository extends JpaRepository<InternalBook, Inte
 
     boolean existsByIsbn13(String isbn13);
 
-    @Query("SELECT COUNT(b) FROM InternalBook b WHERE b.releaseDate >= :startDate")
+    @Query("SELECT COUNT(b) FROM InternalBook b WHERE b.addDate >= :startDate")
     long countBooksInLast30Days(@Param("startDate") LocalDate startDate);
 
     @Query(
@@ -28,4 +27,8 @@ public interface InternalBookRepository extends JpaRepository<InternalBook, Inte
             nativeQuery = true
     )
     List<Object[]> getStatsInLast30Days();
+
+    @Query("SELECT b FROM InternalBook b ORDER BY b.addDate DESC")
+    List<InternalBook> findAllBooksSortedByAddDate();
+
 }

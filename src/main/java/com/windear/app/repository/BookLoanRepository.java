@@ -35,20 +35,24 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, BookLoanId> 
     List<BookLoan> findReturnedBookByUserId(String userId);
 
     @Query(
-            value = "SELECT DATE(DATE_TRUNC('day', borrow_date)) AS time, COUNT(book_id) AS value " +
-                    "FROM book_loan " +
-                    "WHERE borrow_date IS NOT NULL AND borrow_date >= (NOW() - INTERVAL '30 days') " +
-                    "GROUP BY time " +
+            value = "SELECT DATE(TO_TIMESTAMP(borrow_date / 1000) AT TIME ZONE 'UTC' AT TIME ZONE 'GMT+7') AS time, \n" +
+                    "COUNT(book_id) AS value\n" +
+                    "FROM book_loan\n" +
+                    "WHERE borrow_date IS NOT NULL \n" +
+                    "AND DATE(TO_TIMESTAMP(borrow_date / 1000) AT TIME ZONE 'UTC' AT TIME ZONE 'GMT+7') >= (NOW() - INTERVAL '30 days')\n" +
+                    "GROUP BY time\n" +
                     "ORDER BY time",
             nativeQuery = true
     )
     List<Object[]> getBorrowStatsIn30Days();
 
     @Query(
-            value = "SELECT DATE(DATE_TRUNC('day', return_date)) AS time, COUNT(book_id) AS value " +
-                    "FROM book_loan " +
-                    "WHERE return_date IS NOT NULL AND return_date >= (NOW() - INTERVAL '30 days') " +
-                    "GROUP BY time " +
+            value = "SELECT DATE(TO_TIMESTAMP(return_date / 1000) AT TIME ZONE 'UTC' AT TIME ZONE 'GMT+7') AS time, \n" +
+                    "COUNT(book_id) AS value\n" +
+                    "FROM book_loan\n" +
+                    "WHERE return_date IS NOT NULL\n" +
+                    "AND DATE(TO_TIMESTAMP(return_date / 1000) AT TIME ZONE 'UTC' AT TIME ZONE 'GMT+7') >= (NOW() - INTERVAL '30 days')\n" +
+                    "GROUP BY time\n" +
                     "ORDER BY time",
             nativeQuery = true
     )
