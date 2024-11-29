@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(
+                        .requestMatchers(HttpMethod.GET,
                                 "/api/search",
                                 "/api/external/**",
                                 "/api/books/**",
@@ -32,17 +33,14 @@ public class SecurityConfig {
                                 "/api/db/books",
                                 "/api/db/books/**",
                                 "/api/genres",
-                                "/api/review",
-                                "/api/popular-book/top10",
-                                "/api/review",
-                                "/api/review/**"
+                                "/api/popular-book/top10"
                         )
                         .permitAll()
                         .requestMatchers(
                                 "/api/auth0/user/**",
-                                "/api/popular-book/**",
                                 "/api/notification",
                                 "/api/notification/**",
+                                "/api/reivew",
                                 "/api/review/**",
                                 "/api/shelves/**",
                                 "/api/shelves",
@@ -54,7 +52,10 @@ public class SecurityConfig {
                                 "/api/auth0/users",
                                 "/api/auth0/stats/**",
                                 "/api/auth0/logs",
-                                "/api/analytic/**"
+                                "/api/analytic/**",
+                                "/api/db/books",
+                                "/api/db/books/**",
+                                "/api/popular-book/**"
 
                         )
                         .hasAuthority("ROLE_admin")

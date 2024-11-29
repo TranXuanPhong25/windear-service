@@ -7,9 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -66,6 +68,7 @@ public class ReviewControllerTest {
 
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void createReviewTest() throws Exception {
         Mockito.when(reviewService.save(any(Review.class))).thenReturn(response);
 
@@ -95,6 +98,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void createReviewTest_ReviewExist() throws Exception {
         Mockito.when(reviewService.save(any(Review.class))).thenThrow(new RuntimeException());
 
@@ -105,6 +109,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void getReviewTest() throws Exception {
         Mockito.when(reviewService.findReviewById(anyInt())).thenReturn(response);
 
@@ -123,6 +128,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void getReviewTest_NotFound() throws Exception{
         Mockito.when(reviewService.findReviewById(anyInt())).thenThrow(new RuntimeException());
 
@@ -133,6 +139,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void getReviewByBookIdTest() throws Exception {
         responseList.remove(response2);
         Mockito.when(reviewService.findReviewByBookId(anyInt())).thenReturn(responseList);
@@ -153,6 +160,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void findReviewByBookIdAndUserIdTest() throws Exception {
         Mockito.when(reviewService.findReviewByBookIdAndUserId(anyInt(), anyString())).thenReturn(response);
 
@@ -172,6 +180,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void findReviewByBookIdAndUserIdTest_NotFound() throws Exception{
         Mockito.when(reviewService.findReviewByBookIdAndUserId(anyInt(), anyString())).thenThrow(new RuntimeException());
 
@@ -183,6 +192,7 @@ public class ReviewControllerTest {
 
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void getRateTest() throws Exception {
         Mockito.when(reviewService.findRateByBookIdAndUserId(anyInt(), anyString())).thenReturn(response.getRating());
 
@@ -194,6 +204,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void updateReviewTest() throws Exception {
         response2.setReviewId(1);
         response2.setUserName("John Doe");
@@ -219,6 +230,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void updateRateTest() throws Exception {
         response.setRating(5.0);
         Mockito.when(reviewService.updateRate(anyInt(), anyString(), anyDouble(), anyString(), anyString())).thenReturn(response);
@@ -248,6 +260,7 @@ public class ReviewControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void deleteReviewTest() throws Exception {
         Mockito.doNothing().when(reviewService).delete(anyInt());
 
@@ -259,6 +272,7 @@ public class ReviewControllerTest {
 
 
     @Test
+    @WithMockUser(username = "user123", roles = {"USER"})
     void deleteReviewTest_NotFound() throws Exception {
         Mockito.doThrow(new RuntimeException()).when(reviewService).delete(anyInt());
 
