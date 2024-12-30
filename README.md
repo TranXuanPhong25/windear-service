@@ -6,6 +6,9 @@
 2. 23021669 - [Bùi Minh Quang](https://github.com/mquang279)
 3. 23021673 - [Phạm Minh Quân](https://github.com/quanpm2008)
 
+## Disclaim
+This project use Goodreads API with their public key only for educational purpose.
+
 ## Description
 
 The Library Management Web Application is a robust, user-friendly platform developed using Spring Boot to streamline library operations and enhance user experience. This web-based solution enables efficient management of books, users, and library transactions with a focus on automation and accessibility.
