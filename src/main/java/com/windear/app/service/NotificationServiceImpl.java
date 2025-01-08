@@ -98,7 +98,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void rejectBookLoanRequest() {
         List<BookLoan> bookLoans = bookLoanService.findAllBorrowRequest();
         for (BookLoan bookLoan : bookLoans) {
-            LocalDate requestDate = new Timestamp(bookLoan.getBorrowDate())
+            LocalDate requestDate = new Timestamp(bookLoan.getBookLoanId().getRequestDate())
                     .toLocalDateTime().toLocalDate();
             if (requestDate != null && LocalDate.now()
                     .minusDays(3)
