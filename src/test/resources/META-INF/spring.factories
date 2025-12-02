@@ -1,0 +1,2 @@
+# Disable Okta Environment Post Processor for tests
+org.springframework.boot.env.EnvironmentPostProcessor=
