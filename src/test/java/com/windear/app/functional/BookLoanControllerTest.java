@@ -16,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -26,15 +27,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Enhanced functional tests for BookLoanController
- * Focus: Testing business logic including notification service interactions
- * 
- * These tests verify that controller properly coordinates between services:
- * - BookLoanService for core loan operations
- * - NotificationService for user notifications
- * - Cascade actions (e.g., deleting subscribe requests on book return)
- */
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(BookLoanController.class)
 @DisplayName("Use case 3,4,5: Bookloan Tests")
 class BookLoanControllerTest {
