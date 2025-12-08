@@ -22,10 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Functional tests for Use Case 1: Add Book
- * SRS Reference: 1. Thêm Sách
- */
 @WebMvcTest(InternalBookController.class)
 @DisplayName("Use Case 1: Add Book Tests")
 class AddBookFunctionalTest {
@@ -42,7 +38,6 @@ class AddBookFunctionalTest {
     @Test
     @DisplayName("TC1.1: Admin adds a new book successfully")
     void testAddBook_Success() throws Exception {
-        // Given
         InternalBook book = new InternalBook();
         book.setTitle("Clean Code");
         book.setAuthor("Robert C. Martin");
@@ -53,7 +48,6 @@ class AddBookFunctionalTest {
 
         when(internalBookService.add(any(AddInternalBookRequestDTO.class))).thenReturn(book);
 
-        // When & Then
         mockMvc.perform(post("/api/db/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -63,10 +57,10 @@ class AddBookFunctionalTest {
 
         verify(internalBookService).add(any(AddInternalBookRequestDTO.class));
     }
+
     @Test
     @DisplayName("TC1.2: Admin adds a new book with invalid fields should fail")
     void testAddBook_whenInvalidField_thenShouldFail() throws Exception {
-        // Given
         InternalBook book = new InternalBook();
         book.setTitle(null);
         book.setAuthor(null);
@@ -77,7 +71,6 @@ class AddBookFunctionalTest {
 
         when(internalBookService.add(any(AddInternalBookRequestDTO.class))).thenReturn(book);
 
-        // When & Then
         mockMvc.perform(post("/api/db/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
