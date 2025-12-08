@@ -3,7 +3,6 @@ package com.windear.app.functional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windear.app.controller.ShelvesController;
 import com.windear.app.dto.UpdateShelvesRequest;
-import com.windear.app.entity.Shelf;
 import com.windear.app.entity.Shelves;
 import com.windear.app.service.ShelvesService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ShelvesController.class)
 @DisplayName("Use case 6: Shelves Tests")
-class ShelvesControllerEnhancedTest {
+class ShelvesControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

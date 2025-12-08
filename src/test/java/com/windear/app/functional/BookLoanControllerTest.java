@@ -5,7 +5,6 @@ import com.windear.app.controller.BookLoanController;
 import com.windear.app.dto.SubscribeRequest;
 import com.windear.app.entity.BookCopy;
 import com.windear.app.entity.BookLoan;
-import com.windear.app.entity.InternalBook;
 import com.windear.app.enums.Status;
 import com.windear.app.primarykey.BookLoanId;
 import com.windear.app.repository.BookLoanRepository;
@@ -38,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WebMvcTest(BookLoanController.class)
 @DisplayName("Use case 3,4,5: Bookloan Tests")
-class BookLoanControllerEnhancedTest {
+class BookLoanControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
